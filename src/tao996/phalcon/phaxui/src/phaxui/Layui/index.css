@@ -1,0 +1,65 @@
+
+.badge {
+    display: inline-block;
+    min-width: 10px;
+    padding: 3px 7px;
+    font-size: 11px;
+    font-weight: bold;
+    color: #fff;
+    line-height: 1;
+    vertical-align: middle;
+    white-space: nowrap;
+    text-align: center;
+    background-color: #777777;
+    border-radius: 10px;
+}
+
+.hint {
+    color: #999;
+    font-size: small;
+    padding: 9px 0 !important;
+    line-height: 20px;
+    margin-right: 10px;
+}
+
+.layui-table-view {
+    border: none;
+}
+
+.layui-table-box {
+    border: 1px solid #eee;
+}
+
+.layui-table-tool {
+    background: white;
+    padding-left: 0;
+    padding-right: 0;
+    border: none;
+}
+
+.layui-table-tool-self {
+    right: 0;
+}
+
+.table-search-fieldset {
+    margin: 0;
+    border: 1px solid #e6e6e6;
+    padding: 10px 20px 5px 20px;
+    color: #6b6b6b;
+}
+
+.form-search .layui-form-label {
+    padding: 0 8px;
+    height: 38px;
+    line-height: 38px;
+}
+.table-search-fieldset {
+    margin: 0;
+    border: 1px solid #e6e6e6;
+    padding: 10px 20px 5px 20px;
+    color: #6b6b6b;
+}
+.required::before {
+    content: '*';
+    color: red;
+}

@@ -1,0 +1,199 @@
+<?php
+
+namespace Phax\Utils;
+
+use Phax\Support\Facades\Helper;
+
+/**
+ * 数据格式化
+ * @link https://www.php.net/manual/zh/ref.array.php
+ */
+class Data
+{
+    /**
+     * 以路径方式来查询数组中的值
+     * @param array $data 待查询的数组
+     * @param string $path 多层次使用 . 来分开，示例 a.b.c
+     * @param mixed $default 默认值
+     * @return mixed
+     */
+    public static function findWithPath(array &$data, string $path, mixed $default): mixed
+    {
+        $keys = explode('.', $path);
+        if (count($keys) == 1) {
+            return isset($data[$path]) && $data[$path] ? $data[$path] : $default;
+        }
+        $current = $data;
+        foreach ($keys as $key) {
+            if (!isset($current[$key])) {
+                return $default;
+            }
+            $current = $current[$key];
+        }
+        return $current ?: $default;
+    }
+
+    /**
+     * 将子数组中指定键的值作为新的 key
+     * @param array $data
+     * @param string|null $key 指定列名
+     * @return array
+     */
+    public static function reGroupWithKey(array $data, string|null $key): array
+    {
+        if (empty($key)) {
+            return $data;
+        }
+        if (empty($data)) {
+            return [];
+        }
+        $rows = [];
+        foreach ($data as $item) {
+            $rows[$item[$key]] = (array)$item;
+        }
+        return $rows;
+    }
+
+
+    public static function getString(array &$data, string $key, $def = ''): string
+    {
+        return $data[$key] ?? $def;
+    }
+
+    public static function getInt(array &$data, string $key, $def = 0): int
+    {
+        return isset($data[$key]) ? intval($data[$key]) : $def;
+    }
+
+    /**
+     * 获取整数数组
+     * @param array $data 待检测数组 ['ids'=>['1','2','3']] 或者 ['ids'=>[1=>'on',2=>'on',3=>'on']] 或者 ['ids'=>'1,2,3']
+     * @param string $key 数组中的键 ids
+     * @return array [1,2,3]
+     */
+    public static function getIntsWith(array &$data, string $key): array
+    {
+        if (empty($data[$key])) {
+            return [];
+        }
+        return self::getInts($data[$key]);
+    }
+
+    /**
+     * 获取整数数组
+     * @param array|string $data ['1','2','3'] 或者 '1,2,3' 或者 [1=>'on',2=>'on',3=>'on']
+     * @return array [1,2,3]
+     * @throws \Exception
+     */
+    public static function getInts($data): array
+    {
+        if (is_string($data)) {
+            $items = explode(',', $data);
+        } elseif (is_array($data)) {
+            $valueInValue = isset($data[0]) && is_numeric($data[0]); // [1,2,3,] 格式
+            if ($valueInValue) {
+                $items = array_map('intval', $data);
+            } else {
+                $items = array_keys($data);
+            }
+        } else {
+            throw new \Exception('unsupported params in Data.getInts');
+        }
+        $rows = [];
+        foreach ($items as $item) {
+            if (filter_var($item, \FILTER_VALIDATE_INT)) {
+                $rows[] = intval($item);
+            } else {
+                throw new \Exception($item . ' is not a int value');
+            }
+        }
+        return $rows;
+    }
+
+    /**
+     * 获取布尔值 : 字符串 (on|true|t|ok), >0 都将被作为 true 对待
+     * @param array $data
+     * @param string $key
+     * @param bool $strict 是否严格类型，只接受 true/false
+     * @return bool
+     */
+    public static function getBool(array $data, string $key, bool $strict = false): bool
+    {
+        $v = $data[$key] ?? false;
+        if ($strict || is_bool($v)) {
+            return $v == true;
+        }
+        if (is_numeric($v)) {
+            return intval($v) > 0;
+        }
+        return in_array($v, ['on', 'true', 't', 'ok']);
+    }
+
+    public static function notEmpty(array $data, string $key): bool
+    {
+        return !empty($data[$key]);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public static function mustHasSet(array $data, array|string $keys, array $allowEmpty = []): void
+    {
+        $allNotAllowEmpty = empty($allowEmpty);
+        foreach ($keys as $key) {
+            if (!array_key_exists($key, $data)) {
+                throw new \Exception($key . ' is not exits in the data when mustHasSet');
+            }
+            if ($allNotAllowEmpty) {
+                if (empty($data[$key])) {
+                    throw new \Exception($key . ' is not allow empty when mustHasSet');
+                }
+            } else {
+                if (!in_array($key, $allowEmpty) && empty($data[$key])) {
+                    throw new \Exception($key . ' is not allow empty when mustHasSet');
+                }
+            }
+        }
+    }
+
+    public static function findByKeys(array &$data, array $keys): array
+    {
+        return array_intersect_key($data, array_flip($keys));
+    }
+
+    public static function firstValue(array $args, $def)
+    {
+        foreach ($args as $arg) {
+            if (!empty($arg)) {
+                return $arg;
+            }
+        }
+        return $def;
+    }
+
+    public static function subtext(string $text, int $length): string
+    {
+        if (mb_strlen($text, 'utf8') > $length) {
+            return mb_substr($text, 0, $length, 'utf8') . '...';
+        } else {
+            return $text;
+        }
+
+    }
+
+    /**
+     * 格式化命名
+     * @param string $name refreshNode, refresh-node, refresh_node, RefreshNode
+     * @param bool $lcfirst 首字母是否小写，默认是
+     * @return string refreshNode
+     */
+    public static function formatName(string $name, bool $lcfirst = true): string
+    {
+        $name = str_replace(['-', '_', ' '], '-', $name);
+        if (str_contains($name, '-')) {
+            $name = Helper::camelize($name, '-', true);
+        }
+        return $lcfirst ? lcfirst($name) : $name;
+    }
+
+}

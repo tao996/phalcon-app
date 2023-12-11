@@ -1,0 +1,8 @@
+.idea
+DirectoryV3.xml
+
+.env
+docker-compose.yaml
+nginx/default.conf
+nginx/host.conf
+php/extra.ini
