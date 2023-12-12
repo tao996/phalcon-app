@@ -21,12 +21,21 @@ quick start to use phalcon framework like Laravel and ThinkPHP
 * 将 `php/extra.example.ini` 复制为 `extra.ini` 以对 `php` 进行配置
 * (开发阶段)将 `src/.env.example` 复制为 `.env` 以配置 `phalcon` 项目
 * 将 `src/config/config.example.php` 复制为 `src/config/config.php` 对项目进行配置
-* `chown -R 1000:1000 src/storage`
+* `chmod 777 src/storage -R`
 
-根据需要对上面的配置文件进行修改
+
+### 必须修改 
+
+1. `.env` 中的数据库密码
+2. `src/config/config.php` 中应用的密码
+
+根据需要对上面的配置文件进行修改，然后再启动服务
 
 ```
 docker-composer up -d
+
+# 检查系统开放的端口
+ss -antp
 ```
 
 

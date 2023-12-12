@@ -63,7 +63,7 @@ else
 fi
 
 # 修改日志目录权限
-chown -R 1000:1000 src/storage
+chmod 777 src/storage -R
 
 echo "---------------------"
 if [ -f /usr/sbin/nginx ]; then
