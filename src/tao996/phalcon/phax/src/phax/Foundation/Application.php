@@ -403,25 +403,41 @@ class Application
         $console->setDI(self::di());
 
         include_once PATH_ROOT . 'routes/cli.php';
-        if ($argc < 2) {
-            die('php artisan xxx');
-        }
 
-        if (Router::runCLI($argv[1])) {
-            echo '|<-- run cmd end', PHP_EOL;
+        if ($argc < 2 || in_array($argv[1], ['help', '-help', '--help'])) {
+            $outputs = [
+                '|<-- examples',
+                'php artisan main                  # run task in app/Console/MainTask.indexAction',
+                'php artisan main/demo 15          # run task in app/Console/MainTask.demoAction, params is 15',
+                'php artisan main -p               # run the default project task',
+                'php artisan m/module/task/action  # run the modules task'
+            ];
+            echo join(PHP_EOL, $outputs), PHP_EOL;
             return;
         }
 
+        if (Router::runCLI($argv[1])) {
+            echo '|<-- run routes.cli-task success', PHP_EOL;
+            return;
+        }
+        $options = [
+            'm' => Router::moduleName(),
+            'project' => ''
+        ];
+
+        if (in_array('-p', $argv)) {
+            $options['project'] = \config('app.project', '');
+        }
         $arguments = [];
         foreach ($argv as $k => $arg) {
             if ($k === 1) {
 
-                $info = Router::analysisWithCLI($arg);
+                $info = Router::analysisWithCLI($arg, $options);
                 if (isset($info['modules'])) {
                     $console->registerModules($info['modules']);
                 }
                 $arguments = array_merge($arguments, $info);
-            } elseif ($k >= 2) {
+            } elseif ($k >= 2 && str_starts_with($arg, '-')) {
                 $arguments['params'][] = $arg;
             }
         }

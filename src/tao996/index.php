@@ -21,7 +21,7 @@ if (file_exists(PATH_ROOT . 'vendor/autoload.php')) {
 
 $loader = new \Phalcon\Autoload\Loader();
 $loader->setFiles([
-    PATH_PHAX . 'Foundation/helper.php',
+    PATH_PHAX . 'Foundation/function.php',
     PATH_PHAX . 'sdk/dotenv.phar',
 ], true);
 

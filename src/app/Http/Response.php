@@ -26,13 +26,14 @@ class Response
                 echo "TODO 多模块异常响应:", $e->getMessage();
                 return true;
             }
-            flash()->error($e->getMessage());
             $data = array_merge($_GET, $_POST);
             // 在原视图模板上显示错误信息
-            echo view($data)->getRender(
-                \router()->getControllerName(),
-                \router()->getActionName()
-            );
+            if ($tpl = Router::getPathViewTPL()) {
+                flash()->error($e->getMessage());
+                \Phax\Foundation\Response::simpleView($tpl, $data);
+            } else {
+                echo '未处理的错误信息：',$e->getMessage();
+            }
             return true;
         }
     }
@@ -44,7 +45,7 @@ class Response
      */
     public static function notFound(\Exception $e)
     {
-        dd($e->getMessage(),false);
+        dd($e->getMessage(), false);
         Debug::info();
     }
 }

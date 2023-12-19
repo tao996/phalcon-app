@@ -129,7 +129,7 @@ class Model extends \Phalcon\Mvc\Model
         return property_exists($this, 'useSortDelete');
     }
 
-    public function initialize()
+    public function initialize(): void
     {
         $this->setConnectionService($this->connection);
         $table = $this->table ?: $this->getSource();

@@ -41,10 +41,10 @@ class Layui
 
     public function header(): void
     {
-        if (HtmlAssets::$cdnJs) {
+        if (HtmlAssets::$cdnNcn) {
             echo '<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/layui/'.$this->version.'/css/layui.min.css" />';
             echo '<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />';
-        } elseif (HtmlAssets::$cdn) {
+        } elseif (HtmlAssets::$cdnCN) {
             echo '<link rel="stylesheet" href="https://cdn.staticfile.org/layui/'.$this->version.'/css/layui.min.css" />';
             echo '<link rel="stylesheet" href="https://cdn.staticfile.org/font-awesome/4.7.0/css/font-awesome.min.css" />';
         } else {
@@ -67,9 +67,9 @@ class Layui
         if ($this->hasImport) {
             return;
         }
-        if (HtmlAssets::$cdnJs) {
+        if (HtmlAssets::$cdnNcn) {
             echo '<script src="https://cdnjs.cloudflare.com/ajax/libs/layui/'.$this->version.'/layui.min.js"></script>';
-        } elseif (HtmlAssets::$cdn) {
+        } elseif (HtmlAssets::$cdnCN) {
             echo '<script src="https://cdn.staticfile.org/layui/'.$this->version.'/layui.min.js"></script>';
         } else {
             echo '<script src="/assets/layui/layui.min.js"></script>';

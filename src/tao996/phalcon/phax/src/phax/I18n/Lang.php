@@ -5,7 +5,6 @@ namespace Phax\I18n;
 use Phax\Support\Facades\Helper;
 
 /**
- * TODO 本地化
  * @link https://docs.phalcon.io/5.0/en/request#i18n
  */
 class Lang

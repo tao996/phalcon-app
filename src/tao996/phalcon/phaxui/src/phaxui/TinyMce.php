@@ -13,13 +13,14 @@ class TinyMce
      * @link https://www.tiny.cloud/docs/tinymce/6/tinymce-and-cors/#editimage_cors_hosts
      */
     public static array $editImageCorsHosts = [];
+    public static string $version = '6.8.0';
 
     public static function init(array $config = [])
     {
-        if (HtmlAssets::$cdnJs) {
-            echo '<script src="https://cdnjs.cloudflare.com/ajax/libs/tinymce/6.8.0/tinymce.min.js"></script>';
-        } elseif (HtmlAssets::$cdn) {
-            echo '<script src="https://cdn.staticfile.org/font-awesome/4.7.0/css/font-awesome.min.css"></script>';
+        if (HtmlAssets::$cdnNcn) {
+            echo '<script src="https://cdnjs.cloudflare.com/ajax/libs/tinymce/'.self::$version.'/tinymce.min.js"></script>';
+        } elseif (HtmlAssets::$cdnCN) {
+            echo '<script src="https://cdn.staticfile.org/tinymce/'.self::$version.'/tinymce.min.js"></script>';
         } else {
             echo '<script src="/assets/tinymce/tinymce.min.js"></script>';
         }

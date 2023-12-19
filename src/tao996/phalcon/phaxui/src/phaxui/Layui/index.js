@@ -756,6 +756,9 @@ const admin = {
         getTableId: function () {
             return this._config.tableId;
         },
+        reloadData:function (){
+            this._config.tableId.reloadData();
+        },
         /**
          * 表格渲染<pre>
          * lineStyle: 'height: 95px;' 多行樣式
@@ -919,7 +922,7 @@ const admin = {
          * @param {{url?:string, action?:Function, key?:string}} [config] 回调函数，obj.event 是事件名称, obj.data 是当前行数据
          * @return this
          */
-        addRowToolEvents: function (config) {
+        addLayEventActions: function (config = {}) {
             const tableId = this._config.id;
             const url = this.getConfig(config, 'url');
             const key = this.getConfig(config, 'key', 'id');
@@ -951,8 +954,8 @@ const admin = {
                         })
                         return;
                     default:
-                        if (typeof config.action === 'function') {
-                            config.action(obj.data);
+                        if (typeof config['action'] === 'function') {
+                            config.action(obj);
                         } else {
                             console.warn('没有添加事件处理函数:', obj.event)
                         }

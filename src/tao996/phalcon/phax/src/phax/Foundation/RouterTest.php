@@ -493,11 +493,19 @@ class RouterTest extends \PHPUnit\Framework\TestCase
 
     public function testCliRoute()
     {
-        $rst = Router::analysisWithCLI('/');
-        $rst1 = Router::analysisWithCLI('');
+        $blankOption = ['project' => '', 'm' => ''];
+        $rst = Router::analysisWithCLI('/', $blankOption);
+        $expect = [
+            'task' => 'main', 'action' => 'index', 'namespace' => 'App\Console'
+        ];
+        $this->assertEquals($expect, $rst);
+        $rst1 = Router::analysisWithCLI('', $blankOption);
         $this->assertEquals($rst, $rst1);
 
-        $rst = Router::analysisWithCLI('/main/test');
+        $rst = Router::analysisWithCLI('/main/test', $blankOption);
+        $this->assertEquals(['task' => 'main', 'action' => 'test', 'namespace' => 'App\Console'], $rst);
+
+        $rst = Router::analysisWithCLI('/main/test', ['project' => 'city']);
         $expect = ['task' => 'main', 'action' => 'test',
             'namespace' => 'App\Http\Projects\city\Console'];
         $this->assertEquals($expect, $rst);

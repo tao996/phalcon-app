@@ -70,7 +70,7 @@ class Request
     protected static function checkEmptyResult($notEmpty, $v, $title)
     {
         if ($notEmpty && empty($v)) {
-            throw new \Exception(__('required', ['field' => $title]));
+            throw new \Exception(__('require', ['field' => $title]));
         }
     }
 

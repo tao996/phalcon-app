@@ -35,12 +35,12 @@ else
     echo "|__ success"
 fi
 
-phpIni="php/extra.ini"
+phpIni="php/php.ini"
 if [ -f "$phpIni" ]; then
     echo "skip, already has $phpIni"
 else
     echo "start to copy $phpIni"
-    cp php/extra.example.ini $phpIni || { echo "|__ failed"; exit 1; }
+    cp php/php.example.ini $phpIni || { echo "|__ failed"; exit 1; }
     echo "|__ success"
 fi
 

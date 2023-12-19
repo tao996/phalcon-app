@@ -214,6 +214,11 @@ if (!function_exists('url')) {
     {
         return \Phax\Support\Facades\Url::createPagePath($path, [], $api, $multi, false);
     }
+
+    function projectURL(string $path, bool $api = false): string
+    {
+        return \Phax\Support\Facades\Url::createPagePath($path, [], $api, false, false);
+    }
 }
 
 // 自定义有服务
@@ -299,6 +304,13 @@ if (!function_exists('view')) {
             return $view;
         }
         return $view->setVars($data, true);
+    }
+}
+
+if (!function_exists('metadata')) {
+    function metadata(): \Phalcon\Mvc\Model\MetaData
+    {
+        return \Phax\Foundation\Application::di()->get('metadata');
     }
 }
 

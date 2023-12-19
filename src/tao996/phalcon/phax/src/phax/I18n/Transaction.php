@@ -108,6 +108,9 @@ class Transaction
             Transaction::getInstance()->loadAll();
         }
         $message = self::$messages[$key] ?? $defMessage;
+        if (empty($message)) {
+            throw new \Exception('找不到'.$key.'翻译信息的翻译信息，请设置默认提示信息');
+        }
         return Lang::interpolate($message, $placeholders);
     }
 }

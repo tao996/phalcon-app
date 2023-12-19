@@ -1,7 +1,6 @@
 <?php
 
 /**
- * 注意：目前 memcached 有 bug，不要使用 memcached 服务
  * https://github.com/phalcon/cphalcon/issues/16244
  * 线上时，可以直接移除没用的配置信息
  * 以下配置中，使用多个 ## 来表示重要需要修改（通常是密钥）
@@ -59,22 +58,22 @@ return [
                 'lifetime' => 7200,
                 'prefix' => env('CACHE_PREFIX', '_phc_')
             ],
-//            'memcached' => [
-//                'defaultSerializer' => 'Json',
-//                'lifetime' => 3600,
-//                'prefix' => env('CACHE_PREFIX', '_phc_'),
-//                'saslAuthData' => [
-//                    'user' => env('MEMCACHED_USER'),
-//                    'pass' => env("MEMCACHED_PASS"),
-//                ],
-//                'servers' => [
-//                    0 => [
-//                        'host' => env('MEMCACHED_HOST', '127.0.0.1'),
-//                        'port' => (int)env('MEMCACHED_PORT', 11211),
-//                        'weight' => 1,
-//                    ],
-//                ],
-//            ]
+            'memcached' => [
+                'defaultSerializer' => 'Json',
+                'lifetime' => 3600,
+                'prefix' => env('CACHE_PREFIX', '_phc_'),
+                'saslAuthData' => [
+                    'user' => env('MEMCACHED_USER'),
+                    'pass' => env("MEMCACHED_PASS"),
+                ],
+                'servers' => [
+                    0 => [
+                        'host' => env('MEMCACHED_HOST', 'memcached'),
+                        'port' => (int)env('MEMCACHED_PORT', 11211),
+                        'weight' => 1,
+                    ],
+                ],
+            ]
         ],
     ],
     'view' => [
@@ -156,16 +155,16 @@ return [
             'stream' => [
                 'savePath' => PATH_STORAGE . 'cache/session',
             ],
-//            'memcached' => [
-//                'client' => [],
-//                'servers' => [
-//                    [
-//                        'host' => '127.0.0.1',
-//                        'port' => 11211,
-//                        'weight' => 0,
-//                    ],
-//                ],
-//            ],
+            'memcached' => [
+                'client' => [],
+                'servers' => [
+                    [
+                        'host' => env('MEMCACHED_HOST', 'memcached'),
+                        'port' => (int)env('MEMCACHED_PORT', 11211),
+                        'weight' => 0,
+                    ],
+                ],
+            ],
             'redis' => [
                 'host' => 'redis',
                 'port' => 6379,
@@ -186,8 +185,9 @@ return [
     'flash' => 'direct',
     // https://docs.phalcon.io/5.0/en/db-models-metadata
     'metadata' => [
-        'driver' => env('METADATA_DRIVER', 'redis'),
+        // use memory in dev
         // apcu|redis|stream|memory(测试)
+        'driver' => env('METADATA_DRIVER', 'redis'),
         'stores' => [
             'stream' => [
                 'metaDataDir' => PATH_STORAGE . 'cache',
@@ -196,17 +196,17 @@ return [
                 'lifetime' => 86400,
                 'prefix' => '_phm_',
             ],
-//            'memcached' => [
-//                'servers' => [
-//                    0 => [
-//                        'host' => 'memcached',
-//                        'port' => 11211,
-//                        'weight' => 1,
-//                    ],
-//                ],
-//                'lifetime' => 86400,
-//                'prefix' => '_phm_',
-//            ],
+            'memcached' => [
+                'servers' => [
+                    0 => [
+                        'host' => env('MEMCACHED_HOST', 'memcached'),
+                        'port' => (int)env('MEMCACHED_PORT', 11211),
+                        'weight' => 1,
+                    ],
+                ],
+                'lifetime' => 86400,
+                'prefix' => '_phm_',
+            ],
             'redis' => [
                 'host' => 'redis',
                 'port' => 6379,

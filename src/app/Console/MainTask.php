@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Console;
+namespace app\Console;
 
 use Phalcon\Cli\Task;
 
@@ -15,7 +15,7 @@ class MainTask extends Task
      */
     public function indexAction(): void
     {
-        echo 'success', PHP_EOL;
+        echo 'main.index.success', PHP_EOL;
     }
 
     /**
@@ -24,7 +24,7 @@ class MainTask extends Task
      */
     public function testAction(): void
     {
-        echo 'default.test.000000', PHP_EOL;
+        echo 'main.test.000000', PHP_EOL;
     }
 
     /**
@@ -34,6 +34,6 @@ class MainTask extends Task
      */
     public function demoAction(int $count = 0): void
     {
-        echo '111111(' . $count . ')', PHP_EOL;
+        echo 'main.demo(' . $count . ')', PHP_EOL;
     }
 }

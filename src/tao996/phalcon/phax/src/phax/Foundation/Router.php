@@ -13,7 +13,7 @@ class Router
      * 多模型识别名称
      * @return string
      */
-    private static function moduleName(): string
+    public static function moduleName(): string
     {
         static $moduleName = '';
         if ('' === $moduleName) {
@@ -454,20 +454,14 @@ class Router
 
     /**
      * @param string $route
-     * @param array $options
+     * @param array $options ['m'=>'模块名称','project'=>前端项目名称']
      * @return array
      * @throws \Exception
      */
     public static function analysisWithCLI(string $route, array $options = [
     ])
     {
-
-        if (empty($options['m'])) {
-            $options['m'] = self::moduleName();
-        }
-        if (empty($options['project'])) {
-            $options['project'] = config('app.project', '');
-        }
+        $options = array_merge(['m' => '', 'project' => ''], $options);
 
         $arguments = [
             'task' => 'main', 'action' => 'index',
@@ -616,6 +610,10 @@ class Router
         return $cName . '/' . $aName;
     }
 
+    /**
+     * 返回当前操作模板
+     * @return string open.form/rent
+     */
     public static function getPickView(): string
     {
         $config = self::$options;
@@ -624,5 +622,16 @@ class Router
         } else {
             return $config['pathsname']['controller'] . '/' . $config['pathsname']['action'];
         }
+    }
+
+    public static function getPathViewTPL(): string
+    {
+        $f = self::getViewPath() . '/' . self::getPickView();
+        foreach (['.phtml', '.php', '.volt'] as $suf) {
+            if (file_exists($f . $suf)) {
+                return $f . $suf;
+            }
+        }
+        return '';
     }
 }

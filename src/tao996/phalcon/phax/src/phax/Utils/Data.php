@@ -57,7 +57,7 @@ class Data
 
     public static function getString(array &$data, string $key, $def = ''): string
     {
-        return $data[$key] ?? $def;
+        return empty($data[$key]) ? $def : $data[$key];
     }
 
     public static function getInt(array &$data, string $key, $def = 0): int

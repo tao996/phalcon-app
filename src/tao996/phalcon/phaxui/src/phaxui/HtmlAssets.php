@@ -6,11 +6,9 @@ use Phax\Foundation\Router;
 
 class HtmlAssets
 {
-    /**
-     * @var bool 是否使用 cdn
-     */
-    public static bool $cdn = false; // 七牛云 cdn
-    public static bool $cdnJs = false; // 海外 cdn
+// 注意：这里的 cdn 只针对 layui, tinymce, awesome 等公共资源生效
+    public static bool $cdnCN = false; // China cdn
+    public static bool $cdnNcn = false; // not China cdn
 
     private static array $hasImports = [];
 
