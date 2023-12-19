@@ -9,17 +9,6 @@
 #   |-- app.sh
 #   |-- phalcon-app
 # cd phalcon-app 然后执行其它命令
-
-function copy_files() {
-  local source="$1"
-  local target="$2"
-  local files="docker-compose.yaml .env nginx/default.conf php/php.ini src/config.php src.env"
-
-  for file in $files; do
-    cp "$source/$file" "$target/$file"
-  done
-}
-
 origin="https://github.com/tao996"
 
 # 当前脚本所在目录
@@ -43,6 +32,7 @@ if [ 'create' == $1 ]; then
   # 克隆 admin/assets
   git clone ${origin}/phalcon-app-admin.git ${2}/src/app/Modules/tao
   git clone ${origin}/phalcon-app-assets.git ${2}/src/public/assets
+  chmod 777 -R "${2}src/storage"
   exit 0
 fi
 
@@ -79,15 +69,23 @@ if [ 'backup' == $1 ]; then
     exit 1
   fi
 
-  copy_files "$2" "$3"
+  if [ ! -d "${basepath}/$3" ]; then
+    mkdir $3
+  fi
 
+  cp "$2/docker-compose.yaml" "$3/docker-compose.yaml"
+  cp "$2/.env" "$3/.env"
+  cp "$2/nginx/default.conf" "$3/nginx-default.conf"
+  cp "$2/php/php.ini" "$3/php-php.ini"
+  cp "$2/src/config/config.php" "$3/app-config.php"
+  cp "$2/src/.env" "$3/app-env"
 
   echo "备份完成"
   exit 0
 fi
 
 # 恢复备份的配置文件到指定目录
-if [ 'recover' == $1 ];then
+if [ 'recover' == $1 ]; then
   if [ -z $3 ]; then
     echo '必须指定备份目录'
     exit 1
@@ -103,9 +101,15 @@ if [ 'recover' == $1 ];then
     exit 1
   fi
 
-  copy_files "$3" "$2"
 
-  echo "备份完成"
+  cp "$3/docker-compose.yaml" "$2/docker-compose.yaml"
+  cp "$3/.env" "$2/.env"
+  cp "$3/nginx-default.conf" "$2/nginx/default.conf"
+  cp "$3/php-php.ini" "$2/php/php.ini"
+  cp "$3/app-config.php" "$2/src/config/config.php"
+  cp "$3/app-env" "$2/src/.env"
+
+  echo "恢复备份完成"
   exit 0
 fi
 

@@ -13,8 +13,8 @@ quick start to use phalcon framework like Laravel and ThinkPHP
 ## Quick Start
 
 ### 半自动
-
-将 `app.sh` 复制到目录，然后通过 `sh app.sh create xxx` 来创建项目
+下载 `wget https://raw.githubusercontent.com/tao996/phalcon-app/main/app.sh`
+然后通过 `sh app.sh create xxx` 来创建项目
 
 ### 全手动
 
