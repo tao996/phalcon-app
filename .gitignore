@@ -6,4 +6,4 @@ DirectoryV3.xml
 docker-compose.yaml
 nginx/default.conf
 nginx/host.conf
-php/extra.ini
+php/php.ini

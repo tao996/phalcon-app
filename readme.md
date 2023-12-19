@@ -12,22 +12,31 @@ quick start to use phalcon framework like Laravel and ThinkPHP
 
 ## Quick Start
 
+### 半自动
+
+将 `app.sh` 复制到目录，然后通过 `sh app.sh create xxx` 来创建项目
+
+### 全手动
+
 `git clone https://github.com/tao996/phalcon-app.git`
 
-为了启动项目，你需要修改相关的 `example` 配置文件（或者执行 `./deploy.sh` 以代替以下操作）
+为了启动项目，你需要修改相关的 `example` 配置文件
+（以下几个复制步骤可通过执行 `sh deploy.sh` 以代替）
 
 * 将 `.env.example` 复制为 `.env` 以配置 `docker-composer` 项目
 * 将 `nginx/default.example.conf` 复制为 `nginx/default.conf` 以对 `nginx` 进行配置
 * 将 `php/extra.example.ini` 复制为 `extra.ini` 以对 `php` 进行配置
 * (开发阶段)将 `src/.env.example` 复制为 `.env` 以配置 `phalcon` 项目
 * 将 `src/config/config.example.php` 复制为 `src/config/config.php` 对项目进行配置
-* `chmod 777 src/storage -R`
 
 
-### 必须修改 
+
+## 修改 
+
+执行 `chmod 777 src/storage -R` 否则没权限写临时文件
 
 1. `.env` 中的数据库密码
-2. `src/config/config.php` 中应用的密码
+2. `src/config/config.php` 中应用配置的密钥
 
 根据需要对上面的配置文件进行修改，然后再启动服务
 
