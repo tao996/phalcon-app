@@ -310,7 +310,7 @@ if (!function_exists('view')) {
 if (!function_exists('metadata')) {
     function metadata(): \Phalcon\Mvc\Model\MetaData
     {
-        return \Phax\Foundation\Application::di()->get('metadata');
+        return \Phax\Foundation\Application::di()->get('modelsMetadata');
     }
 }
 

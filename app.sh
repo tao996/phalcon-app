@@ -45,16 +45,16 @@ if [ 'update' == $1 ]; then
     exit 1
   fi
 
-  cd ${origin}/phalcon-app
+  cd ${basepath}/phalcon-app
   git pull
 
-  cd ${origin}/phalcon-app-tao
+  cd ${basepath}/phalcon-app-tao
   git pull
 
-  cd ${origin}/phalcon-app-assets
+  cd ${basepath}/phalcon-app-assets
   git pull
 
-  cd ${origin}
+  cd ${basepath}
   exit 0
 fi
 
