@@ -134,7 +134,7 @@ return [
         'driver' => env('LOGGER_DRIVER', 'stream'), // stream, syslog, noop
         'stores' => [
             'stream' => [
-                'path' => PATH_STORAGE . (IS_DEBUG ? 'app/app-{Ym}.log' : 'app/app-{Ymd}.log'),
+                'path' => PATH_STORAGE . (IS_DEBUG ? 'logs/app-{Ym}.log' : 'logs/app-{Ymd}.log'),
                 'name' => env('LOG_NAME', 'main'),
                 'level' => 'message',
             ],
@@ -150,7 +150,6 @@ return [
     'session' => [
         'auto_start' => true,
         'driver' => 'redis', // stream, memcached, redis, noop(just for test),
-        'timeout' => 3600,
         'stores' => [
             'stream' => [
                 'savePath' => PATH_STORAGE . 'cache/session',

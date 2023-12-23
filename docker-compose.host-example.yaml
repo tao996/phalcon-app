@@ -13,7 +13,7 @@ services:
     working_dir: /var/www
     volumes:
       - ./src:/var/www:delegated
-      - ./log/php:/var/log/php/:rw
+      - ./src/storage/logs:/var/log/php/:rw
       - ./php/php.ini:/usr/local/etc/php/conf.d/php.ini
     networks:
       - backend

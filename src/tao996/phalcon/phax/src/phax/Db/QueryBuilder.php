@@ -543,9 +543,9 @@ class QueryBuilder
      * 查询符合条件的首行记录
      * @param bool $toArray 如果为 false 则不会联表查询
      * @param callable|null $callback 回调函数
-     * @return array|Model|null|mixed
+     * @return array|Model|null|mixed|\Phalcon\Mvc\Model\Row 注意返回的不是具体模型，可能需要再次转换
      */
-    public function findFirst(bool $toArray = true, callable $callback = null): array|null|Model
+    public function findFirst(bool $toArray = true, callable $callback = null)
     {
         $this->_parameter['limit'] = 1;
         $this->_parameter['offset'] = 0;

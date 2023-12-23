@@ -29,7 +29,7 @@ class Request
     public static function mustPost()
     {
         if (!request()->isPost()) {
-            throw new \Exception('only support POST method');
+            throw new \Exception('only support POST method', 200);
         }
     }
 
@@ -60,7 +60,7 @@ class Request
     protected static function nameLang(string $key): array
     {
         if (empty($key)) {
-            throw new \Exception('name is empty for Request::Get');
+            throw new \Exception('name is empty for Request::Get', 200);
         }
         $cc = explode('|', $key);
         return count($cc) == 1 ? [$key, $key] : $cc;
@@ -70,7 +70,7 @@ class Request
     protected static function checkEmptyResult($notEmpty, $v, $title)
     {
         if ($notEmpty && empty($v)) {
-            throw new \Exception(__('require', ['field' => $title]));
+            throw new \Exception(__('require', ['field' => $title]), 200);
         }
     }
 

@@ -12,7 +12,6 @@ class Logger
      */
     public static function exception(\Exception $e): void
     {
-
         $info = [];
         foreach ($e->getTrace() as $item) {
             if (isset($item['file']) && strrpos($item['file'], 'public/index.php') === false) {

@@ -232,7 +232,8 @@ class Validate
 
     /**
      * @param array $data 待检查的数据
-     * @param array $rules 验证规则，示例 ['name|用户名'=>'required|min:2|max:10'] <pre>
+     * @param array $rules 验证规则，示例 ['name|用户名'=>'required|min:2|max:10']
+     * <pre>
      * require/required                 必须填写
      * email                            电子邮件
      * alnum/alphanum                   字母数字字符
@@ -271,7 +272,7 @@ class Validate
      * after                            在指定时间之后，支持 strtotime 参数，如 after:20231005
      * before                           在指定时间之前
      * expire                           验证当前操作（注意不是某个值）是否在某个有效日期之内，示例 expire:20230101,20231231
-     * <pre>
+     * </pre>
      * @param array $messages 验证消息, 示例 ['name.require'=>'姓名不能为空', 'name.max'=>'姓名不得超过20位']
      * @return null|array 验证通过则返回 null，否则返回数组
      */

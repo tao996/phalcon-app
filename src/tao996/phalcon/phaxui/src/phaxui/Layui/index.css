@@ -63,3 +63,7 @@
     content: '*';
     color: red;
 }
+.group-radio button {
+    margin-right: 3px;
+    margin-bottom: 3px;
+}

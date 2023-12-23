@@ -208,16 +208,17 @@ if (!function_exists('url')) {
      * @param string $path 路径：模块/控制器/操作 或者 /控制器/操作
      * @param bool $api 是否为 api 地址，默认为 false
      * @param bool $multi 是否为多模块，默认为 true
+     * @param array $query 请求参数
      * @return string
      */
-    function url(string $path, bool $api = false, bool $multi = true): string
+    function url(string $path, bool $api = false, bool $multi = true, array $query = [], bool $baseUri = false): string
     {
-        return \Phax\Support\Facades\Url::createPagePath($path, [], $api, $multi, false);
+        return \Phax\Support\Facades\Url::createPagePath($path, $query, $api, $multi, $baseUri);
     }
 
-    function projectURL(string $path, bool $api = false): string
+    function projectURL(string $path, bool $api = false, array $query = [], bool $baseUri = false): string
     {
-        return \Phax\Support\Facades\Url::createPagePath($path, [], $api, false, false);
+        return \Phax\Support\Facades\Url::createPagePath($path, $query, $api, false, $baseUri);
     }
 }
 

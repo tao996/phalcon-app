@@ -278,14 +278,6 @@ class Application
             $session = new \Phalcon\Session\Manager();
             $session->setAdapter($adapter);
             if ($cc['auto_start'] || session_status() == PHP_SESSION_NONE) {
-
-                if (isset($cc['timeout'])) {
-                    $timeout = intval($cc['timeout']);
-                    if ($timeout > 0) {
-                        ini_set('session.gc_maxlifetime', $timeout);
-                        session_set_cookie_params($timeout);
-                    }
-                }
                 // session_start();
                 $session->start();
             }
@@ -381,7 +373,9 @@ class Application
                     ], [$e]);
                     return null;
                 }
-                Logger::exception($e);
+                if (200 != $e->getCode()) { // 200 的错误码不记录，通常是请求参数错误
+                    Logger::exception($e);
+                }
                 call_user_func_array([
                     $errClass, 'exception',
                 ], [$e]);

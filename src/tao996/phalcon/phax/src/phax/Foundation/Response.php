@@ -30,6 +30,19 @@ class Response
     }
 
     /**
+     * 发送内容
+     * @param mixed $data 响应的内容
+     * @param int $code
+     * @return \Phalcon\Http\ResponseInterface
+     */
+    public static function send($data, int $code = 200)
+    {
+        return response()->setStatusCode($code)
+            ->setContent($data)
+            ->send();
+    }
+
+    /**
      * 渲染指定路径的视图模板
      * @param string $pathTpl 模板路径
      * @param array $data

@@ -242,7 +242,7 @@ const admin = {
         _isPosting: false,
         /**
          * 请求方法
-         * @param option {{url?:string,data:Object,dataType:string,}}
+         * @param option {{url: string}}
          * @param {function} [ok] 返回成功回调
          * @param {function} [no] 返回错误回调
          * @param {function} [complete] 完成回调
@@ -756,7 +756,7 @@ const admin = {
         getTableId: function () {
             return this._config.tableId;
         },
-        reloadData:function (){
+        reloadData: function () {
             this._config.tableId.reloadData();
         },
         /**
@@ -853,10 +853,10 @@ const admin = {
         },
         /**
          * 监听一些常用的 lay-on 事件，如 工具栏的 batchDelete/create，行记录的 edit/delete
-         * @param {{url?:string,}} [config] 配置信息
+         * @param {{url?:string,events?:Object}} [config] 配置信息
          * @return this
          */
-        addLayOnActions: function (config) {
+        addLayOnActions: function (config = {}) {
             const tableId = this._config.id;
             const url = config && config.url ? config.url : this._config.url;
             // 批量删除
@@ -913,13 +913,17 @@ const admin = {
                     })
                 }
             };
-
             layui.util.on('lay-on', events)
+
+            if (typeof config.events !== "undefined") {
+                layui.util.on('lay-on', config.events)
+            }
+
             return this;
         },
         /**
          * 监听行操作事件 lay-event，通常绑定在 table.cols.toolbar 上
-         * @param {{url?:string, action?:Function, key?:string}} [config] 回调函数，obj.event 是事件名称, obj.data 是当前行数据
+         * @param {{url?:string, events?:Function, key?:string}} [config] 回调函数，obj.event 是事件名称, obj.data 是当前行数据
          * @return this
          */
         addLayEventActions: function (config = {}) {
@@ -954,8 +958,8 @@ const admin = {
                         })
                         return;
                     default:
-                        if (typeof config['action'] === 'function') {
-                            config.action(obj);
+                        if (typeof config['events'] === 'function') {
+                            config.events(obj);
                         } else {
                             console.warn('没有添加事件处理函数:', obj.event)
                         }

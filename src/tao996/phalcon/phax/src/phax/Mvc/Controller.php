@@ -62,8 +62,12 @@ class Controller extends \Phalcon\Mvc\Controller
         if ($isApi) {
             return \json($data);
         } else {
-            if ($this->pageTitle) {
-                $data['pageTitle'] = $this->pageTitle;
+            if (is_array($data)) {
+                if ($this->pageTitle) {
+                    $data['pageTitle'] = $this->pageTitle;
+                }
+            } elseif (is_scalar($data)){
+                $data['message'] = $data;
             }
             return \view($data);
         }

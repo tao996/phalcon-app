@@ -139,13 +139,18 @@ class Model extends \Phalcon\Mvc\Model
         $this->setSource($table);
 
         if ($this->autoWriteTimestamp) {
-            \Phax\Behavior\Model::timestampable($this, 'beforeValidationOnCreate',
-                $this->createdTime, $this->autoWriteTimestamp);
-            \Phax\Behavior\Model::timestampable($this, 'beforeValidationOnCreate',
-                $this->updatedTime, $this->autoWriteTimestamp);
+            if ($this->createdTime) {
+                \Phax\Behavior\Model::timestampable($this, 'beforeValidationOnCreate',
+                    $this->createdTime, $this->autoWriteTimestamp);
+            }
 
-            \Phax\Behavior\Model::timestampable($this, 'beforeValidationOnUpdate',
-                $this->updatedTime, $this->autoWriteTimestamp);
+            if ($this->updatedTime) {
+                \Phax\Behavior\Model::timestampable($this, 'beforeValidationOnCreate',
+                    $this->updatedTime, $this->autoWriteTimestamp);
+
+                \Phax\Behavior\Model::timestampable($this, 'beforeValidationOnUpdate',
+                    $this->updatedTime, $this->autoWriteTimestamp);
+            }
         }
 
         $this->useDynamicUpdate(true);
@@ -168,7 +173,7 @@ class Model extends \Phalcon\Mvc\Model
             }
             $messages[] = $message->getMessage();
         }
-        return $messages;
+        return $first && empty($messages) ? '' : $messages;
     }
 
     /**
@@ -390,6 +395,27 @@ class Model extends \Phalcon\Mvc\Model
     }
 
     /**
+     * 查询第一条记录
+     * @param mixed $parameters 查询条件示例
+     * <pre>
+     * 5 // 单独一个 ID
+     * 'uuid = "abc"' 或者 'inv_id = 3' 或者 ['inv_id = 3']
+     * ['conditions' => 'inv_id = :id:','bind'=> ['id' => 4,]]
+     * ['uuid = ?0','bind' => [$uuid]]
+     * ['uuid = :uuid:','bind' => ['uuid' => $uuid]]
+     * </pre>
+     * @return \Phalcon\Mvc\Model\Row|\Phalcon\Mvc\ModelInterface
+     * @throws \Exception
+     */
+    public static function mustFindFirst($parameters)
+    {
+        if ($record = static::findFirst($parameters)) {
+            return $record;
+        }
+        throw new \Exception('找不到符合要求的记录');
+    }
+
+    /**
      * 使用 PDO 批量添加记录（不会触发模型事件）
      * @throws \Exception
      */
@@ -422,6 +448,33 @@ class Model extends \Phalcon\Mvc\Model
     }
 
     /**
+     * 更新指定的列值
+     * @param array|string $columns 待更新的列
+     * @param string $primaryKey 主键，默认为 id
+     * @return bool
+     */
+    public function updateWith(array|string $columns, string $primaryKey = 'id'): bool
+    {
+        if (empty($columns)) {
+            return $this->update();
+        } else {
+            $pkv = $this->$primaryKey;
+            if (empty($pkv)) {
+                throw new \Exception('primary key value is empty when update the columns');
+            }
+            if (is_string($columns)) {
+                $columns = explode(',', $columns);
+            }
+            return $this->getWriteConnection()->update(
+                $this->getSource(),
+                $columns,
+                array_values($this->toArray($columns)),
+                $primaryKey . '=' . $pkv
+            );
+        }
+    }
+
+    /**
      * 清空数据表
      * @param bool $confirm 必须 === true 才能生效
      * @return bool
@@ -444,44 +497,60 @@ class Model extends \Phalcon\Mvc\Model
 //    {
 //
 //    }
-//
-//    private $toArrayColumns = [
-//        'append' => [],
-//        'visible' => [],
-//        'hidden' => [],
-//    ];
-//
-//    /**
-//     * TODO 追加获取器(关联属性）到模型中
-//     * @param array $attrs
-//     * @return self
-//     */
-//    public function append(array $attrs)
-//    {
-//        $this->toArrayColumns['append'] = $attrs;
-//        return $this;
-//    }
-//
-//    /**
-//     * TODO 只显示指定的列值
-//     * @param array $columns
-//     * @return self
-//     */
-//    public function visible(array $columns)
-//    {
-//        $this->toArrayColumns['visible'] = $columns;
-//        return $this;
-//    }
-//
-//    /**
-//     * TODO 隐藏指定的列值
-//     * @param array $columns
-//     * @return self
-//     */
-//    public function hidden(array $columns)
-//    {
-//        $this->toArrayColumns['hidden'] = $columns;
-//        return $this;
-//    }
+
+    private array $toArrayColumns = [
+        'append' => [],
+        'visible' => [],
+        'hidden' => [],
+    ];
+
+    /**
+     * TODO 追加获取器(关联属性）到模型中
+     * @param array $attrs
+     * @return self
+     */
+    public function append(array $attrs): static
+    {
+        $this->toArrayColumns['append'] = $attrs;
+        return $this;
+    }
+
+    /**
+     * 只显示指定的列值，也可以在 toArray 时指定
+     * @param array $columns
+     * @return self
+     */
+    public function visible(array $columns): static
+    {
+        $this->toArrayColumns['visible'] = $columns;
+        return $this;
+    }
+
+    /**
+     * 隐藏指定的列值
+     * @param array $columns
+     * @return self
+     */
+    public function hidden(array $columns): static
+    {
+        $this->toArrayColumns['hidden'] = $columns;
+        return $this;
+    }
+
+    public function toArray($columns = null): array
+    {
+        if (is_null($columns)) {
+            if (!empty($this->toArrayColumns['visible'])) {
+                $columns = $this->toArrayColumns['visible'];
+            }
+        }
+        if (!empty($this->toArrayColumns['hidden'])) {
+            if (is_null($columns)) {
+                $columns = $this->getModelsMetaData()->getAttributes($this);
+            }
+            $columns = array_diff($columns, $this->toArrayColumns['hidden']);
+        }
+        return parent::toArray($columns);
+    }
 
 }
