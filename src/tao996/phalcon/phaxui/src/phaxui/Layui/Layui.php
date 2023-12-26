@@ -11,6 +11,7 @@ use Phaxui\HtmlAssets;
 class Layui
 {
     use  Singleton;
+
     public string $version = '2.9.0';
 
     /**
@@ -41,16 +42,8 @@ class Layui
 
     public function header(): void
     {
-        if (HtmlAssets::$cdnNcn) {
-            echo '<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/layui/'.$this->version.'/css/layui.min.css" />';
-            echo '<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />';
-        } elseif (HtmlAssets::$cdnCN) {
-            echo '<link rel="stylesheet" href="https://cdn.staticfile.org/layui/'.$this->version.'/css/layui.min.css" />';
-            echo '<link rel="stylesheet" href="https://cdn.staticfile.org/font-awesome/4.7.0/css/font-awesome.min.css" />';
-        } else {
-            echo '<link rel="stylesheet" href="/assets/layui/layui.min.css" />';
-            echo '<link rel="stylesheet" href="/assets/font-awesome-4.7.0/css/font-awesome.min.css" />';
-        }
+        echo '<link rel="stylesheet" href="' . HtmlAssets::$cdn . 'layui/' . $this->version . '/css/layui.min.css" />';
+        echo '<link rel="stylesheet" href="' . HtmlAssets::$cdn . 'font-awesome-4.7.0/css/font-awesome.min.css" />';
 
         if (self::$includeLocal) {
             echo '<style type="text/css">';
@@ -67,26 +60,19 @@ class Layui
         if ($this->hasImport) {
             return;
         }
-        if (HtmlAssets::$cdnNcn) {
-            echo '<script src="https://cdnjs.cloudflare.com/ajax/libs/layui/'.$this->version.'/layui.min.js"></script>';
-        } elseif (HtmlAssets::$cdnCN) {
-            echo '<script src="https://cdn.staticfile.org/layui/'.$this->version.'/layui.min.js"></script>';
-        } else {
-            echo '<script src="/assets/layui/layui.min.js"></script>';
-        }
-
+        echo '<script src="' . HtmlAssets::$cdn . 'layui/' . $this->version . '/layui.min.js"></script>';
         echo '<script type="text/javascript">const $ = layui.jquery,layer = layui.layer, form = layui.form, laydate= layui.laydate,util=layui.util,table=layui.table;';
 
         echo 'window.CONFIG = {';
         foreach ($this->_config as $key => $v) {
             if (is_string($v)) {
                 if (str_contains($v, '\'')) {
-                    echo '"'.$key.'"', ':"', $v, '",';
+                    echo '"' . $key . '"', ':"', $v, '",';
                 } else {
-                    echo '"'.$key.'"', ":'", $v, "',";
+                    echo '"' . $key . '"', ":'", $v, "',";
                 }
             } else {
-                echo '"'.$key.'"', ':', $v, ',';
+                echo '"' . $key . '"', ':', $v, ',';
             }
         }
         echo '};';

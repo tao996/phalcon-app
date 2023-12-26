@@ -13,17 +13,26 @@ class Config
     {
         $has = false;
         $cc = new \Phalcon\Config\Config();
-        if (file_exists(PATH_ROOT . 'config/config.php')) {
-            $cc->merge(include_once PATH_ROOT . 'config/config.php');
-            $has = true;
+        if ($appConfig = env('APP_CONFIG')) {
+            $f = PATH_ROOT . 'config/' . $appConfig;
+            if (file_exists($f)) {
+                $cc->merge(include_once $f);
+                $has = true;
+            }
+        } else {
+            if (file_exists(PATH_ROOT . 'config/config.php')) {
+                $cc->merge(include_once PATH_ROOT . 'config/config.php');
+                $has = true;
+            }
+            $project = $cc->path('app.project', env('APP_PROJECT', ''));
+            $projectFile = PATH_ROOT . 'config/' . $project . '.php';
+            if (file_exists($projectFile)) {
+                $cc->merge(include_once $projectFile);
+                $has = true;
+            }
         }
-        $project = $cc->path('app.project', env('APP_PROJECT', ''));
-        $projectFile = PATH_ROOT . 'config/' . $project . '.php';
-        if (file_exists($projectFile)) {
-            $cc->merge(include_once $projectFile);
-            $has = true;
-        }
-        if (!$has){
+
+        if (!$has) {
             throw new \Exception('could not load any config');
         }
         static::$config = $cc;

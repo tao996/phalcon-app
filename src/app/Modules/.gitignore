@@ -1,2 +1,6 @@
+*
+!.gitignore
+!demo/
+!demo1/
 # git rm -r --cached .
 # git add -f

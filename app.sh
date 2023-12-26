@@ -114,6 +114,8 @@ if [ 'recover' == $1 ]; then
 fi
 
 echo "-----"
-echo "创建项目 sh app.sh create yourName"
-echo "更新项目 sh app.sh update yourName"
+echo "创建项目 sh app.sh create yourAppName"
+echo "更新项目 sh app.sh update yourAppName"
+echo "备份项目配置 sh app.sh backup yourAppName toDir"
+echo "恢复项目配置 sh app.sh recover yourAppName fromDir"
 echo "-----"

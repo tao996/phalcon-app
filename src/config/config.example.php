@@ -28,6 +28,7 @@ return [
         // 异常和错误处理的类
         'error' => 'App\Http\Response',
         'module' => env('APP_MODULE', 'm'), // 模块识别名称（不要符合 [a-z]{2} 以免与多语言冲突）
+        'cdn' => 'cn', // cn|ncn|(your cdn address), 本地开发时，可克隆 phalcon-admin-assets，然后将 app.cdn 设置为空
     ],
     // https://docs.phalcon.io/5.0/en/cache
     'cache' => [
@@ -94,6 +95,9 @@ return [
                 'options' => [
                     \PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES 'UTF8'",
                     \PDO::ATTR_CASE => \PDO::CASE_LOWER,
+                    \PDO::ATTR_EMULATE_PREPARES => false,
+                    \PDO::ATTR_ERRMODE => \PDO::ERRMODE_EXCEPTION,
+                    \PDO::ATTR_DEFAULT_FETCH_MODE => \PDO::FETCH_ASSOC
                 ],
             ],
             'postgresql' => [

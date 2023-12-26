@@ -2,8 +2,8 @@
 
 namespace Phax\Foundation;
 
+use Phax\Support\Logger;
 use Phax\Utils\Data;
-use Symfony\Component\Dotenv\Dotenv;
 
 class Router
 {
@@ -14,17 +14,23 @@ class Router
     public static string $languageRule = '/{language:[a-z]{2}}';
 
     /**
-     * 如果模块/应用是通过 composer 安装的，那么则需要将其名称及配置添加到此处
+     * 非标准命名空间目录
+     * @param string $name 模块名称
+     * @param array $config 配置信息，如果模块/应用是通过 composer 安装的，那么则需要将其名称及配置添加到此处
      * @var array
      */
     private static array $vendors = [];
 
-    public static function addVendor(string $name, array $config, bool $overwrite = false): void
+    public static function addVendor(string $name, array $config): void
     {
-        if (!$overwrite && in_array($name, self::$vendors)) {
-            throw new \Exception('Router vendors repeat:' . $name);
+        if (key_exists($name, self::$vendors)) {
+            Logger::info('Router vendors repeat:' . $name);
+            return;
         }
         self::$vendors[$name] = $config;
+        if (isset($config['addNamespace'])) {
+            loader()->addNamespace($name, $config['addNamespace'] . $name, true)->register();
+        }
     }
 
     /**
@@ -447,20 +453,11 @@ class Router
     private static function doVendors(array &$config): void
     {
         if (self::$vendors) {
-            $name = $config['name'];
-            if (isset($config['module']) && isset(self::$vendors[$name])) {
-                // 完全重写
-                if ($overwriteConfig = self::$vendors[$name]) {
-                    $config = array_merge($config, $overwriteConfig);
+            if (isset($config['name'])) {
+                $name = $config['name'];
+                if (isset($config['module']) && isset(self::$vendors[$name])) {
+                    $config = array_merge($config, self::$vendors[$name]);
                     $config['vendor'] = 'overwrite';
-                } else {
-                    // 在 app/modules 下，但不是标准的命名空间
-                    // 去掉 App\Modules\
-                    $config['namespace'] = substr($config['namespace'], 12);
-                    $config['registerModules'][$name]['className'] = substr(
-                        $config['registerModules'][$name]['className'], 12
-                    );
-                    loader()->addNamespace($name, '/var/www/app/Modules/' . $name, true)->register();
                 }
             }
         }

@@ -6,9 +6,28 @@ use Phax\Foundation\Router;
 
 class HtmlAssets
 {
-// 注意：这里的 cdn 只针对 layui, tinymce, awesome 等公共资源生效
-    public static bool $cdnCN = false; // China cdn
-    public static bool $cdnNcn = false; // not China cdn
+
+    // 注意：这里的 cdn 只针对 layui, tinymce, awesome 等公共资源生效
+    public static string $cdn = '/assets/';
+
+    /**
+     * 设置 CDN 地址
+     * @param string $cdn
+     * @return void
+     */
+    public static function cdnFromConfig(string $cdn = '')
+    {
+        if ($cdn === '') {
+            $cdn = config('app.cdn');
+        }
+        if ($cdn) {
+            self::$cdn = match ($cdn) {
+                'cn' => 'https://cdn.staticfile.org/',
+                'ncn' => 'https://cdnjs.cloudflare.com/ajax/libs/',
+                default => str_ends_with($cdn, '/') ? $cdn : $cdn . '/',
+            };
+        }
+    }
 
     private static array $hasImports = [];
 

@@ -14,7 +14,7 @@ Router::addCLI('metadata', function () {
 // run `php artisan migrate` to see the help
 Router::addCLI('migrate', function () {
     include_once PATH_ROOT . 'phalcon-migrations.phar';
-    \phalconMigration(function (\Phalcon\Cop\Parser $parser){
+    \phalconMigration(function (\Phalcon\Cop\Parser $parser) {
         $argv = empty($_SERVER['argv']) ? [] : $_SERVER['argv'];
         array_shift($argv);
         $parser->parse($argv);

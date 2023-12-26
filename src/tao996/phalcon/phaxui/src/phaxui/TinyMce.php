@@ -17,13 +17,8 @@ class TinyMce
 
     public static function init(array $config = [])
     {
-        if (HtmlAssets::$cdnNcn) {
-            echo '<script src="https://cdnjs.cloudflare.com/ajax/libs/tinymce/'.self::$version.'/tinymce.min.js"></script>';
-        } elseif (HtmlAssets::$cdnCN) {
-            echo '<script src="https://cdn.staticfile.org/tinymce/'.self::$version.'/tinymce.min.js"></script>';
-        } else {
-            echo '<script src="/assets/tinymce/tinymce.min.js"></script>';
-        }
+        echo '<script src="' . HtmlAssets::$cdn . 'tinymce/' . self::$version . '/tinymce.min.js"></script>';
+
         $config = array_merge([
             'selector' => '#content',
             'language' => 'zh-Hans',
