@@ -2,6 +2,7 @@
 
 namespace Phax\Db;
 
+use Phalcon\Db\Index;
 use Phax\Foundation\Application;
 
 class Db
@@ -69,4 +70,50 @@ class Db
         return preg_replace($keys, $params, $query, 1, $count);
     }
 
+    /**
+     * @param \Phalcon\Db\Adapter\Pdo\AbstractPdo $db
+     * @param string $table
+     * @param string|null $schema
+     * @return array
+     * @deprecated 原版调用会产生一个错误
+     * TypeError: Phalcon\Db\Index::__construct(): Argument #2 ($columns) must be of type array
+     * __construct( $name = '\000', $columns = NULL, $type = 'UNIQUE' ) 这个 $name 不知道是哪里来的
+     */
+    public static function describeIndexes(\Phalcon\Db\Adapter\Pdo\AbstractPdo $db, string $table, string $schema = null)
+    {
+        $indexesSQL = $db->getDialect()->describeIndexes($table, $schema);
+        $indexes = [];
+        foreach ($db->fetchAll($indexesSQL, \PDO::FETCH_ASSOC) as $index) {
+            $keyName = $index['key_name'];
+            $indexType = $index['index_type'];
+
+
+            if (!isset($indexes[$keyName])) {
+                $indexes[$keyName] = [];
+            }
+
+            if (!isset($indexes[$keyName]['columns'])) {
+                $columns = [];
+            } else {
+                $columns = $indexes[$keyName]['columns'];
+            }
+            $columns[] = $index['column_name'];
+            $indexes[$keyName]['columns'] = $columns;
+
+            if ($keyName == "PRIMARY") {
+                $indexes[$keyName]["type"] = "PRIMARY";
+            } elseif ($indexType == "FULLTEXT") {
+                $indexes[$keyName]["type"] = "FULLTEXT";
+            } elseif (isset($index['non_unique']) && $index["non_unique"] == 0) {
+                $indexes[$keyName]["type"] = "UNIQUE";
+            } else {
+                $indexes[$keyName]["type"] = "";
+            }
+        }
+        $indexObjects = [];
+        foreach ($indexes as $name => $index) {
+            $indexObjects[] = new Index($name, $index['columns'], $index['type']);
+        }
+        return $indexObjects;
+    }
 }

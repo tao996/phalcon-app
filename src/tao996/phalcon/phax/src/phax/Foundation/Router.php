@@ -7,7 +7,25 @@ use Symfony\Component\Dotenv\Dotenv;
 
 class Router
 {
+    /**
+     * 默认的语言参数匹配表达式
+     * @var string
+     */
     public static string $languageRule = '/{language:[a-z]{2}}';
+
+    /**
+     * 如果模块/应用是通过 composer 安装的，那么则需要将其名称及配置添加到此处
+     * @var array
+     */
+    private static array $vendors = [];
+
+    public static function addVendor(string $name, array $config, bool $overwrite = false): void
+    {
+        if (!$overwrite && in_array($name, self::$vendors)) {
+            throw new \Exception('Router vendors repeat:' . $name);
+        }
+        self::$vendors[$name] = $config;
+    }
 
     /**
      * 多模型识别名称
@@ -334,9 +352,13 @@ class Router
             application()->registerModules($config['registerModules']);
         }
         if (!$config['isApi']) {
-            view()->setViewsDir($config['viewpath']);
-            if (isset($config['pickview'])) {
-                view()->pick($config['pickview']);
+            if (isset($config['vendor']) && 'overwrite' == $config['vendor']) {
+                // register the view in the Module.php by your self
+            } else {
+                view()->setViewsDir($config['viewpath']);
+                if (isset($config['pickview'])) {
+                    view()->pick($config['pickview']);
+                }
             }
         }
         $router->add($config['route'], $config['paths']);
@@ -408,6 +430,7 @@ class Router
     public static function start(): void
     {
         if (IS_CLI) {
+            // start with artisan
             return;
         }
         $options = [
@@ -415,9 +438,32 @@ class Router
             'project' => config('app.project'),
         ];
         $config = self::analysisWithURL($_SERVER['REQUEST_URI'], $options);
-//        dd(__LINE__, $options, $config);
+        self::doVendors($config);
+//        dd($config);
         self::addRoute($config);
         self::$options = $config;
+    }
+
+    private static function doVendors(array &$config): void
+    {
+        if (self::$vendors) {
+            $name = $config['name'];
+            if (isset($config['module']) && isset(self::$vendors[$name])) {
+                // 完全重写
+                if ($overwriteConfig = self::$vendors[$name]) {
+                    $config = array_merge($config, $overwriteConfig);
+                    $config['vendor'] = 'overwrite';
+                } else {
+                    // 在 app/modules 下，但不是标准的命名空间
+                    // 去掉 App\Modules\
+                    $config['namespace'] = substr($config['namespace'], 12);
+                    $config['registerModules'][$name]['className'] = substr(
+                        $config['registerModules'][$name]['className'], 12
+                    );
+                    loader()->addNamespace($name, '/var/www/app/Modules/' . $name, true)->register();
+                }
+            }
+        }
     }
 
     private static array $cmd = [];
@@ -428,8 +474,11 @@ class Router
      * @param string|callable $action 所执行的命令或回调函数
      * @return void
      */
-    public static function addCLI(string $name, string|callable $action): void
+    public static function addCLI(string $name, string|callable $action, bool $overwrite = false): void
     {
+        if (!$overwrite && isset(self::$cmd[$name])) {
+            throw new \Exception('repeat CLI:' . $name);
+        }
         self::$cmd[$name] = [$action];
     }
 

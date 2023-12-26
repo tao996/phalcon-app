@@ -18,19 +18,21 @@ if (file_exists(PATH_ROOT . 'vendor/autoload.php')) {
     require PATH_ROOT . 'vendor/autoload.php';
 }
 
-
 $loader = new \Phalcon\Autoload\Loader();
+function loader(): \Phalcon\Autoload\Loader
+{
+    global $loader;
+    return $loader;
+}
 $loader->setFiles([
     PATH_PHAX . 'Foundation/function.php',
     PATH_PHAX . 'sdk/dotenv.phar',
 ], true);
 
 $loader->setNamespaces([
-    'App' => PATH_APP,
+    'App' => PATH_APP, // warning: don't use app
     'Phax' => PATH_PHAX,
     'Phaxui' => __DIR__ . '/phalcon/phaxui/src/phaxui/',
 ], true);
 
 $loader->register();
-
-//dd($loader->getNamespaces());

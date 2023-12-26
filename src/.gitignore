@@ -1,6 +1,4 @@
 .env
-vendor
-phalcon-migrations.phar
 .phpunit.result.cache
-
+vendor
 public/assets

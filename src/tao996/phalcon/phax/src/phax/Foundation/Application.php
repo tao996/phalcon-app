@@ -347,6 +347,7 @@ class Application
     public function runWeb()
     {
         require_once PATH_ROOT . 'routes/web.php';
+        \Phax\Foundation\Router::start();
         $application = application();
         $application->setDI(self::di());
         $finished = false;

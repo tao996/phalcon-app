@@ -9,4 +9,7 @@ try {
     echo $e->getMessage();
     die();
 }
+/**
+ * @var $app \Phax\Foundation\Application
+ */
 $app->runWeb();
