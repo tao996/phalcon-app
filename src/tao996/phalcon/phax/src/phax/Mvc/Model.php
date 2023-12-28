@@ -407,7 +407,7 @@ class Model extends \Phalcon\Mvc\Model
      * @return \Phalcon\Mvc\Model\Row|\Phalcon\Mvc\ModelInterface
      * @throws \Exception
      */
-    public static function mustFindFirst($parameters)
+    public static function mustFindFirst($parameters):static
     {
         if ($record = static::findFirst($parameters)) {
             return $record;
@@ -450,10 +450,10 @@ class Model extends \Phalcon\Mvc\Model
     /**
      * 更新指定的列值
      * @param array|string $columns 待更新的列
-     * @param string $primaryKey 主键，默认为 id
+     * @param string $primaryKey 主键/唯一键，默认为 id
      * @return bool
      */
-    public function updateWith(array|string $columns, string $primaryKey = 'id'): bool
+    public function updateColumns(array|string $columns, string $primaryKey = 'id'): bool
     {
         if (empty($columns)) {
             return $this->update();

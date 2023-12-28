@@ -33,6 +33,7 @@ if [ 'create' == $1 ]; then
   git clone ${origin}/phalcon-app-admin.git ${2}/src/app/Modules/tao
   git clone ${origin}/phalcon-app-assets.git ${2}/src/public/assets
   chmod 777 -R "${2}src/storage"
+  chmod 777 -R "${2}src/public/upload"
   exit 0
 fi
 

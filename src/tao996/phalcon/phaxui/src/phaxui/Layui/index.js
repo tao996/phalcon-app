@@ -242,7 +242,7 @@ const admin = {
         _isPosting: false,
         /**
          * 请求方法
-         * @param option {{url: string}}
+         * @param option {{url?: string}}
          * @param {function} [ok] 返回成功回调
          * @param {function} [no] 返回错误回调
          * @param {function} [complete] 完成回调
@@ -730,7 +730,9 @@ const admin = {
             url: '',
             autoApi: true,
             tableId: null, // 在 table.render 时会自动赋值
-            key: 'id'
+            key: 'id',
+            rowAction: function () {
+            }
         },
         /**
          * 获取配置信息
@@ -745,8 +747,8 @@ const admin = {
             return this._config[key] || defV;
         },
         /**
-         * 初始化
-         * @param {{id?:string, url:string}} [config]
+         * 初始化 id: 表格 ID，url 请求接口, rowAction:修改行数据时回调函数
+         * @param {{id?:string, url?:string, rowAction?:function}} [config]
          * @return this;
          */
         with: function (config = {}) {
@@ -873,6 +875,7 @@ const admin = {
                                 url: '/api' + url + '/delete', data: {id: ids.join(',')},
                             }, function () {
                                 layui.table.reload(tableId);
+                                admin.table._config.rowAction('batchDelete', ids.join(','));
                             })
                         })
                     }
@@ -884,6 +887,7 @@ const admin = {
                         end: function () {
                             admin.iframe.hasRefresh(() => {
                                 layui.table.reload(tableId);
+                                admin.table._config.rowAction('add');
                             })
                         }
                     })
@@ -895,6 +899,7 @@ const admin = {
                         title: '编辑记录', end: function () {
                             admin.iframe.hasRefresh(() => {
                                 layui.table.reload(tableId);
+                                admin.table._config.rowAction('edit', {id});
                             })
                         }
                     });
@@ -908,6 +913,7 @@ const admin = {
                             },
                             function () {
                                 admin.table.removeWith(tableId, s => s.id === id)
+                                admin.table._config.rowAction('delete', {id})
                             }
                         )
                     })
@@ -1068,6 +1074,8 @@ lay-skin="switch" lay-text="${option.tips}" lay-filter="${option.filter}" ${chec
                     admin.ajax.post({
                         url: url + '/modify',
                         data: postData,
+                    }, function () {
+                        admin.table._config.rowAction('modify', postData);
                     })
                 })
             })
@@ -1105,6 +1113,7 @@ lay-skin="switch" lay-text="${option.tips}" lay-filter="${option.filter}" ${chec
                     if (config && typeof config.ok === "function") {
                         config.ok(postData);
                     }
+                    admin.table._config.rowAction('modify', postData);
                 })
             })
             return this;
