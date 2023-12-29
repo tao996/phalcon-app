@@ -13,11 +13,8 @@ use Phax\Utils\Data;
  */
 class Request
 {
-    public static function isApiRequest($post = true): bool
+    public static function isApiRequest(): bool
     {
-        if ($post && request()->isPost()) {
-            return true;
-        }
         return request()->isAjax() || Router::isApiPath();
     }
 

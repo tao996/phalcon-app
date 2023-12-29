@@ -551,7 +551,7 @@ class QueryBuilder
         $this->_parameter['offset'] = 0;
         $record = $this->builder()->getQuery()->execute()?->getFirst();
         if (is_null($record)) {
-            return null;
+            return $toArray ? [] : null;
         }
         $row = $toArray ? $record->toArray() : $record;
         if ($toArray) {
