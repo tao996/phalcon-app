@@ -41,6 +41,15 @@ class Logger
         }
     }
 
+    public static function warning(...$args): void
+    {
+        if (count($args) === 1) {
+            logger()->warning(print_r($args[0], true));
+        } else {
+            logger()->warning(print_r($args, true));
+        }
+    }
+
     /**
      * 记录异常详细的栈信息
      * @param string $message 需要返回给客户端的信息，并重新 throw

@@ -64,9 +64,17 @@ class Request
 
     }
 
-    protected static function checkEmptyResult($notEmpty, $v, $title)
+    /**
+     * 检查数据能否为空
+     * @param $mustNotEmpty bool 是否必须不能为空
+     * @param $v mixed 待检查的值
+     * @param $title string 标题
+     * @return void
+     * @throws \Exception
+     */
+    protected static function checkEmptyResult(bool $mustNotEmpty, mixed $v, string $title):void
     {
-        if ($notEmpty && empty($v)) {
+        if ($mustNotEmpty && empty($v)) {
             throw new \Exception(__('require', ['field' => $title]), 200);
         }
     }

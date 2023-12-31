@@ -12,7 +12,7 @@ const PATH_APP_MODULES = PATH_ROOT . 'app/Modules/';
 
 
 // 扩展类库
-const PATH_PHAX = __DIR__ . '/phalcon/phax/src/phax/';
+const PATH_PHAX = __DIR__ . '/phax/';
 
 if (file_exists(PATH_ROOT . 'vendor/autoload.php')) {
     require PATH_ROOT . 'vendor/autoload.php';
@@ -32,7 +32,6 @@ $loader->setFiles([
 $loader->setNamespaces([
     'App' => PATH_APP, // warning: don't use app
     'Phax' => PATH_PHAX,
-    'Phaxui' => __DIR__ . '/phalcon/phaxui/src/phaxui/',
 ], true);
 
 $loader->register();
