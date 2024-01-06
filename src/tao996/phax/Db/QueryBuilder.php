@@ -64,6 +64,9 @@ class QueryBuilder
      */
     public function columns(array|string $columns): static
     {
+        if (empty($columns)) {
+            return $this;
+        }
         if (func_num_args() > 1) {
             throw new \Exception('params columns should be "id,age" or ["id","age"] in queryBuilder.columns');
         }
