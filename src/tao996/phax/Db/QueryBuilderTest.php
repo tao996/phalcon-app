@@ -16,6 +16,6 @@ class QueryBuilderTest extends TestCase
         $this->assertEquals([
             'bind' => ['123456789', 1],
             'bindTypes' => [2, 1]
-        ], Data::findByKeys($rst, ['bind', 'bindTypes']));
+        ], Data::getByKeys($rst, ['bind', 'bindTypes']));
     }
 }

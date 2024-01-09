@@ -9,7 +9,7 @@ networks:
 services:
   php:
     container_name: php
-    image: authus/php-8.3-fpm-phalcon-5.5.0
+    image: authus/phalcon:5.5.0
     working_dir: /var/www
     volumes:
       - ./src:/var/www:delegated

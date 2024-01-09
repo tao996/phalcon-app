@@ -120,13 +120,24 @@ class Data
     public static function getBool(array $data, string $key, bool $strict = false): bool
     {
         $v = $data[$key] ?? false;
+        return self::isBool($v, $strict);
+    }
+
+    /**
+     * 判断是否为布尔值
+     * @param mixed $v 待判断的值
+     * @param bool $strict 是否为严格类型，只接受 true/false
+     * @return bool
+     */
+    public static function isBool($v, bool $strict = false): bool
+    {
         if ($strict || is_bool($v)) {
             return $v == true;
         }
         if (is_numeric($v)) {
             return intval($v) > 0;
         }
-        return in_array($v, ['on', 'true', 't', 'ok']);
+        return in_array(strtolower($v), ['on', 'true', 't', 'ok']);
     }
 
     public static function notEmpty(array $data, string $key): bool
@@ -156,8 +167,16 @@ class Data
         }
     }
 
-    public static function findByKeys(array &$data, array $keys): array
+    /**
+     * 获取数组中指定键的值（see test）
+     * @param array $data 原始数组
+     * @param array $keys 需要提取的键
+     * @return array 由 $keys 组成的新数组
+     */
+    public static function getByKeys(array &$data, array $keys): array
     {
+        // array_flip 交换数组的键和值
+        // array_intersect_key 使用键名计算数组的交集
         return array_intersect_key($data, array_flip($keys));
     }
 
@@ -194,6 +213,26 @@ class Data
             $name = Helper::camelize($name, '-', true);
         }
         return $lcfirst ? lcfirst($name) : $name;
+    }
+
+
+    public static function findByKeys(array $items, array $keys, array $notEmptyKeys = [], bool $skipIfEmpty = true): array
+    {
+        $rows = [];
+        foreach ($items as $item) {
+            $append = true;
+            foreach ($notEmptyKeys as $key) {
+                if (empty($item[$key])) {
+                    $append = false;
+                    break;
+                }
+            }
+            if ($append) {
+                $rows[] = self::getByKeys($item, $keys);
+            }
+        }
+        unset($item);
+        return $rows;
     }
 
 }

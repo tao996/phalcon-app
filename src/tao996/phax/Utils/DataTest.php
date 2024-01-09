@@ -22,11 +22,27 @@ class DataTest extends TestCase
 
     }
 
-    public function testFindByKeys()
+    public function testGetByKeys()
     {
         $data = ['a' => 1, 'b' => 2, 'c' => 'hello'];
-        $rst = Data::findByKeys($data, ['a', 'c']);
+        $rst = Data::getByKeys($data, ['a', 'c']);
         $this->assertEquals(['a' => 1, 'c' => 'hello'], $rst);
+    }
+
+    public function testFindByKeys()
+    {
+        $data = [
+            ['a' => 1, 'b' => 2, 'd' => 5],
+            ['a' => 0, 'c' => 5]
+        ];
+        $rst = Data::findByKeys($data, ['a', 'b', 'c'], ['a']);
+        $this->assertEquals(['a' => 1, 'b' => 2], $rst[0]);
+
+        $rst = Data::findByKeys($data, ['a', 'b', 'c']);
+        $this->assertEquals([
+            ['a' => 1, 'b' => 2],
+            ['a' => 0, 'b' => 5]
+        ], $rst);
     }
 
     public function testFormatName()

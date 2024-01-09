@@ -224,6 +224,15 @@ class QueryBuilder
         return $this;
     }
 
+    /**
+     * 操作
+     * @param string $name 字段名称
+     * @param string $opt 操作符 like, =, >= ...
+     * @param mixed $value 字段值
+     * @param int $bindType 绑定类型，默认 -1 表示从模型中获取，其它使用 \PDO::PARAM_XXX
+     * @return void
+     * @throws \Exception
+     */
     public function opt($name, $opt, $value, int $bindType = -1): void
     {
 

@@ -128,12 +128,12 @@ class RouterTest extends \PHPUnit\Framework\TestCase
         ];
         $keys = ['pattern', 'pathsname', 'namespace', 'viewpath', 'route'];
         $rst = Router::analysisWithURL('/m/tao.wechat');
-        $this->assertEquals($expect, \Phax\Utils\Data::findByKeys($rst, $keys));
+        $this->assertEquals($expect, \Phax\Utils\Data::getByKeys($rst, $keys));
 
         $rst = Router::analysisWithURL('/cn/m/tao.wechat');
         $expect['pattern'] = Router::$languageRule . $expect['pattern'];
         $expect['route'] = Router::$languageRule . $expect['route'];
-        $this->assertEquals($expect, \Phax\Utils\Data::findByKeys($rst, $keys));
+        $this->assertEquals($expect, \Phax\Utils\Data::getByKeys($rst, $keys));
 
         $rst1 = Router::analysisWithURL('/m/m1.m11/');
         $rst2 = Router::analysisWithURL('/m/m1.m11');
@@ -413,19 +413,19 @@ class RouterTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals([
             'namespace' => 'App\Http\Projects\city\Controllers',
             'viewpath' => '/var/www/app/Http/Projects/city/views'
-        ], \Phax\Utils\Data::findByKeys($data, ['namespace', 'viewpath']));
+        ], \Phax\Utils\Data::getByKeys($data, ['namespace', 'viewpath']));
 
         $data = Router::analysisRoutePath('/', ['project' => 'city']);
         $this->assertEquals([
             'namespace' => 'App\Http\Projects\city\Controllers',
             'viewpath' => '/var/www/app/Http/Projects/city/views'
-        ], \Phax\Utils\Data::findByKeys($data, ['namespace', 'viewpath']));
+        ], \Phax\Utils\Data::getByKeys($data, ['namespace', 'viewpath']));
 
         $data = Router::analysisRoutePath('/auth', ['project' => 'city']);
         $this->assertEquals([
             'namespace' => 'App\Http\Projects\city\Controllers',
             'viewpath' => '/var/www/app/Http/Projects/city/views'
-        ], \Phax\Utils\Data::findByKeys($data, ['namespace', 'viewpath']));
+        ], \Phax\Utils\Data::getByKeys($data, ['namespace', 'viewpath']));
         $this->assertEquals('auth', $data['pathsname']['controller']);
 
         $url = '/sub/sub1.me/say?key=1';
