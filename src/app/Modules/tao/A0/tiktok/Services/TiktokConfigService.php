@@ -1,0 +1,44 @@
+<?php
+
+namespace app\Modules\tao\A0\tiktok\Services;
+
+use app\Modules\tao\A0\tiktok\Models\TiktokConfig;
+use app\Modules\tao\Services\ConfigService;
+
+class TiktokConfigService
+{
+    private const cacheKey = 'tao_tiktok_config';
+
+    public static function rows(): array
+    {
+        if (cache()->has(self::cacheKey)) {
+            return (array)cache()->get(self::cacheKey);
+        }
+        return self::forceCache();
+    }
+
+    public static function forceCache(): array
+    {
+        static $cache = null;
+        if (!is_null($cache)) {
+            return $cache;
+        }
+
+        $data = TiktokConfig::queryBuilder()->findColumn('name,value');
+        $rows = array_column($data, 'value', 'name');
+        if (!cache()->set(self::cacheKey, $rows)) {
+            $cache = $rows;
+            logger()->error('cache tao.tiktok.config failed:' . __CLASS__);
+        }
+        return $rows;
+    }
+
+    public static function getWith(string $name, int|string $default = '')
+    {
+        $data = self::rows();
+        if (isset($data[$name]) && ConfigService::notEmptyValue($data[$name])) {
+            return $data[$name];
+        }
+        return $default;
+    }
+}

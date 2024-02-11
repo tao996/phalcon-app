@@ -1,0 +1,79 @@
+<?php
+/**
+ * @var \app\Modules\tao\sdk\phaxui\Layui\Layui $layui
+ * @var \Phalcon\Mvc\View\Engine\AbstractEngine $this
+ */
+?>
+<form class="layui-form">
+
+    <div class="layui-form-item">
+        <label class="layui-form-label required">角色名称</label>
+        <div class="layui-input-block">
+            <input type="text" name="title" readonly class="layui-input" value="<?php echo viewData('row.title') ?>">
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label required">分配节点</label>
+        <div class="layui-input-block">
+            <div id="node_ids"></div>
+        </div>
+    </div>
+
+    <input type="hidden" name="id" readonly class="layui-input" value="<?php echo viewData('row.id') ?>">
+
+    <div class="hr-line"></div>
+    <div class="layui-form-item text-center">
+        <button type="submit"
+                lay-submit
+                class="layui-btn layui-btn-normal layui-btn-sm">
+            确认
+        </button>
+        <button type="reset" class="layui-btn layui-btn-primary layui-btn-sm">重置</button>
+    </div>
+
+</form>
+<?php $layui->footer(); ?>
+<?php $layui->addWindowConfig([]); ?>
+<script type="text/javascript">
+    const treeId = 'nodeDataId';
+    const id = <?php echo request()->getQuery('id', 'int', 0) ?>;
+    // 获取节点列表
+    admin.ajax.get({
+        url: window.location.href,
+    }, function (res) {
+        res.data = res.data || [];
+        layui.tree.render({
+            elem: '#node_ids',
+            data: res.data,
+            showCheckbox: true,
+            id: treeId,
+        });
+    })
+
+    admin.form.submitFirst(function () {
+        admin.iframe.closeFromParent(true);
+    }, function (data) {
+        // console.log('data', data)
+        // 获取选中的值
+        const rows = layui.tree.getChecked(treeId);
+        const ids = [];
+        $.each(rows, function (i, v) {
+            if (v.children !== undefined && v.children.length > 0) { // 控制器
+                $.each(v.children, function (i2, v2) {
+                    if (v2.children !== undefined && v2.children.length > 0) { // action
+                        $.each(v2.children, function (i3, v3) {
+                            ids.push(v3.id);
+                        })
+                    } else {
+                        ids.push(v2.id)
+                    }
+                });
+            } else {
+                ids.push(v.id)
+            }
+        })
+        data.node = ids.join(',')
+        return data;
+    })
+</script>

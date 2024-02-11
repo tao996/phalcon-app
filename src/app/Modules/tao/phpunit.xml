@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+在项目目录下执行
+php phpunit.phar -c app/Modules/tao/phpunit.xml
+-->
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         bootstrap="../../../phpunit-autoload.php"
+         colors="true"
+>
+    <testsuites>
+        <testsuite name="tao">
+            <directory suffix="Test.php">./</directory>
+        </testsuite>
+    </testsuites>
+    <php>
+        <env name="APP_ENV" value="testing"/>
+    </php>
+
+</phpunit>

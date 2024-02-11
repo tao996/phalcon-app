@@ -1,0 +1,134 @@
+<?php
+
+use app\Modules\tao\A0\city\Models\CityNear;
+use app\Modules\tao\sdk\phaxui\Layui\Layui;
+
+/**
+ * @var Layui $layui
+ * @var \Phalcon\Mvc\View\Engine\AbstractEngine $this
+ */
+?>
+
+<fieldset class="table-search-fieldset" id="table-search">
+    <legend>条件搜索</legend>
+    <form class="layui-form layui-form-pane form-search" lay-filter="form-search">
+        <div class="layui-form-item layui-inline">
+            <label class="layui-form-label">状态</label>
+            <div class="layui-input-inline">
+                <select name="status">
+                    <option value="">全部</option>
+                    <option value="1">启用</option>
+                    <option value="2">禁用</option>
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item layui-inline">
+            <label class="layui-form-label">类型</label>
+            <div class="layui-input-inline">
+                <select name="kind">
+                    <option value="">全部</option>
+                    <?php foreach (CityNear::MapKinds as $v => $t) { ?>
+                        <option value="<?php echo $v ?>"><?php echo $t[1] ?></option>
+                    <?php } ?>
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item layui-inline">
+            <a class="layui-btn layui-btn-normal layui-btn-sm"
+               lay-submit>搜索</a>
+            <button type="reset" class="layui-btn layui-btn-primary layui-btn-sm">
+                重置
+            </button>
+        </div>
+    </form>
+</fieldset>
+
+<script type="text/html" id="toolbar">
+    <div class="layui-table-tool-temp">
+        <button class="layui-btn layui-btn-sm" lay-on="refresh">
+            <i class="fa fa-refresh"></i>
+        </button>
+
+        <button class="layui-btn layui-btn-normal layui-btn-sm"
+                lay-on="create" data-full="true">
+            <i class="fa fa-plus"></i>添加
+        </button>
+        <button class="layui-btn layui-btn-sm layui-btn-danger"
+                lay-on="batchDelete">
+            <i class="fa fa-trash-o"></i>删除
+        </button>
+
+    </div>
+</script>
+<script type="text/html" id="row-action">
+    <div class="layui-btn-container">
+        <a class="layui-btn layui-btn-xs layui-btn-normal" lay-event="preview">预览</a>
+        <a class="layui-btn layui-btn-xs layui-btn-normal" lay-event="address">地址</a>
+        <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+        <a class="layui-btn layui-btn-xs layui-btn-danger" lay-event="remove">删除</a>
+    </div>
+</script>
+
+<table id="table" class="layui-hide"></table>
+
+<?php $layui->footer(); ?>
+<?php $layui->addWindowConfig([]); ?>
+<script>
+    const url = '<?php echo url('tao.city/admin.near') ?>'
+    const mapKinds = <?php echo json_encode(CityNear::MapKinds) ?>;
+    admin.table.with({url})
+        .render({
+            toolbar: '#toolbar',
+            cols: [[
+                {type: 'checkbox'},
+
+                {field: 'sort', title: '排序', width: 80, edit: 'text'},
+                {
+                    title: '类型', width: 80, templet: function (d) {
+                        return mapKinds[d.kind][1];
+                    }
+                },
+                {field: 'banner', width: 100, templet: admin.table.image, title: '横幅图'},
+                {field: 'list', width: 80, templet: admin.table.image, title: '列表图'},
+                {field: 'tag', title: '标签[edit]', width: 120, edit: 'text'},
+                {field: 'title', title: '名称',},
+                {field: 'address', title: '位置', width: 150},
+                {
+                    title: '坐标', width: 50, templet: function (d) {
+                        return d.lat != 0 ? '有' : '无';
+                    }
+                },
+                {field: 'summary', title: '简介[edit]', width: 150, edit: 'text'},
+
+                {field: 'hot', title: '热门', width: 85, templet: admin.table.switch},
+                {field: 'top', title: '置顶', width: 85, templet: admin.table.switch},
+                {field: 'status', title: '状态', width: 85, templet: admin.table.switch},
+                {title: '操作', width: 130, toolbar: '#row-action'}
+            ]],
+            lineStyle: 'height: 90px;'
+        })
+        .addPostSwitch(['status', 'hot', 'top'])
+        .addPostEditText()
+        .addLayOnActions()
+        .addLayEventActions({
+            events: function (obj) {
+                const data = obj.data;
+                const prefix = '<?php echo url("tao.city/admin") ?>'
+                switch (obj.event) {
+                    case 'address':
+                        admin.iframe.open(prefix + '.near/address?id=' + data.id, {
+                            title: '修改地址',
+                            end: admin.table.reloadWhenIframeRefresh,
+                        });
+                        break;
+                    case 'preview':
+                        admin.iframe.open(prefix + '.near/preview?id=' + data.id, {
+                            title: '预览',
+                            full: false,
+                            end: admin.table.reloadWhenIframeRefresh,
+                        });
+                        break;
+                }
+            }
+        });
+</script>

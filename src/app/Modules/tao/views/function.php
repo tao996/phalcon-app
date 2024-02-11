@@ -1,0 +1,51 @@
+<?php
+/**
+ * 与模板数据比较
+ * @param string $path 路径
+ * @param mixed $output 输出的内容，如果提供，则会直接使用 echo
+ * @param mixed $cmpValue 待比较的值，默认为 1
+ * @return mixed
+ */
+function viewDataCompare(string $path, mixed $output = "", mixed $cmpValue = 1): mixed
+{
+    $rst = viewData($path, 0) == $cmpValue;
+    if ($output) {
+        return $rst ? $output : (is_int($output) ? 0 : '');
+    }
+    return $rst;
+}
+
+/**
+ * 通常用于将 php 变量转为 js 布尔值
+ * @param bool $condition
+ * @return string
+ */
+function viewDataBool2String(bool $condition): string
+{
+    return $condition ? 'true' : 'false';
+}
+
+/**
+ * 读取系统配置的值
+ * @param string $path 路径
+ * @param mixed $default 默认值
+ * @return mixed|string
+ */
+function systemConfig(string $path, mixed $default = ''): mixed
+{
+    return \app\Modules\tao\Services\ConfigService::getWith($path, $default);
+}
+
+function systemConfigCompare(string $path, string $output, $cmpValue = "1"): void
+{
+    echo \app\Modules\tao\Services\ConfigService::getWith($path, "") == $cmpValue ? $output : '';
+}
+
+/**
+ * 模板目录
+ * @return string
+ */
+function viewsDir(): string
+{
+    return view()->getViewsDir();
+}

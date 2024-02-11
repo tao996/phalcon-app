@@ -1,0 +1,92 @@
+<?php
+
+use app\Modules\tao\A0\city\Config\Data;
+use app\Modules\tao\sdk\phaxui\Layui\Layui;
+use app\Modules\tao\sdk\phaxui\Layui\LayuiHtml;
+
+/**
+ * @var Layui $layui
+ * @var \Phalcon\Mvc\View\Engine\AbstractEngine $this
+ */
+
+$platform = viewData('row.platform', 0);
+?>
+<div class="text-danger" style="margin-bottom: 10px;">通常情况下是由客户端登录后，推送过来“我要直播”，此时会获取用户的 app user id 和 账号，而不需要手动添加</div>
+<form class="layui-form" lay-filter="row">
+    <div class="layui-form-item">
+        <label class="layui-form-label required">平台</label>
+        <div class="layui-input-inline">
+            <select name="platform" lay-verify="required" lay-reqtext="必须选择平台">
+                <option value="">请选择</option>
+                <?php foreach (Data::MapPlatform as $v => $t) { ?>
+                    <option value="<?php echo $v ?>" <?php echo $platform == $v ? 'selected' : '' ?>><?php echo $t[1] ?></option>
+                <?php } ?>
+            </select>
+        </div>
+
+        <label class="layui-form-label">账号</label>
+        <div class="layui-input-inline">
+            <input type="text" name="name" class="layui-input" placeholder="请输入平台账号或者姓名"
+                   value="<?php echo viewData('row.name') ?>"
+                   lay-affix="clear"
+            >
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">直播间分享码</label>
+        <div class="layui-input-block">
+            <input type="text" name="share_code" class="layui-input"
+                   placeholder="请输入直播间分享码"
+                   value="<?php echo viewData('row.share_code') ?>"
+                   lay-affix="clear"
+            >
+        </div>
+    </div>
+    <?php LayuiHtml::upload('直播间二维码', 'qc', [
+        'value' => viewData('row.qc'),
+    ]); ?>
+
+
+    <div class="hr-line"></div>
+
+    <div class="layui-form-item text-center" style="margin-top: 10px;">
+        <button type="submit" class="layui-btn layui-btn-normal layui-btn-sm" lay-submit lay-filter="demo1">确认
+        </button>
+        <button type="reset" class="layui-btn layui-btn-primary layui-btn-sm">重置</button>
+    </div>
+
+</form>
+<?php $layui->addWindowConfig(); ?>
+<?php $layui->footer(); ?>
+
+<script>
+    const platforms = <?php echo json_encode(Data::MapPlatform) ?>;
+    const isStorage = <?php echo viewDataBool2String(isset($_GET['storage'])) ?>;
+
+    if (isStorage) {
+        const key = 'lives';
+        const vs = admin.storage.getParse(key);
+        if (vs) {
+            admin.form.valFilter('row', vs)
+        }
+        // admin.form.submitFilter('demo1', data => {
+        //     data.ptitle = platforms[data.platform][1];
+        //     admin.storage.save(key, data);
+        //     admin.iframe.closeFromParent(true);
+        // })
+    }
+    admin.form.submitFirst(res => {
+        console.log(res)
+        admin.iframe.closeFromParent(true);
+    }, function (data) {
+        if (admin.util.isEmpty(data.qc) && admin.util.isEmpty(data.share_code)) {
+            admin.layer.error('分享码和二维码不能同时为空')
+            return false;
+        }
+        return data;
+    })
+
+
+    admin.upload.run();
+</script>

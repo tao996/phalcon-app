@@ -1,0 +1,120 @@
+<?php
+
+use app\Modules\tao\Models\SystemMenu;
+use app\Modules\tao\sdk\phaxui\Layui\Layui;
+
+/**
+ * @var Layui $layui
+ * @var \Phalcon\Mvc\View\Engine\AbstractEngine $this
+
+ * @var int $id
+ * @var array $row
+ */
+$pid = viewData('row.pid', viewData('pid', 0));
+$menuList = viewData('row.menuList',[]);
+//dd(viewData());
+?>
+
+<form class="layui-form">
+
+    <div class="layui-form-item  layui-row layui-col-xs12">
+        <label class="layui-form-label required">上级菜单</label>
+        <div class="layui-input-inline">
+            <select name="pid">
+                <?php foreach ($menuList as $vo) { ?>
+                    <option value="<?php echo $vo['id'] ?>"
+                        <?php echo $pid == $vo['id'] ? 'selected' : '' ?>
+                    ><?php echo $vo['title'] ?></option>
+                <?php } ?>
+            </select>
+        </div>
+        <!-- 只有一级菜单才能设置访问权限 -->
+        <div id="tag" style="display: inline-block;margin-top: 10px;">
+            <label class="layui-form-label">访问权限</label>
+            <div class="layui-input-inline">
+                <input type="text" class="layui-input" id="inputTag" name="tag"
+                       value="<?php echo viewData('row.tag') ?>"
+                       placeholder="不填则表示手动授权"
+                >
+            </div>
+            <div style="display: inline-block;padding-top: 5px;">
+                <a class="layui-btn layui-btn-sm layui-btn-warm" onclick="inputTag('')">清空</a>
+                <?php foreach ([
+                                   SystemMenu::TAG_OPEN,
+                                   SystemMenu::TAG_USER,
+                                   SystemMenu::TAG_SUPER_ADMIN
+                               ] as $tag) { ?>
+                    <a class="layui-btn layui-btn-sm" onclick="inputTag('<?php echo $tag ?>')"><?php echo $tag ?></a>
+                <?php } ?>
+            </div>
+        </div>
+
+
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label required">菜单名称</label>
+        <div class="layui-input-inline">
+            <input type="text" name="title" class="layui-input"
+                   lay-verify="required" lay-reqtext="请输入菜单名称"
+                   lay-affix="clear"
+                   placeholder="请输入菜单名称" value="<?php echo viewData('row.title') ?>">
+        </div>
+
+        <label class="layui-form-label">标识</label>
+        <div class="layui-input-inline">
+            <input type="text" name="remark" class="layui-input" value="<?php echo viewData('row.remark') ?>">
+        </div>
+
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">菜单链接</label>
+        <div class="layui-input-inline">
+            <input type="text" name="href" id="href" class="layui-input"
+                   lay-affix="clear"
+                   placeholder="请输入菜单链接"
+                   value="<?php echo viewData('row.href') ?>">
+        </div>
+
+        <div class="layui-input-inline">
+            <input type="checkbox" name="multi" value="1" title="多模块"
+                <?php echo viewDataCompare('row.multi', 'checked') ?>>
+        </div>
+    </div>
+
+    <?php \app\Modules\tao\sdk\phaxui\Layui\LayuiHtml::icon(['value' => viewData('row.icon')]); ?>
+
+
+    <div class="layui-form-item">
+
+
+        <label class="layui-form-label">菜单排序</label>
+        <div class="layui-input-inline">
+            <input type="number" name="sort"
+                   lay-reqtext="菜单排序不能为空" placeholder="请输入菜单排序"
+                   value="<?php echo viewData('row.sort', 0) ?>" class="layui-input">
+        </div>
+    </div>
+
+
+    <div class="layui-form-item text-center">
+        <button type="submit" class="layui-btn layui-btn-normal layui-btn-sm" lay-submit>确认</button>
+        <button type="reset" class="layui-btn layui-btn-primary layui-btn-sm">重置</button>
+    </div>
+
+</form>
+<?php $layui->addWindowConfig([]); ?>
+<?php $layui->footer(); ?>
+<?php \app\Modules\tao\sdk\phaxui\Layui\LayuiHtml::iconJs(); ?>
+<script>
+    admin.form.submitFirst(() => {
+        admin.iframe.closeFromParent(true);
+    })
+    const inputTagEle = $('#inputTag');
+
+
+    function inputTag(tag) {
+        inputTagEle.val(tag);
+    }
+</script>

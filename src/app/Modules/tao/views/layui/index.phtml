@@ -1,0 +1,44 @@
+<?php
+
+use app\Modules\tao\BaseResponseController;
+
+use app\Modules\tao\sdk\phaxui\HtmlAssets;
+
+/**
+ * @var \Phalcon\Mvc\View\Engine\AbstractEngine $this
+ * @var array $user
+ * @var string $controllerJs 当前页面 js
+ */
+$layui = app\Modules\tao\sdk\phaxui\Layui\Layui::getInstance();
+?>
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="utf-8">
+    <title><?php echo isset($pageTitle) ? $pageTitle . ' - ' : '' ?><?php echo config('app.name') ?></title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!--[if lt IE 9]>
+    <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+    <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <?php $layui->header(); ?>
+    <?php HtmlAssets::outputHeaders(); ?>
+    <style><?php include_once __DIR__ . '/tao.css'; ?></style>
+</head>
+<body>
+<div class="tao-container">
+    <?php echo $this->view->getContent(); ?>
+</div>
+</body>
+
+<?php
+
+$layui->footer();
+\app\Modules\tao\sdk\phaxui\HtmlAssets::outputFooters();
+// 模板脚本
+\app\Modules\tao\sdk\phaxui\HtmlAssets::appendTemplateJs(BaseResponseController::$theme);
+?>
+
+</html>

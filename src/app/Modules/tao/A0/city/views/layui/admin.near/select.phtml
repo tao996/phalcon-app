@@ -1,0 +1,111 @@
+<?php
+/**
+ * @var \app\Modules\tao\sdk\phaxui\Layui\Layui $layui
+ * @var \Phalcon\Mvc\View\Engine\AbstractEngine $this
+ */
+
+use app\Modules\tao\A0\city\Models\CityNear;
+
+?>
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>周边选择</title>
+    <?php $layui->header();
+    $layui->selectHeader();
+    ?>
+
+</head>
+<body>
+<script type="text/html" id="toolbar">
+
+    <form class="layui-form" style="display:inline-block;" lay-filter="form-search">
+        <div class="layui-form-item" style="margin-bottom: 0">
+
+            <label class="layui-form-label">类型</label>
+            <div class="layui-input-inline">
+                <select name="kind">
+                    <option value="">全部</option>
+                    <?php foreach (CityNear::MapKinds as $v => $t) { ?>
+                        <option value="<?php echo $v ?>"><?php echo $t[1] ?></option>
+                    <?php } ?>
+                </select>
+            </div>
+            <div class="layui-input-inline">
+                <input type="text" id="keyword"
+                       name="keyword" placeholder="名称" autocomplete="off"
+                       lay-affix="clear"
+                       class="layui-input input-keyword"
+                >
+            </div>
+            <div class="layui-form-item layui-inline">
+                <a class="layui-btn layui-btn-normal"
+                   lay-submit>搜索</a>
+                <button type="reset" class="layui-btn layui-btn-primary">
+                    重置
+                </button>
+                <a class="layui-btn" lay-on="picker">选择</a>
+            </div>
+        </div>
+    </form>
+</script>
+
+<div style="padding: 0 8px;">
+    <table id="table" class="layui-hide"></table>
+</div>
+</body>
+<?php $layui->footer(); ?>
+<script>
+    const key = 'nears';
+    const apiUrl ='<?php echo url("tao.city/admin.near") ?>';
+    const kinds = <?php echo json_encode(CityNear::MapKinds) ?>;
+
+    const tt = admin.table.with({url: apiUrl})
+        .render({
+            defaultToolbar: '-',
+            toolbar: '#toolbar',
+            cols: [[
+                {type: 'checkbox'},
+                {
+                    title: '类型', width: 100, templet: function (d) {
+                        try {
+                            return kinds[d.kind][1];
+                        } catch (e) {
+                            return '~';
+                        }
+                    }
+                },
+                {field: 'list',title: '列表图',width: 90,templet:admin.table.image},
+                {field: 'title', title: '名称', width: 150},
+                {field: 'address', title: '地址'},
+            ]],
+            lineStyle: 'height: 60px;'
+        }, {search: false}).addPostEditText()
+
+    const inst = tt.getTableId();
+    const index = parent.layer.getFrameIndex(window.name);
+
+
+    admin.util.layOn({
+        picker: function () {
+            const rows = layui.table.cache['table'];
+            const items = rows.filter(d => d['LAY_CHECKED'] === true);
+            if (items.length > 0) {
+                items.forEach(d => {
+                    d.ktitle = kinds[d.kind][1]
+                })
+                // id, kind, title, ktitle, address,list
+                admin.storage.save(key, items);
+                parent.layer.close(index)
+            } else {
+                admin.layer.error('没有选中任何周边')
+            }
+        }
+    })
+
+</script>
+</html>

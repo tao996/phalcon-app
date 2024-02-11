@@ -1,0 +1,121 @@
+<?php
+
+use app\Modules\tao\sdk\phaxui\Layui\Layui;
+
+/**
+ * @var Layui $layui
+ * @var \Phalcon\Mvc\View\Engine\AbstractEngine $this
+ */
+$platform = \Phax\Utils\Data::getInt($_GET, 'platform', 0);
+?>
+
+<fieldset class="table-search-fieldset" id="table-search">
+    <legend>条件搜索</legend>
+    <form class="layui-form layui-form-pane form-search" lay-filter="form-search">
+        <div class="layui-form-item layui-inline">
+            <label class="layui-form-label">状态</label>
+            <div class="layui-input-inline">
+                <select name="status">
+                    <option value="">全部</option>
+                    <option value="1">启用</option>
+                    <option value="2">禁用</option>
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item layui-inline">
+            <label class="layui-form-label">平台</label>
+            <div class="layui-input-inline">
+                <select name="term_id">
+                    <option value="">全部</option>
+                    <?php foreach (\app\Modules\tao\A0\city\Config\Data::MapPlatform as $id => $t) { ?>
+                        <option value="<?php echo $id ?>" <?php echo $platform == $id ? 'selected' : '' ?>><?php echo $t[1] ?></option>
+                    <?php } ?>
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item layui-inline">
+            <a class="layui-btn layui-btn-normal layui-btn-sm"
+               lay-submit>搜索</a>
+            <button type="reset" class="layui-btn layui-btn-primary layui-btn-sm">
+                重置
+            </button>
+        </div>
+    </form>
+</fieldset>
+
+<script type="text/html" id="toolbar">
+    <div class="layui-table-tool-temp">
+        <button class="layui-btn layui-btn-sm" lay-on="refresh">
+            <i class="fa fa-refresh"></i>
+        </button>
+
+        <button class="layui-btn layui-btn-normal layui-btn-sm"
+                lay-on="create">
+            <i class="fa fa-plus"></i>添加
+        </button>
+        <button class="layui-btn layui-btn-sm layui-btn-danger"
+                lay-on="batchDelete">
+            <i class="fa fa-trash-o"></i>删除
+        </button>
+
+    </div>
+</script>
+<script type="text/html" id="row-action">
+    <div class="layui-btn-container">
+        <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+        <a class="layui-btn layui-btn-xs layui-btn-danger" lay-event="remove">删除</a>
+    </div>
+</script>
+
+<table id="table" class="layui-hide"></table>
+
+<?php $layui->footer(); ?>
+<?php $layui->addWindowConfig([]); ?>
+<script>
+    const url = '<?php echo url('tao.city/admin.video') ?>'
+    const mapPlatform = <?php echo json_encode(\app\Modules\tao\A0\city\Config\Data::MapPlatform) ?>;
+
+    admin.table.with({url})
+        .render({
+            toolbar: '#toolbar',
+            cols: [[
+                {type: 'checkbox'},
+                {
+                    title: '平台', width: 100, templet: function (d) {
+                        return mapPlatform[d.platform][1]
+                    }
+                },
+                {field: 'date', title: '日期', templet: admin.table.humanDate,width: 120},
+                {field: 'cover', title: '封面', width: 100, templet: admin.table.image},
+                {field: 'title', title: '标题', edit: 'text'},
+                {
+                    field: 'share_code', title: '分享码', width: 100, templet: function (d) {
+                        return `<a lay-event="seeShareCode" class="layui-btn layui-btn-xs layui-btn-warm">查看</a>`
+                    }
+                },
+                {
+                    title: '链接', width: 80, templet: function (d) {
+                        return d.link ? `<a class="layui-btn layui-btn-xs" href="${d.link}" target="_blank">打开</a>` : '-';
+                    }
+                },
+                {field: 'status', title: '状态', width: 85, templet: admin.table.switch},
+                {
+                    title: '操作', toolbar: '#row-action', width: 130
+                }
+            ]],
+            lineStyle: 'height: 60px;'
+        })
+        .addPostSwitch()
+        .addPostEditText()
+        .addLayOnActions()
+        .addLayEventActions({
+            events: function (obj) {
+                switch (obj.event) {
+                    case 'seeShareCode':
+                        admin.layer.alert(obj.data.share_code, null, {title: '分享码'});
+                        break;
+                }
+            }
+        });
+
+</script>

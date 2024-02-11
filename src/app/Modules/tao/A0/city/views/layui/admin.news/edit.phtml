@@ -1,0 +1,202 @@
+<?php
+
+use app\Modules\tao\sdk\phaxui\Layui\Layui;
+use app\Modules\tao\sdk\phaxui\Layui\LayuiHtml;
+
+/**
+ * @var Layui $layui
+ * @var \Phalcon\Mvc\View\Engine\AbstractEngine $this
+ */
+
+\app\Modules\tao\A0\cms\Helper\CmsHtmlHelper::header();
+$kind = viewData('row.kind', 0);
+//dd(viewData());
+?>
+<form class="layui-form" lay-filter="row">
+    <h3 class="my-2">基本信息</h3>
+    <div class="flex-rows">
+        <div style="width: 400px;">
+            <div>
+                <?php LayuiHtml::upload('横幅图', 'banner', [
+                    'value' => viewData('row.banner'),
+                    'tip' => '通常用于广告，建议尺寸比例 16:9'
+                ]); ?>
+            </div>
+            <div>
+                <?php LayuiHtml::upload('列表图', 'list', [
+                    'value' => viewData('row.list'),
+                    'tip' => '建议尺寸比例 1:1'
+                ]); ?>
+            </div>
+        </div>
+
+        <div class="flex-1">
+
+            <div class="layui-form-item">
+                <label class="layui-form-label required">开始时间</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="dt1" class="layui-input" id="dt1"
+                           placeholder="请输入开始时间"
+                           lay-affix="clear"
+                    >
+                </div>
+
+                <label class="layui-form-label">结束时间</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="dt2" class="layui-input" id="dt2"
+                           placeholder="请输入结束时间"
+                           lay-affix="clear"
+                    >
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <label class="layui-form-label required">标题</label>
+                <div class="layui-input-block">
+                    <input type="text" name="title" class="layui-input"
+                           placeholder="请输入活动/景点/比赛标题（最多填写 100 个汉字）"
+                           value="<?php echo viewData('row.title') ?>"
+                           lay-affix="clear"
+                           lay-verify="required" maxlength="100"
+                    >
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <label class="layui-form-label">简介</label>
+                <div class="layui-input-block">
+                    <input type="text" name="summary" class="layui-input"
+                           placeholder="请输入活动/景点/比赛简介（最多填写 255 个汉字）"
+                           value="<?php echo viewData('row.summary') ?>"
+                           lay-affix="clear" maxlength="255"
+                    >
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <label class="layui-form-label">标签</label>
+                <div class="layui-input-block">
+                    <input type="text" name="tag" class="layui-input"
+                           placeholder="显示的标签"
+                           value="<?php echo viewData('row.tag') ?>"
+                           lay-affix="clear"
+                           maxlength="255"
+                    >
+                </div>
+            </div>
+
+            <?php \app\Modules\tao\A0\city\Helper\CityHtmlHelper::addressHtml(); ?>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">类型</label>
+        <div class="layui-input-block">
+            <?php $kind = viewData('row.kind', 0); ?>
+
+            <input lay-filter="kind" <?php echo $kind == 0 ? 'checked' : '' ?> value="0" type="radio" name="kind"
+                   title="无" lay-skin="tag">
+            <?php foreach (\app\Modules\tao\A0\city\Models\CityNews::MapKinds as $v => $t) { ?>
+                <input lay-filter="kind" value="<?php echo $v ?>" type="radio" name="kind" title="<?php echo $t[1] ?>"
+                       lay-skin="tag" <?php echo $kind == $v ? 'checked' : '' ?>>
+            <?php } ?>
+
+            <!-- Metadata -->
+            <div style="padding: 10px 0;border: 1px solid lightgreen;border-radius: 5px;margin-top: 10px;">
+                <div id="kind-game" class="kind-block" style="display: none;">
+                    <?php \app\Modules\tao\A0\city\Helper\CityHtmlHelper::gameHtml(); ?>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">提示</label>
+        <div class="layui-input-block">
+                    <textarea name="warning" class="layui-textarea"
+                              placeholder="出行提示或其它警告信息（水/洗手间）（最多填写 1000 个汉字）"><?php echo viewData('row.warning') ?></textarea>
+        </div>
+    </div>
+
+    <?php \app\Modules\tao\A0\cms\Helper\CmsHtmlHelper::ImageHtml(); ?>
+    <?php \app\Modules\tao\A0\city\Helper\CityHtmlHelper::liveHtml(); ?>
+    <?php \app\Modules\tao\A0\city\Helper\CityHtmlHelper::videoHtml(); ?>
+    <?php \app\Modules\tao\A0\city\Helper\CityHtmlHelper::nearHtml(); ?>
+
+    <h3 class="my-2">内容</h3>
+    <div>
+            <textarea name="content" class="layui-textarea" placeholder="请输入内容"
+                      id="content"><?php echo viewData('row.content') ?></textarea>
+    </div>
+
+    <div class="hr-line"></div>
+    <div class="layui-form-item text-center" style="margin-top: 10px;">
+        <button type="submit" class="layui-btn layui-btn-normal layui-btn-sm" lay-submit>确认</button>
+        <button type="reset" class="layui-btn layui-btn-primary layui-btn-sm">重置</button>
+    </div>
+
+</form>
+<?php
+$layui->addWindowConfig();
+$layui->footer();
+
+$images = viewData('row.images');
+\app\Modules\tao\A0\cms\Helper\CmsHtmlHelper::ImageJs($images);
+
+$lives = viewData('row.lives');
+\app\Modules\tao\A0\city\Helper\CityHtmlHelper::liveJs($lives);
+
+$videos = viewData('row.videos');
+\app\Modules\tao\A0\city\Helper\CityHtmlHelper::videoJs($videos);
+
+$nears = viewData('row.nears');
+\app\Modules\tao\A0\city\Helper\CityHtmlHelper::nearJs($nears);
+
+\app\Modules\tao\A0\city\Helper\CityHtmlHelper::addressJs();
+\app\Modules\tao\A0\city\Helper\CityHtmlHelper::gameJs();
+
+\app\Modules\tao\sdk\phaxui\TinyMce::init();
+?>
+<script>
+    const mapKinds = <?php echo json_encode(\app\Modules\tao\A0\city\Models\CityNews::MapKinds) ?>;
+    <?php if ($kind){
+    $kindInfo = \app\Modules\tao\A0\city\Models\CityNews::getMapKind($kind);
+    ?>
+    $('#kind-<?php echo $kindInfo[0] ?>').show();
+    <?php } ?>
+
+    admin.form.submitFirst(() => {
+        admin.iframe.closeFromParent(true);
+    }, function (data) {
+        const content = tinymce.activeEditor.getContent();
+        const image_ids = vmImage.data.items.map(d => d.id).join(',');
+        const live_ids = vmLive.data.items.map(d => d.id).join(',');
+        const video_ids = vmVideo.data.items.map(d => d.id).join(',');
+        const near_ids = vmNear.data.items.map(d => d.id).join(',');
+        return Object.assign(data, {content, image_ids, live_ids, video_ids, near_ids})
+    })
+
+    admin.upload.run();
+
+    admin.form.on('kind', function (data) {
+        const v = data.elem.value;
+        const kind = mapKinds[v];
+        $('.kind-block').hide();
+        if (kind) {
+            $('#kind-' + kind[0]).show();
+        }
+    }, 'radio');
+
+    laydate.render({
+        elem: '#dt1',
+        type: 'datetime',
+        value: '<?php echo date("Y-m-d H:i:s", viewData("row.dt1")) ?>',
+        fullPanel: true // 2.8+
+    });
+    laydate.render({
+        elem: '#dt2',
+        type: 'datetime',
+        value: '<?php echo date("Y-m-d H:i:s", viewData("row.dt2")) ?>',
+        fullPanel: true // 2.8+
+    });
+
+</script>
+

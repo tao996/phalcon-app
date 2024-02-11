@@ -1,0 +1,114 @@
+<?php
+/**
+ * @var \app\Modules\tao\sdk\phaxui\Layui\Layui $layui
+ * @var \Phalcon\Mvc\View\Engine\AbstractEngine $this
+ */
+?>
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>选择回放记录</title>
+    <?php $layui->header();
+    $layui->selectHeader(); ?>
+</head>
+<body>
+<div id="table-search" style="margin-top: 8px;">
+    <form class="layui-form" style="display:inline-block;" lay-filter="form-search">
+        <div class="layui-form-item" style="margin-bottom: 0">
+            <label class="layui-form-label layui-form-label-auto">平台</label>
+            <div class="layui-input-inline">
+                <select name="platform">
+                    <option value="">全部</option>
+                    <?php foreach (\app\Modules\tao\A0\city\Config\Data::MapPlatform as $v => $t) { ?>
+                        <option value="<?php echo $v ?>"><?php echo $t[1] ?></option>
+                    <?php } ?>
+                </select>
+            </div>
+            <label class="layui-form-label layui-form-label-auto">日期</label>
+            <div class="layui-input-inline">
+                <input type="text" id="date"
+                       name="date" placeholder="日期范围" autocomplete="off"
+                       lay-affix="clear"
+                       class="layui-input input-keyword"
+                >
+            </div>
+            <div class="layui-input-inline">
+                <input type="text" id="keyword"
+                       name="keyword" placeholder="请输入标题关键词" autocomplete="off"
+                       lay-affix="clear"
+                       class="layui-input input-keyword"
+                >
+            </div>
+            <div class="layui-form-item layui-inline">
+                <a class="layui-btn layui-btn-normal"
+                   lay-submit>搜索</a>
+                <button type="reset" class="layui-btn layui-btn-primary">
+                    重置
+                </button>
+                <a class="layui-btn" lay-on="picker">选择</a>
+            </div>
+        </div>
+    </form>
+</div>
+<div style="padding: 0 8px">
+    <table id="table" class="layui-hide"></table>
+</div>
+</body>
+<?php $layui->footer(); ?>
+<script>
+    const key = 'videos';
+    const apiUrl = '<?php echo url("tao.city/admin.video") ?>';
+    const mapPlatform = <?php echo json_encode(\app\Modules\tao\A0\city\Config\Data::MapPlatform) ?>;
+
+
+    admin.util.layOn({
+        picker: function () {
+
+            const items = layui.table.cache['table'].filter(d => d['LAY_CHECKED'] === true);
+            if (items.length > 0) {
+                const rows = items.map(d => admin.util.pick(d, 'id', 'platform', 'link', 'title', 'cover'));
+                rows.forEach(d => {
+                    d.ptitle = mapPlatform[d.platform][1];
+                });
+                admin.storage.save(key, rows)
+                admin.iframe.closeFromParent(false)
+            } else {
+                admin.layer.error('没有选中任何记录')
+            }
+        }
+    })
+
+
+    const tt = admin.table.with({url: apiUrl})
+        .render({
+            cols: [[
+                {type: "checkbox"},
+                {
+                    field: 'date',
+                    width: 120,
+                    title: '日期',
+                    align: "center",
+                    templet: admin.table.humanDate
+                },
+                {
+                    title: '平台', width: 100, templet: function (d) {
+                        return mapPlatform[d.platform] ? `${mapPlatform[d.platform][1]}` : '-'
+                    }
+                },
+                {field: 'cover', title: '封面', width: 80, templet: admin.table.image},
+                {field: 'title', title: '标题'},
+                {title: '', width: 1}
+            ]],
+            lineStyle: 'height: 60px;'
+        })
+
+    laydate.render({
+        elem: "#date",
+        range: true,
+    });
+</script>
+</html>

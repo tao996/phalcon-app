@@ -1,0 +1,23 @@
+# 本地开发时，可下载以下库
+
+font-awesome
+# https://fontawesome.com/versions
+
+layui
+# https://layui.dev/docs/2/versions.html
+# layui
+#   |-- 2.9.6
+#       |-- layui.min.js
+#       |-- css/layui.min.css
+
+tinymce
+# https://www.tiny.cloud/get-tiny/self-hosted/
+# tinymce
+#   |-- 6.8.0
+
+vue
+# vue
+#   |-- 3.3.9
+#       |-- vue.global.prod.min.js
+
+taro

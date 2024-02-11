@@ -1,0 +1,129 @@
+<?php
+
+use app\Modules\tao\A0\city\Models\CityNear;
+use app\Modules\tao\sdk\phaxui\Layui\Layui;
+use app\Modules\tao\sdk\phaxui\Layui\LayuiHtml;
+
+/**
+ * @var Layui $layui
+ * @var \Phalcon\Mvc\View\Engine\AbstractEngine $this
+ */
+
+\app\Modules\tao\A0\cms\Helper\CmsHtmlHelper::header();
+$kind = viewData('row.kind', 0);
+?>
+
+<form class="layui-form" lay-filter="near">
+
+    <div class="layui-form-item">
+        <label class="layui-form-label required">类型</label>
+        <div class="layui-input-block">
+            <?php foreach (CityNear::MapKinds as $v => $t) { ?>
+                <input name="kind" type="radio" <?php echo $v == $kind ? 'checked' : '' ?>
+                       title="<?php echo $t[1] ?>" value="<?php echo $v ?>">
+            <?php } ?>
+        </div>
+    </div>
+    <div class="flex-rows">
+        <div style="width: 400px;">
+            <div>
+                <?php LayuiHtml::upload('横幅图', 'banner', [
+                    'value' => viewData('row.banner'),
+                    'tip' => '通常用于广告，建议尺寸比例 16:9'
+                ]); ?>
+            </div>
+            <div>
+                <?php LayuiHtml::upload('列表图', 'list', [
+                    'value' => viewData('row.list'),
+                    'tip' => '建议尺寸比例 1:1'
+                ]); ?>
+            </div>
+        </div>
+        <div class="flex-1">
+
+
+            <div class="layui-form-item">
+                <label class="layui-form-label required">名称</label>
+                <div class="layui-input-block">
+                    <input type="text" name="title" class="layui-input" placeholder="请输入名称"
+                           lay-affix="clear"
+                           value="<?php echo viewData('row.title') ?>"
+                           lay-verify="required" lay-reqtext="必须填写名称"
+                    >
+                </div>
+            </div>
+            <?php \app\Modules\tao\A0\city\Helper\CityHtmlHelper::addressHtml(); ?>
+
+            <div class="layui-form-item">
+                <label class="layui-form-label"></label>
+                <div class="layui-input-inline">
+                    <input type="checkbox" name="hot"
+                           title="热门" <?php echo viewDataCompare('row.hot', 'checked', 1) ?>>
+                    <input type="checkbox" name="top"
+                           title="置顶" <?php echo viewDataCompare('row.top', 'checked', 1) ?>>
+                </div>
+                <label class="layui-form-label">排序</label>
+                <div class="layui-input-inline">
+                    <input type="number" name="sort" class="layui-input" placeholder="排序号"
+                           lay-affix="clear"
+                           value="<?php echo viewData('row.sort') ?>"
+                    >
+                </div>
+
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">标签</label>
+                <div class="layui-input-block">
+                    <input type="text" name="tag" class="layui-input" placeholder="多个标签使用空格分开"
+                           lay-affix="clear" value="<?php echo viewData('row.tag') ?>"
+                    >
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">简介</label>
+        <div class="layui-input-block">
+            <input type="text" name="summary" class="layui-input" placeholder="卖点等信息"
+                   lay-affix="clear" value="<?php echo viewData('row.summary') ?>"
+            >
+        </div>
+    </div>
+
+    <?php \app\Modules\tao\A0\cms\Helper\CmsHtmlHelper::ImageHtml(); ?>
+
+    <?php \app\Modules\tao\A0\city\Helper\CityHtmlHelper::videoHtml(); ?>
+
+    <div class="hr-line"></div>
+    <div class="layui-form-item text-center" style="margin-top: 10px;">
+        <button type="submit" class="layui-btn layui-btn-normal layui-btn-sm" lay-submit
+                lay-filter="demo1">确认
+        </button>
+        <button type="reset" class="layui-btn layui-btn-primary layui-btn-sm">重置</button>
+    </div>
+
+</form>
+<?php
+$layui->addWindowConfig();
+$layui->footer();
+
+$images = viewData('row.images', []);
+\app\Modules\tao\A0\cms\Helper\CmsHtmlHelper::ImageJs($images);
+$videos = viewData('row.videos', []);
+\app\Modules\tao\A0\city\Helper\CityHtmlHelper::videoJs($videos);
+
+\app\Modules\tao\A0\city\Helper\CityHtmlHelper::addressJs();
+?>
+<script>
+    admin.form.submitFirst(() => {
+        admin.iframe.closeFromParent(true);
+    }, function (data) {
+        const image_ids = vmImage.data.items.map(d => d.id).join(',');
+        const video_ids = vmVideo.data.items.map(d => d.id).join(',');
+        return Object.assign(data, {video_ids, image_ids})
+    })
+
+    admin.upload.run();
+</script>
+

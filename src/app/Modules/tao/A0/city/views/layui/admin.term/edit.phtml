@@ -1,0 +1,77 @@
+<?php
+
+use app\Modules\tao\sdk\phaxui\Layui\Layui;
+use app\Modules\tao\sdk\phaxui\Layui\LayuiHtml;
+
+/**
+ * @var Layui $layui
+ * @var \Phalcon\Mvc\View\Engine\AbstractEngine $this
+ */
+?>
+<form class="layui-form">
+
+    <div class="flex-rows">
+        <div style="width: 300px;">
+            <?php LayuiHtml::upload('球队图标', 'avatar', [
+                'value' => viewData('row.avatar')]); ?>
+        </div>
+        <div class="flex-1">
+            <div class="layui-form-item">
+                <label class="layui-form-label required">全称</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="name" class="layui-input" placeholder="请输入球队名称"
+                           value="<?php echo viewData('row.name') ?>"
+                           lay-affix="clear"
+                           lay-verify="required" lay-reqtext="输入球队名称"
+                    >
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">简称</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="nickname" class="layui-input"
+                           value="<?php echo viewData('row.nickname') ?>"
+                           lay-affix="clear"
+                    >
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <label class="layui-form-label required">地区</label>
+                <div class="layui-input-block">
+                    <input type="text" name="address" class="layui-input" value="<?php echo viewData('row.address') ?>">
+                </div>
+            </div>
+
+
+            <div class="layui-form-item">
+                <label class="layui-form-label">领队</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="leader" class="layui-input" value="<?php echo viewData('row.leader') ?>">
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+
+
+    <div class="hr-line"></div>
+    <div class="layui-form-item text-center" style="margin-top: 10px;">
+        <button type="submit" class="layui-btn layui-btn-normal layui-btn-sm" lay-submit>确认</button>
+        <button type="reset" class="layui-btn layui-btn-primary layui-btn-sm">重置</button>
+    </div>
+
+</form>
+<?php $layui->addWindowConfig(); ?>
+<?php $layui->footer(); ?>
+
+<script>
+    admin.form.submitFirst(() => {
+        admin.iframe.closeFromParent(true);
+    }, function (data) {
+        return Object.assign(data, {})
+    })
+
+    admin.upload.run();
+</script>

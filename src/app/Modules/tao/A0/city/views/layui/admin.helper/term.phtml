@@ -1,0 +1,115 @@
+<?php
+/**
+ * @var \app\Modules\tao\sdk\phaxui\Layui\Layui $layui
+ * @var \Phalcon\Mvc\View\Engine\AbstractEngine $this
+ */
+?>
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>球队选择</title>
+    <?php $layui->header(); ?>
+    <style>
+        html, body {
+            margin: 0;
+            padding: 0;
+        }
+
+        .layui-table-tool-temp {
+            padding-right: 0;
+        }
+
+        .input-keyword {
+            display: inline-block;
+            width: 190px;
+            line-height: 30px;
+            height: 30px;
+            vertical-align: top;
+            margin-top: 1px;
+            border: 1px solid #C9C9C9;
+        }
+    </style>
+</head>
+<body>
+<script type="text/html" id="toolbar">
+    <form class="layui-form" style="display:inline-block;">
+        <div class="layui-form-item" style="margin-bottom: 0">
+            <div class="layui-input-inline">
+                <input type="text" id="keyword"
+                       name="keyword" placeholder="请输入球队名称" autocomplete="off"
+                       lay-affix="clear"
+                       class="layui-input input-keyword"
+                >
+            </div>
+            <a class="layui-btn layui-btn-sm layui-btn-primary"
+               lay-on="search">
+                <i class="layui-icon layui-icon-search"></i>
+            </a>
+        </div>
+    </form>
+    <a style="float:right;" class="layui-btn layui-btn-sm" lay-on="select">选择<span></span>
+    </a>
+</script>
+
+<div style="padding: 0 8px;">
+    <table id="table" class="layui-hide"></table>
+</div>
+</body>
+<?php $layui->footer(); ?>
+<script>
+    const apiUrl = '<?php echo url("tao.city/user.term") ?>';
+    const tt = admin.table.with({url: apiUrl})
+        .render({
+            defaultToolbar: '-',
+            toolbar: '#toolbar',
+            cols: [[
+                {type: "<?php echo request()->getQuery('type') === 'checkbox' ? 'checkbox' : 'radio' ?>"},
+                {field: 'avatar', title: '图标', width: 85, templet: admin.table.image},
+                {
+                    field: 'name', title: '名称', width: 150, templet: function (d) {
+                        return `<div>${d.name}</div>
+<div><span>简称:</span><span>${d.nickname}</span></div>`;
+                    }
+                },
+
+                {field: 'address', title: '地区', width: 150},
+                {field: 'leader', title: '领队', width: 120},
+            ]],
+            lineStyle: 'height: 60px;'
+        }, {search: false}).addPostEditText()
+
+    const inst = tt.getTableId();
+    const index = parent.layer.getFrameIndex(window.name);
+
+
+    admin.util.layOn({
+        search: function () {
+            const keyword = $('#keyword').val();
+            inst.reloadData({
+                where: {keyword},
+                page: {curr: 1}
+            })
+        },
+        select: function () {
+            const rows = layui.table.cache['table'];
+            const items = rows.filter(d => d['LAY_CHECKED'] === true);
+            if (items.length > 0) {
+                const terms = items.map(function (d) {
+                    return {
+                        id: d.id, name: d.name, avatar: d.avatar
+                    }
+                });
+                admin.storage.save('terms',terms);
+                parent.layer.close(index)
+            } else {
+                admin.layer.error('没有选中任何球队')
+            }
+        }
+    })
+
+</script>
+</html>

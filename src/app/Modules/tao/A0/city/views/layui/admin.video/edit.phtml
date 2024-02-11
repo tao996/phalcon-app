@@ -1,0 +1,160 @@
+<?php
+
+use app\Modules\tao\A0\city\Config\Data;
+use app\Modules\tao\sdk\phaxui\Layui\Layui;
+use app\Modules\tao\sdk\phaxui\Layui\LayuiHtml;
+
+/**
+ * @var Layui $layui
+ * @var \Phalcon\Mvc\View\Engine\AbstractEngine $this
+ */
+
+$platformId = viewData('row.platform', 0);
+$storage = \Phax\Utils\Data::get($_GET, 'storage');
+?>
+<form class="layui-form" lay-filter="row">
+    <?php if (empty($storage) || 'insert' == $storage) { ?>
+        <div class="layui-form-item">
+            <label class="layui-form-label required">分享码</label>
+            <div class="layui-input-inline" style="width: 600px;">
+                <textarea name="share_code" class="layui-textarea" id="share_code"
+                          placeholder="通常是在 APP 中复制得到，包含了播放地址和基本的视频信息"
+                          lay-affix="clear"
+                          lay-verify="required" lay-reqtext="必须填写分享码"
+                ><?php echo viewData('row.share_code') ?></textarea>
+            </div>
+            <div class="layui-form-mid" style="padding: 0!important;">
+                <button type="button" class="layui-btn layui-btn-primary" lay-on="doShareCode">分析分享码</button>
+            </div>
+        </div>
+    <?php } ?>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label required">平台</label>
+        <div class="layui-input-inline">
+            <select name="platform" lay-verify="required" lay-reqtext="必须选择平台">
+                <option value="">请选择</option>
+                <?php foreach (Data::MapPlatform as $v => $t) { ?>
+                    <option <?php echo $v == $platformId ? 'selected' : '' ?>
+                            value="<?php echo $v ?>"><?php echo $t[1] ?>
+                    </option>
+                <?php } ?>
+            </select>
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">日期</label>
+        <div class="layui-input-inline">
+            <input type="text" name="date" class="layui-input" placeholder="日期"
+                   lay-affix="clear" id="date"
+            >
+        </div>
+        <label class="layui-form-label required">标题</label>
+        <div class="layui-input-inline" style="width: 290px;">
+            <input type="text" name="title" class="layui-input" placeholder="请填写标题标题"
+                   lay-affix="clear"
+                   lay-verify="required" lay-reqtext="标题不能为空"
+                   value="<?php echo viewData('row.title') ?>"
+            >
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label required">链接</label>
+        <div class="layui-input-block">
+            <input type="text" name="link" class="layui-input" placeholder="实际的网页播放地址 https://..."
+                   lay-affix="clear"
+                   lay-verify="required" lay-reqtext="链接不能为空"
+                   value="<?php echo viewData('row.link') ?>"
+            >
+        </div>
+    </div>
+
+    <?php LayuiHtml::upload('封面', 'cover', [
+        'value' => viewData('row.cover')
+    ]); ?>
+
+    <div class="hr-line"></div>
+    <div class="layui-form-item text-center" style="margin-top: 10px;">
+        <button type="submit" class="layui-btn layui-btn-normal layui-btn-sm" lay-submit
+                lay-filter="demo1">确认
+        </button>
+        <button type="reset" class="layui-btn layui-btn-primary layui-btn-sm">重置</button>
+    </div>
+
+</form>
+<?php
+$layui->addWindowConfig();
+$layui->footer();
+?>
+
+<script>
+    const platforms = <?php echo json_encode(Data::MapPlatform) ?>;
+    const isStorage = <?php echo isset($_GET['storage']) ? 'true' : 'false'?>;
+    const key = 'videos';
+
+    function saveData(data) {
+        data.ptitle = platforms[data.platform][1];
+        admin.storage.save(key, data);
+        admin.iframe.closeFromParent(true);
+    }
+
+    if (isStorage) {
+        const vs = admin.storage.getParse(key);
+        if (vs) {
+            admin.form.valFilter('row', vs)
+        }
+        admin.form.submitFilter('demo1', data => {
+            admin.ajax.post({data}, function () {
+                saveData(data)
+            })
+        })
+    } else {
+        admin.form.submitFirst(() => {
+            admin.iframe.closeFromParent(true);
+        })
+    }
+
+    admin.upload.run();
+
+    const shareCodeEle = $('#share_code');
+    admin.util.layOn({
+        doShareCode: function () {
+            const text = shareCodeEle.val();
+            if (text.length < 1) {
+                admin.layer.error('分享码内容不能为空');
+            } else {
+                const val = {platform: 0,}
+                if (text.includes('抖音')) {
+                    val.platform = 1;
+                } else if (text.includes('快手')) {
+                    val.platform = 3;
+                } else {
+                    admin.layer.error('未知平台的分享码')
+                    return;
+                }
+                const urls = extractURLs(text);
+                if (urls.length > 0) {
+                    val.link = urls[0]
+                }
+                if (val.platform === 1 && !admin.util.isEmpty(val.link)) {
+                    val.title = text.substring(text.indexOf('】') + 1, text.indexOf('https'));
+                }
+                admin.form.valFilter('row', val)
+            }
+        }
+    })
+
+    // 提取字符串中的网址
+    function extractURLs(str) {
+        const regex = /(\b(?:https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/gim;
+        const urls = str.match(regex);
+        return urls ? urls.map(url => url.trim()) : [];
+    }
+
+    layui.laydate.render({
+        elem: '#date',
+        value: '<?php echo date("Y-m-d", viewData("row.date"))?>'
+    });
+</script>

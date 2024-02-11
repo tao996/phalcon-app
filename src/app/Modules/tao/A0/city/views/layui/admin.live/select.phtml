@@ -1,0 +1,115 @@
+<?php
+/**
+ * @var \app\Modules\tao\sdk\phaxui\Layui\Layui $layui
+ * @var \Phalcon\Mvc\View\Engine\AbstractEngine $this
+ */
+
+use app\Modules\tao\A0\city\Config\Data;
+
+?>
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>直播间选择</title>
+    <?php $layui->header();
+    $layui->selectHeader();
+    ?>
+
+</head>
+<body>
+<script type="text/html" id="toolbar">
+
+    <form class="layui-form" style="display:inline-block;" lay-filter="form-search">
+        <div class="layui-form-item" style="margin-bottom: 0">
+
+            <label class="layui-form-label">平台</label>
+            <div class="layui-input-inline">
+                <select name="platform">
+                    <option value="">全部</option>
+                    <?php foreach (Data::MapPlatform as $v => $t) { ?>
+                        <option value="<?php echo $v ?>"><?php echo $t[1] ?></option>
+                    <?php } ?>
+                </select>
+            </div>
+            <div class="layui-input-inline">
+                <input type="text" id="keyword"
+                       name="keyword" placeholder="请输入主播名称" autocomplete="off"
+                       lay-affix="clear"
+                       class="layui-input input-keyword"
+                >
+            </div>
+            <div class="layui-form-item layui-inline">
+                <a class="layui-btn layui-btn-normal"
+                   lay-submit>搜索</a>
+                <button type="reset" class="layui-btn layui-btn-primary">
+                    重置
+                </button>
+                <a class="layui-btn" lay-on="picker">选择</a>
+            </div>
+        </div>
+    </form>
+</script>
+
+<div style="padding: 0 8px;">
+    <table id="table" class="layui-hide"></table>
+</div>
+</body>
+<?php $layui->footer(); ?>
+<script>
+    const key = 'lives';
+    const apiUrl = '<?php echo url("tao.city/admin.live") ?>';
+    const platforms = <?php echo json_encode(Data::MapPlatform) ?>;
+
+    const tt = admin.table.with({url: apiUrl})
+        .render({
+            defaultToolbar: '-',
+            toolbar: '#toolbar',
+            cols: [[
+                {type: 'checkbox'},
+                {
+                    title: '平台', width: 100, templet: function (d) {
+                        try {
+                            return platforms[d.platform][1];
+                        } catch (e) {
+                            return '~';
+                        }
+                    }
+                },
+                {field: 'name', title: '平台账号/姓名', width: 150},
+                {field: 'qc', title: '直播间', width: 100, templet: admin.table.image},
+                {
+                    field: 'share_code', title: '分享码', width:100, templet: function (d) {
+                        return d.share_code ? `<a class="layui-btn-xs layui-btn layui-btn-warm" lay-event="seeShareCode">查看</a>` : '~'
+                    }
+                },
+            ]],
+            lineStyle: 'height: 60px;'
+        }, {search: false}).addPostEditText()
+
+    const inst = tt.getTableId();
+    const index = parent.layer.getFrameIndex(window.name);
+
+
+    admin.util.layOn({
+        picker: function () {
+            const rows = layui.table.cache['table'];
+            const items = rows.filter(d => d['LAY_CHECKED'] === true);
+            if (items.length > 0) {
+                const ss = items.map(d => admin.util.pick(d, 'id', 'platform', 'qc', 'name'))
+                ss.forEach(d => {
+                    d.ptitle = platforms[d.platform][1]
+                })
+                admin.storage.save(key, ss);
+                parent.layer.close(index)
+            } else {
+                admin.layer.error('没有选中任何主播')
+            }
+        }
+    })
+
+</script>
+</html>

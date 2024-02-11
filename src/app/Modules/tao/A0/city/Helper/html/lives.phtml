@@ -1,0 +1,67 @@
+<?php
+/**
+ * @var bool $formItem
+ */
+?>
+
+<div id="lives">
+    <?php if ($formItem){ ?>
+
+    <div class="layui-form-item layui-form-text">
+        <label class="layui-form-label">直播</label>
+        <div class="layui-input-block">
+            <?php } ?>
+
+            <div class="group-button">
+                <button type="button" class="layui-btn layui-btn-normal" @click="select()">
+                    <i class="layui-icon layui-icon-list"></i>
+                    直播选择
+                </button>
+<!--
+                <button type="button" class="layui-btn" @click="insert">
+                    <i class="layui-icon layui-icon-add-circle"></i>
+                    添加直播
+                </button>
+-->
+                <button v-if="removesLength>0" @click="recoverDelete()" type="button" class="layui-btn layui-btn-warm">
+                    <i class="layui-icon layui-icon-disabled"></i>
+                    撤销删除
+                </button>
+            </div>
+
+            <div class="cms-block-container">
+                <!--
+                // {platform:平台, title:'平台名称', name:'主播账号', qc:'二维码'}
+                -->
+                <div class="cms-block-content" v-for="(item,index) in items">
+                    <div>
+                        <img :src="item.qc" class="cms-block-image">
+                    </div>
+                    <div class="cms-block-text">[{{item.ptitle}}]{{item.name}}</div>
+                    <div class="cms-block-actions">
+                        <button @click="moveToPre(index)" type="button"
+                                class="layui-btn layui-btn-xs layui-btn-primary">
+                            <i class="layui-icon layui-icon-left"></i>
+                        </button>
+                        <button @click="moveToNext(index)" type="button"
+                                class="layui-btn layui-btn-xs layui-btn-primary">
+                            <i class="layui-icon layui-icon-right"></i>
+                        </button>
+<!--
+                        <button @click="editWith(index)" type="button"
+                                class="layui-btn layui-btn-xs layui-btn-normal">
+                            <i class="layui-icon layui-icon-edit"></i>
+                        </button>
+-->
+                        <button @click="removeWith(index)" type="button"
+                                class="layui-btn layui-btn-xs layui-btn-danger">
+                            <i class="layui-icon layui-icon-delete"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <?php if ($formItem){ ?>
+        </div>
+    </div>
+<?php } ?>
+</div>

@@ -1,0 +1,44 @@
+<?php
+$isGameKind = viewData('row.kind', 0) == \app\Modules\tao\A0\city\Models\CityNews::KindGame;
+$metadata = viewData('row.metadata', []);
+?>
+<div class="layui-form-item">
+    <input type="hidden" name="metadata[id1]" class="layui-input" lay-affix="clear"
+           value="<?php echo $isGameKind ? $metadata['id1'] : '' ?>"
+    >
+    <label class="layui-form-label">主队名称</label>
+    <div class="layui-input-inline">
+        <input type="text" readonly name="metadata[name1]" class="layui-input"
+               value="<?php echo $isGameKind ? $metadata['name1'] : '' ?>"
+        >
+    </div>
+
+    <label class="layui-form-label">球服颜色</label>
+    <div class="layui-input-inline">
+        <input type="text" name="metadata[color1]" class="layui-input" lay-affix="clear"
+               value="<?php echo $isGameKind ? $metadata['color1'] : '' ?>"
+        >
+    </div>
+
+    <a class="layui-btn" lay-on="term" data-to="main">导入主队</a>
+</div>
+<div class="layui-form-item">
+    <input type="hidden" name="metadata[id2]" class="layui-input" lay-affix="clear"
+           value="<?php echo $isGameKind ? $metadata['id2'] : '' ?>"
+    >
+    <label class="layui-form-label">客队名称</label>
+    <div class="layui-input-inline">
+        <input type="text" readonly name="metadata[name2]" class="layui-input"
+               value="<?php echo $isGameKind ? $metadata['name2'] : '' ?>"
+        >
+    </div>
+
+    <label class="layui-form-label">球服颜色</label>
+    <div class="layui-input-inline">
+        <input type="text" name="metadata[color2]" class="layui-input" lay-affix="clear"
+               value="<?php echo $isGameKind ? $metadata['color2'] : '' ?>"
+        >
+    </div>
+
+    <a class="layui-btn" lay-on="term">导入客队</a>
+</div>
