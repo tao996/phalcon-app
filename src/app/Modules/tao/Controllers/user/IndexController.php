@@ -35,7 +35,7 @@ class IndexController extends BaseController
             $user->head_img = SecretService::innerURL(Data::getString($data, 'head_img'));
             $user->signature = Data::getString($data, 'signature');
             if ($user->save()) {
-                LoginUser::instance()->updateUserInfo([
+                LoginUser::getInstance()->updateUserInfo([
                     'head_img' => $user->head_img,
                     'signature' => $user->signature,
                 ]);

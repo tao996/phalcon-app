@@ -80,7 +80,7 @@ class BaseRbacController extends BaseResponseController
     public function tryGetLoginUser(): LoginUser
     {
         if (empty($this->loginUser)) {
-            $this->loginUser = LoginUser::instance();
+            $this->loginUser = LoginUser::getInstance();
         }
         return $this->loginUser;
     }

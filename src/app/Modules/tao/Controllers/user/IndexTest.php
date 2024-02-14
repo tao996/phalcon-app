@@ -18,7 +18,7 @@ class IndexTest extends TestCase
 
         $mock = new MockController();
         // indexController 需要预先登录
-        LoginUser::instance()->loadUserInfo(1);
+        LoginUser::getInstance()->loadUserInfo(1);
         /**
          * @var $cc IndexController
          */
@@ -49,7 +49,7 @@ class IndexTest extends TestCase
     public function testPhoneCodeAction()
     {
         $mock = new MockController();
-        LoginUser::instance()->loadUserInfo(1);
+        LoginUser::getInstance()->loadUserInfo(1);
         /**
          * @var $cc IndexController
          * @var $token PageRandToken
@@ -120,7 +120,7 @@ class IndexTest extends TestCase
     public function testChangePhoneAction()
     {
         $mock = new MockController();
-        LoginUser::instance()->loadUserInfo(1);
+        LoginUser::getInstance()->loadUserInfo(1);
         /**
          * @var $cc IndexController
          * @var $token PageRandToken
@@ -194,7 +194,7 @@ class IndexTest extends TestCase
     public function testPasswordAction()
     {
         $mock = new MockController();
-        LoginUser::instance()->loadUserInfo(1);
+        LoginUser::getInstance()->loadUserInfo(1);
         /**
          * @var $cc IndexController
          */

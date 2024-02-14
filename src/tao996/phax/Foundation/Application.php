@@ -50,6 +50,10 @@ class Application
         Env::parse();
         define('IS_DEBUG', (bool)env('APP_DEBUG', false));// 通常用在本地开发
         $config = Config::parse();
+        $namespaces = $config->path('app.namespaces');
+        if (is_array($namespaces) && !empty($namespaces)) {
+            loader()->setNamespaces($namespaces, true)->register();
+        }
 
         // 加载语言
         Transaction::getInstance()
@@ -424,7 +428,7 @@ class Application
             return;
         }
         $options = [
-            'm' => Router::moduleName(),
+            'm' => Router::ModulePrefix,
             'project' => ''
         ];
 

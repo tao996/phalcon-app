@@ -27,9 +27,8 @@ return [
         ],
         // 异常和错误处理的类
         'error' => 'app\Http\Response',
-        'module' => env('APP_MODULE', 'm'), // 模块识别名称（不要符合 [a-z]{2} 以免与多语言冲突）
-
         'cdn' => 'cn', // cn|ncn|(your cdn address), 本地开发时，可克隆 phalcon-admin-assets，然后将 app.cdn 设置为空
+        'namespaces' => [], // name => path
     ],
     // https://docs.phalcon.io/5.0/en/cache
     'cache' => [

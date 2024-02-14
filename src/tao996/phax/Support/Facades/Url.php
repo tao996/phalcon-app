@@ -77,7 +77,7 @@ class Url extends Facade
     {
         static $m = null, $origin = '', $language = '';
         if (is_null($m)) {
-            $m = \config('app.module');
+            $m = Router::ModulePrefix;
             $origin = ltrim(self::getFacadeObject()->getStaticBaseUri(), '/');
             $language = Router::hasLanguage() ? Router::getMatchLanguage() : '';
         }

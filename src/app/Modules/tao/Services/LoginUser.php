@@ -4,8 +4,7 @@ namespace app\Modules\tao\Services;
 
 use app\Modules\tao\Models\SystemUser;
 use app\Modules\tao\Services\Auth\LoginAuth;
-use app\Modules\tao\Services\Auth\LoginJwtAuth;
-use app\Modules\tao\Services\Auth\LoginSessionAuth;
+use Phax\Traits\Singleton;
 
 /**
  * 当前登录的用户信息
@@ -14,61 +13,21 @@ class LoginUser
 {
     private int $userId = 0;
     protected SystemUser $user;
-
     protected LoginAuth $loginAuth;
 
-    public static function instance($authType = null): self
-    {
-        static $obj = null;
-        if (is_null($obj)) {
-            $obj = new LoginUser($authType);
-        }
-        return $obj;
-    }
+    use Singleton;
 
     /**
-     * @param string|null|bool $sessionStorage session|jwt 授权方式；默认为 null，先检查 jwt 再检查 session；如果为 false 则表示跳过检查
      * @throws \Exception
      */
-    protected function __construct(private $sessionStorage = null)
+    protected function __construct()
     {
-        if (false === $sessionStorage) {
-            return;
-        }
-
-        if (is_string($this->sessionStorage)) {
-            if ('session' == $this->sessionStorage) {
-                $this->loginAuth = new LoginSessionAuth();
-            } elseif ('jwt' == $this->sessionStorage) {
-                $this->loginAuth = new LoginJwtAuth();
-            } else {
-                throw new \Exception('暂不支持的认证方式:' . $this->sessionStorage);
-            }
-        } else {
-            $jwt = new LoginJwtAuth();
-            if ($jwt->hasLoginKey()) {
-                $this->sessionStorage = 'jwt';
-                $this->loginAuth = $jwt;
-            } else {
-                $this->sessionStorage = 'session';
-                $this->loginAuth = new LoginSessionAuth();
-            }
-        }
+        $this->loginAuth = LoginService::getAuthAdapter();
         // 尝试获取用户信息
-        if ($user = $this->getLoginAuth()->getUser()) {
+        if ($user = $this->loginAuth->getUser()) {
             $this->userId = $user->id;
             $this->user = $user;
         }
-    }
-
-    private function getLoginAuth(): LoginAuth
-    {
-        return $this->loginAuth;
-    }
-
-    public function isJwt(): bool
-    {
-        return $this->sessionStorage == 'jwt';
     }
 
     public function userId(): int
@@ -110,7 +69,7 @@ class LoginUser
     {
         if ($userId > 0) {
             if ($user = SystemUser::findFirst($userId)) {
-                $this->getLoginAuth()->saveUser($user->toArray());
+                $this->loginAuth->saveUser($user->toArray());
                 $this->user = $user;
                 $this->userId = $user->id;
             } else {
@@ -126,7 +85,7 @@ class LoginUser
      */
     public function updateUserInfo(array $info = []): void
     {
-        $this->getLoginAuth()->saveUser($info
+        $this->loginAuth->saveUser($info
             ? array_merge($this->user->toArray(), $info)
             : $this->user->toArray());
         $this->user->assign($info);
@@ -158,7 +117,7 @@ class LoginUser
      */
     public function logout(): void
     {
-        $this->getLoginAuth()->destroy();
+        $this->loginAuth->destroy();
     }
 
     /**

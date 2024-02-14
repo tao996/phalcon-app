@@ -3,6 +3,7 @@
 namespace app\Modules\tao;
 
 
+use app\Modules\tao\Services\LoginService;
 use Phax\Db\QueryBuilder;
 use Phax\Foundation\Router;
 use Phax\Mvc\Model;
@@ -55,7 +56,7 @@ class BaseController extends BaseRbacController
         if ($this->pageTokenName) {
             $this->token = new PageRandToken($this->pageTokenName);
             if (!empty($this->loginUser)) {
-                $this->token->skip = $this->loginUser->isJwt();
+                $this->token->skip = LoginService::isJwtAuth();
             }
         }
     }

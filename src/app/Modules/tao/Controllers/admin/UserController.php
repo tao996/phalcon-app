@@ -8,6 +8,7 @@ use app\Modules\tao\Models\SystemRole;
 use app\Modules\tao\Models\SystemUser;
 use app\Modules\tao\sdk\phaxui\Layui\LayuiData;
 use app\Modules\tao\Services\LogService;
+use app\Modules\tao\Services\Web\WebSessionService;
 use Phax\Db\QueryBuilder;
 use Phax\Mvc\Request;
 use Phax\Utils\Data;
@@ -118,7 +119,7 @@ class UserController extends BaseController
             }
 
             if ($user->save()) {
-                $this->session->set('user', $user->toArray());
+                WebSessionService::save('user', $user->toArray());
                 return $this->success('保存成功');
             } else {
                 return $this->error($user->getErrors());

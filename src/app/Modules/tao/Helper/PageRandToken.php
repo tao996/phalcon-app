@@ -37,7 +37,7 @@ class PageRandToken
      * @return bool
      * @throws \Exception
      */
-    public function compare($token): bool
+    public function compare(string $token): bool
     {
 
         if ($this->skip) {
@@ -54,7 +54,7 @@ class PageRandToken
         return true;
     }
 
-    public function remove()
+    public function remove(): void
     {
         if ($this->skip) {
             return;

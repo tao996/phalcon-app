@@ -8,6 +8,14 @@ use Phax\Utils\Data;
 class Router
 {
     /**
+     * 多模块标识
+     */
+    const ModulePrefix = 'm';
+    /**
+     * 前端项目标识
+     */
+    const ProjectPrefix = 'p';
+    /**
      * 默认的语言参数匹配表达式
      * @var string
      */
@@ -33,18 +41,7 @@ class Router
         }
     }
 
-    /**
-     * 多模型识别名称
-     * @return string
-     */
-    public static function moduleName(): string
-    {
-        static $moduleName = '';
-        if ('' === $moduleName) {
-            $moduleName = config('app.module', 'm');
-        } // 'm'
-        return $moduleName;
-    }
+
 
     /**
      * 注意，not include ajax request，如果要判断是否 ajax，还需要 request()->isAjax()
@@ -70,8 +67,18 @@ class Router
             $url = $_SERVER['REQUEST_URI'];
         }
         $url = self::filterIfLanguage($url);
-        return str_starts_with($url, '/api/' . self::moduleName() . '/')
-            || str_starts_with($url, '/' . self::moduleName() . '/');
+        return str_starts_with($url, '/api/' . self::ModulePrefix . '/')
+            || str_starts_with($url, '/' . self::ModulePrefix . '/');
+    }
+
+    public static function isAppProject(string $url = ''):bool
+    {
+        if ($url === '') {
+            $url = $_SERVER['REQUEST_URI'];
+        }
+        $url = self::filterIfLanguage($url);
+        return str_starts_with($url, '/api/' . self::ProjectPrefix . '/')
+            || str_starts_with($url, '/' . self::ProjectPrefix . '/');
     }
 
     /**
@@ -453,7 +460,7 @@ class Router
             return;
         }
         $options = [
-            'module' => self::moduleName(),
+            'module' => self::ModulePrefix,
             'project' => config('app.project'),
         ];
         $config = self::analysisWithURL($_SERVER['REQUEST_URI'], $options);

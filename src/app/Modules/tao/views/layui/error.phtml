@@ -5,7 +5,7 @@
  * @var array $data
  */
 $redirectBack = $data['redirect'] ?? 'javascript:history.back();';
-$isLogin = \app\Modules\tao\Services\LoginUser::instance()->isLogin();
+$isLogin = \app\Modules\tao\Services\LoginUser::getInstance()->isLogin();
 $layui = \app\Modules\tao\sdk\phaxui\Layui\Layui::getInstance();
 ?>
 <!DOCTYPE html>
