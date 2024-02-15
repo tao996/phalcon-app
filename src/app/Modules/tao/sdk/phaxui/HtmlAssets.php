@@ -167,15 +167,22 @@ class HtmlAssets
     }
 
     /**
+     * @var string 指定要加载的脚本
+     */
+    public static string $pickName = '';
+
+    /**
      * 如果当前模板下存在着同名 js 文件，则引入它；比如你的模板为 add.phtml，如果存在 add.js 则会引入它
      * @param string $theme 主题
      * @return bool
      */
     public static function appendTemplateJs(string $theme = ''): bool
     {
+
+        $pickName = self::$pickName ?: Router::getPickView();
         $jsFile = join('/', $theme
-                ? [Router::getViewPath(), $theme, Router::getPickView()]
-                : [Router::getViewPath(), Router::getPickView()]) . '.js';
+                ? [Router::getViewPath(), $theme, $pickName]
+                : [Router::getViewPath(), $pickName]) . '.js';
         return self::includeAssetsFile($jsFile, 'js');
     }
 
