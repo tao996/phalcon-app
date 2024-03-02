@@ -10,6 +10,7 @@ return [
     'between' => ':field 值必须在 :min 和 :max 之间',
     'bool' => ':field 值只能是 true 或者 false',
     'cnPhone' => ':field 不是一个有效的 +86 手机号码',
+    'phone' => ':field 不是一個有效的手機號',
     'confirm' => ':field 值不匹配',
     'creditCard' => '不是一个有效的信用卡',
     'date' => ':field 不是一个有效的日期',

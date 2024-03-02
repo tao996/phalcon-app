@@ -8,6 +8,7 @@ return [
     'between' => ':field must be between :min and :max',
     'bool' => ':field must be true or false',
     'cnPhone' => ':field not a valid mobile',
+    'phone' => ':field not a valid mobile',
     'confirm' => ':field value confirmation does not match.',
     'creditCard' => 'The credit card number is not valid.',
     'date' => ':field value must be a valid date.',

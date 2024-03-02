@@ -4,7 +4,7 @@
  * @var \Phalcon\Mvc\View\Engine\AbstractEngine $this
  */
 
-$captchaURL = url('tao/auth/captcha');
+$captchaURL = url('tao/captcha');
 \app\Modules\tao\sdk\phaxui\HtmlAssets::addHeaderFile(__DIR__ . '/auth.css');
 ?>
 
@@ -71,7 +71,6 @@ $captchaURL = url('tao/auth/captcha');
     <?php include_once __DIR__ . '/auth.js' ?>
 </script>
 <script>
-    let qToken = '<?php echo viewData("token") ?>';
     let seconds = 0; // 倒计时
     const verCodeBtn = $('#reg-get-vercode');
 
@@ -81,7 +80,6 @@ $captchaURL = url('tao/auth/captcha');
 
         const postData = {
             account: field.account, vercode: field.vercode,
-            token: qToken,
         }
         admin.ajax.post({
             url: '<?php echo url("tao/auth/signin", true) ?>',
@@ -130,18 +128,13 @@ $captchaURL = url('tao/auth/captcha');
 
                             const postData = Object.assign(data, {
                                 account: $('#reg-account').val(),
-                                token: qToken
                             });
 
                             admin.ajax.post({
                                 url: '<?php echo url("tao/auth/signin-code", true) ?>',
                                 data: postData,
                             }, function (res) {
-                                try {
-                                    qToken = res.data;
-                                } catch (e) {
-                                    console.log('could not read the token');
-                                }
+
                                 admin.layer.close(index);
                                 // 开始倒计时
                                 seconds = 60;

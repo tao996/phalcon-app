@@ -3,6 +3,7 @@
 namespace app\Modules\tao\Controllers;
 
 use app\Modules\tao\BaseController;
+use app\Modules\tao\sdk\SdkHelper;
 use app\Modules\tao\Services\LoginService;
 use app\Modules\tao\Services\Oauth3Service;
 use app\Modules\tao\Services\OauthService;
@@ -21,7 +22,7 @@ class Oauth3Controller extends BaseController
     public function initialize(): void
     {
         parent::initialize();
-        require_once dirname(__DIR__) . '/sdk/hybridauth.phar';
+        SdkHelper::hybridauth();
     }
 
 // https://hybridauth.github.io/introduction.html

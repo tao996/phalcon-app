@@ -9,7 +9,7 @@ admin.util.layOn({
             if (pp.length != 2) {
                 admin.layer.error('请检查坐标点内容是否正确');
             } else {
-                admin.form.valFilter('near', {
+                admin.form.patch('near', {
                     lng: pp[0], lat: pp[1],
                 })
                 admin.layer.success('填写坐标成功');

@@ -19,7 +19,6 @@ use Phax\Utils\Data;
  */
 class IndexController extends BaseController
 {
-    protected string $pageTokenName = 'user.index';
     protected array $allowModifyFields = ['status', 'nickname', 'head_img', 'signature'];
     protected array|string $userActions = '*';
 
@@ -56,8 +55,7 @@ class IndexController extends BaseController
     {
         if ($this->request->isPost()) {
             $data = Request::getData();
-            Request::mustHasSet($data, ['phone', 'vercode', 'token']);
-            $this->token->compare($data['token']);
+            Request::mustHasSet($data, ['phone', 'vercode']);
 
             $code = SmsCodeService::checkChangeAccountCode($this->loginUser->userId(),
                 $data['phone'], $data['vercode']);
@@ -77,7 +75,6 @@ class IndexController extends BaseController
         }
 
         return [
-            'p' => ['token' => $this->token->create()]
         ];
     }
 
@@ -88,8 +85,7 @@ class IndexController extends BaseController
     public function phoneCodeAction()
     {
         $data = Request::getData();
-        Request::mustHasSet($data, ['phone', 'token']);
-        $this->token->compare($data['token']);
+        Request::mustHasSet($data, ['phone']);
         $this->loginUser->user()->mustChangeAccount('phone', $data['phone']);
 
         if (SmsCodeService::sendChangeAccountCode(
@@ -110,8 +106,7 @@ class IndexController extends BaseController
     {
         if ($this->request->isPost()) {
             $data = Request::getData();
-            Request::mustHasSet($data, ['email', 'vercode', 'token']);
-            $this->token->compare($data['token']);
+            Request::mustHasSet($data, ['email', 'vercode']);
 
             $code = SmsCodeService::checkChangeAccountCode($this->loginUser->userId(),
                 $data['email'], $data['vercode']);
@@ -132,7 +127,6 @@ class IndexController extends BaseController
         }
 
         return [
-            'p' => ['token' => $this->token->create()]
         ];
     }
 
@@ -144,7 +138,7 @@ class IndexController extends BaseController
     public function emailCodeAction()
     {
         $data = Request::getData();
-        Request::mustHasSet($data, ['email', 'token']);
+        Request::mustHasSet($data, ['email']);
         $this->loginUser->user()->mustChangeAccount('email', $data['email']);
 
         if (SmsCodeService::sendChangeAccountCode($this->loginUser->userId(),

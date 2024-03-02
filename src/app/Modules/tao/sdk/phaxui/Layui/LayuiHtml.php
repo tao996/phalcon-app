@@ -99,7 +99,7 @@ JS;
         $options = array_merge([
             'name' => 'captcha',
             'placeholder' => '验证码',
-            'src' => url('tao/auth/captcha'),
+            'src' => url('tao/captcha'),
             'title' => '点击刷新验证码图片'
         ], $options);
 

@@ -68,7 +68,7 @@ $platform = viewData('row.platform', 0);
         const key = 'lives';
         const vs = admin.storage.getParse(key);
         if (vs) {
-            admin.form.valFilter('row', vs)
+            admin.form.patch('row', vs)
         }
         // admin.form.submitFilter('demo1', data => {
         //     data.ptitle = platforms[data.platform][1];

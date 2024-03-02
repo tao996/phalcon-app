@@ -217,17 +217,14 @@ class BaseRbacController extends BaseResponseController
      */
     protected function beforeViewResponse(mixed &$data): bool
     {
-        $viewDir = $this->view->getViewsDir() . self::$theme; // 主题
-        $this->view->setViewsDir($viewDir);
+
         $this->tryGetLoginUser();
         $this->addViewData('demo', $this->isDemo)
             ->addViewData('user', null);
 
-
         if ($this->isLogin()) {
             $this->addViewData('user', $this->loginUser->user());
         }
-
         return parent::beforeViewResponse($data);
     }
 }

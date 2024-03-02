@@ -6,14 +6,15 @@ use app\Modules\tao\sdk\phaxui\HtmlAssets;
 use app\Modules\tao\sdk\phaxui\Layui\Layui;
 
 use Phax\Foundation\Response;
+use Phax\Foundation\Router;
 use Phax\Mvc\Controller;
 use Phax\Mvc\Request;
 use Phax\Support\Exception\BlankException;
 
 /**
  * 定义各种响应格式
-// * @method \Phalcon\Http\Response error($msg, array $data = [], int $code = 500)
-// * @method \Phalcon\Http\Response success(string $msg, mixed $data = '')
+ * // * @method \Phalcon\Http\Response error($msg, array $data = [], int $code = 500)
+ * // * @method \Phalcon\Http\Response success(string $msg, mixed $data = '')
  */
 class BaseResponseController extends Controller
 {
@@ -21,13 +22,14 @@ class BaseResponseController extends Controller
      * 当前默认主题
      */
     public static string $theme = 'layui';
+    public static string $baseDIR = __DIR__;
 
-    public static function getBaseViewDir(string $tpl = ''): string
+    public static function getBaseViewDir(string $tpl): string
     {
         if (static::$theme) {
-            return __DIR__ . '/views/' . static::$theme . '/' . $tpl;
+            return self::$baseDIR . '/views/' . static::$theme . '/' . $tpl;
         } else {
-            return __DIR__ . '/views/' . $tpl;
+            return self::$baseDIR . '/views/' . $tpl;
         }
     }
 
@@ -47,6 +49,9 @@ class BaseResponseController extends Controller
         $this->view->setVar('layui', Layui::getInstance());
         require_once __DIR__ . '/common/function.php';
         require_once PATH_TAO . 'views/function.php';
+
+        $viewDir = $this->view->getViewsDir() . self::$theme; // 主题
+        $this->view->setViewsDir($viewDir);
         return parent::beforeViewResponse($data);
     }
 
@@ -97,6 +102,7 @@ class BaseResponseController extends Controller
             'code' => 0, 'msg' => '', 'count' => $count, 'data' => $rows
         ]);
     }
+
 // 处理异常响应
     public static function exception(\Exception $e): void
     {

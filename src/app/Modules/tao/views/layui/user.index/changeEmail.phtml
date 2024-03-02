@@ -60,7 +60,6 @@
 <script>
 
     const verCodeBtn = $('#get-vercode');
-    const postToken = '<?php echo viewData('p.token') ?>';
     const emailE = $('#email');
     let seconds = 0;
     admin.util.layOn({
@@ -72,7 +71,7 @@
                 }
                 admin.ajax.postLimit({
                     url: '<?php echo url('tao/user.index/email-code', true) ?>',
-                    data: {email: emailE.val(), token: postToken},
+                    data: {email: emailE.val()},
                 }, function () {
                     seconds = 60;
                     verCodeBtn.addClass('layui-btn-disabled')
@@ -94,9 +93,6 @@
 
     admin.form.submitFirst(function () {
         admin.page.closeCurrentOpen({refreshFrame: true})
-    }, function (data) {
-        data.token = postToken;
-        return data;
     })
 
 

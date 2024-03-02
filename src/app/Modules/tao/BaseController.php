@@ -2,15 +2,12 @@
 
 namespace app\Modules\tao;
 
-
-use app\Modules\tao\Services\LoginService;
 use Phax\Db\QueryBuilder;
 use Phax\Foundation\Router;
 use Phax\Mvc\Model;
 use Phax\Mvc\Request;
 use Phax\Support\Validate;
 
-use app\Modules\tao\Helper\PageRandToken;
 use app\Modules\tao\Config\Config;
 use app\Modules\tao\Services\LogService;
 
@@ -36,29 +33,10 @@ class BaseController extends BaseRbacController
      */
     protected Model|null $model = null;
 
-    /**
-     * 页面提交的 token 随机码名称，主要用在 post 操作中
-     * @var string
-     */
-    protected string $pageTokenName = '';
-    /**
-     * 当前页面的 token 信息
-     * @var PageRandToken
-     */
-    protected PageRandToken $token;
-
-
     protected function prepareInitialize(): void
     {
         // 是否演示环境
         $this->isDemo = config('app.demo', false);
-
-        if ($this->pageTokenName) {
-            $this->token = new PageRandToken($this->pageTokenName);
-            if (!empty($this->loginUser)) {
-                $this->token->skip = LoginService::isJwtAuth();
-            }
-        }
     }
 
     /**
@@ -80,8 +58,6 @@ class BaseController extends BaseRbacController
     {
         $cc = new static();
         $cc->isDemo = $controller->isDemo;
-        $cc->pageTokenName = $controller->pageTokenName;
-        $cc->token = $controller->token;
         $cc->loginUser = $controller->loginUser;
         return $cc;
     }

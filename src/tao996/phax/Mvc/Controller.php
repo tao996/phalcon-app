@@ -102,7 +102,6 @@ class Controller extends \Phalcon\Mvc\Controller
                     $this->doResponse(true, $data);
                 }
             } else {
-                // 必须存在模板才会有输出内容
                 if ($this->beforeViewResponse($data)) {
                     $this->doResponse(false, $data);
                 }

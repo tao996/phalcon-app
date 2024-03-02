@@ -103,7 +103,7 @@ $layui->footer();
     if (isStorage) {
         const vs = admin.storage.getParse(key);
         if (vs) {
-            admin.form.valFilter('row', vs)
+            admin.form.patch('row', vs)
         }
         admin.form.submitFilter('demo1', data => {
             admin.ajax.post({data}, function () {

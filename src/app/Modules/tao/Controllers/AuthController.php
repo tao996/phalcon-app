@@ -5,11 +5,12 @@ namespace app\Modules\tao\Controllers;
 use app\Modules\tao\BaseController;
 use app\Modules\tao\Config\Config;
 use app\Modules\tao\Models\SystemUser;
-use app\Modules\tao\sdk\captcha\ImageCaptcha;
+use app\Modules\tao\Services\CaptchaService;
 use app\Modules\tao\Services\LoginService;
 use app\Modules\tao\Services\RedirectService;
 use app\Modules\tao\Services\SmsCodeService;
 use app\Modules\tao\Services\UserService;
+
 use Phax\Db\Db;
 use Phax\Mvc\Request;
 use Phax\Support\Logger;
@@ -18,9 +19,7 @@ use Phax\Utils\Data;
 class AuthController extends BaseController
 {
     protected array|string $openActions = '*';
-    private const key = 'login.captcha';
     protected string $pageTitle = '注册登录';
-    protected string $pageTokenName = 'auth';
 
     public function initialize(): void
     {
@@ -28,22 +27,6 @@ class AuthController extends BaseController
         if ($this->isLogin()) {
             RedirectService::read();
         }
-    }
-
-    private function captchaCompare($captcha)
-    {
-        if (empty($captcha)) {
-            throw new \Exception('必须填写图片验证码',200);
-        }
-        $sessionCaptcha = session()->get(self::key);
-        if ($sessionCaptcha != strtolower($captcha)) {
-            throw new \Exception('图片验证码错误',200);
-        }
-    }
-
-    private function captchaDestory()
-    {
-        session()->remove(self::key);
     }
 
     /**
@@ -56,9 +39,7 @@ class AuthController extends BaseController
 
             // session = session 或者 jwt
             Request::mustHasSet($data, ['account', 'password', 'captcha', 'token']);
-
-            $this->captchaCompare($data['captcha']);
-            $this->token->compare($data['token']);
+            CaptchaService::getInstance()->compare($data['captcha']);
 
             /**
              * @var $user SystemUser
@@ -86,13 +67,10 @@ class AuthController extends BaseController
 
 
             $jwtToken = LoginService::makeLogin($user);
-
-            $this->token->remove();
-            $this->captchaDestory();
+            CaptchaService::getInstance()->destory();
             return $this->success('登录成功', $jwtToken);
         }
         return [
-            'token' => $this->token->create(),
         ];
     }
 
@@ -105,8 +83,6 @@ class AuthController extends BaseController
             $data = Request::getData();
             Data::mustHasSet($data, ['account', 'vercode', 'token']);
             $isEmail = SmsCodeService::mustReceiver($data['account']);
-
-            $this->token->compare($data['token']);
             SmsCodeService::checkLoginCode($data['account'], $data['vercode']);
 
             // 查询用户
@@ -120,12 +96,10 @@ class AuthController extends BaseController
                 return $this->error('没有找到符合条件的账号');
             }
 
-            $this->token->remove();
-            $this->captchaDestory();
+            CaptchaService::getInstance()->destory();
             return $this->success('登录成功', $token);
         }
         return [
-            'token' => $this->token->create(),
         ];
     }
 
@@ -139,8 +113,7 @@ class AuthController extends BaseController
         Data::mustHasSet($data, ['captcha', 'account', 'token']);
 
         SmsCodeService::mustReceiver($data['account']);
-        $this->token->compare($data['token']);
-        $this->captchaCompare($data['captcha']);
+        CaptchaService::getInstance()->compare($data['captcha']);
 
         // 账号检测
         try {
@@ -155,9 +128,8 @@ class AuthController extends BaseController
         if (!SmsCodeService::sendLoginCode($data['account'])) {
             return $this->error('发送失败，请稍后再试');
         }
-        $this->captchaDestory();
-        $this->token->remove();
-        return $this->success('登录验证码已发送，请注意查收',$this->token->create());
+        CaptchaService::getInstance()->destory();
+        return $this->success('登录验证码已发送，请注意查收');
 
     }
 
@@ -171,8 +143,6 @@ class AuthController extends BaseController
             Data::mustHasSet($data, ['account', 'vercode', 'password', 'token']);
 
             UserService::mustAccountString($data['account']);
-            $this->token->compare($data['token']);
-
             UserService::mustCanRegister($data['account']);
             $code = SmsCodeService::checkRegisterCode($data['account'], $data['vercode']);
 
@@ -191,7 +161,6 @@ class AuthController extends BaseController
             return $this->success('账号注册成功');
         }
         return [
-            'token' => $this->token->create(),
         ];
     }
 
@@ -205,9 +174,7 @@ class AuthController extends BaseController
         Data::mustHasSet($data, ['captcha', 'account', 'token']);
 
         UserService::mustAccountString($data['account']);
-
-        $this->token->compare($data['token']);
-        $this->captchaCompare($data['captcha']);
+        CaptchaService::getInstance()->compare($data['captcha']);
 
         // TODO : ip 地址检查注册
 
@@ -224,8 +191,7 @@ class AuthController extends BaseController
             return $this->error('发送失败，请稍后再试');
         }
 
-        $this->captchaDestory();
-        $this->token->remove();
+        CaptchaService::getInstance()->destory();
         return $this->success('验证码已发送，请注意查收');
     }
 
@@ -238,15 +204,12 @@ class AuthController extends BaseController
             $data = Request::getData();
             Data::mustHasSet($data, ['account', 'captcha', 'token']);
 
-            $this->captchaCompare($data['captcha']);
-            $this->token->compare($data['token']);
-
+            CaptchaService::getInstance()->compare($data['captcha']);
             SmsCodeService::sendForgotPasswordEmail($data['account']);
 
             return $this->success('重置密码邮件已发送，请注意查收');
         }
         return [
-            'token' => $this->token->create(),
         ];
     }
 
@@ -267,8 +230,6 @@ class AuthController extends BaseController
             $d2 = $this->request->getPost();
             Data::mustHasSet($d2, ['password', 'token']);
             UserService::mustPassword($d2['password']);
-            $this->token->compare($d2['token']);
-
             $user = UserService::mustGetUser(['id' => $code->user_id]);
             $user->newPassword($d2['password']);
             if ($user->save() === false) {
@@ -280,19 +241,8 @@ class AuthController extends BaseController
         }
 
         return [
-            'token' => $this->token->create(),
         ];
     }
 
-    /**
-     * 生成一个验证码
-     */
-    public function captchaAction()
-    {
-        $captcha = new ImageCaptcha();
-        $captcha->create();
-        session()->set(self::key, strtolower($captcha->getText()));
-        $captcha->output();
-        exit;
-    }
+
 }

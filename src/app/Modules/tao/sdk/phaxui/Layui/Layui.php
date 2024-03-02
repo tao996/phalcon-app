@@ -18,7 +18,9 @@ class Layui
      * @var array js 配置信息
      */
     public static array $globalJsWindowConfig = [];
-    private array $_config = [];
+    private array $_config = [
+        'debug' => IS_DEBUG
+    ];
 
     /**
      * @var bool 是否使用 include 的方式包含 Layui 目录下的 index.css, index.js, upload.css 文件
@@ -53,7 +55,7 @@ class Layui
         }
     }
 
-    public function selectHeader():void
+    public function selectHeader(): void
     {
         echo '<style>';
         echo <<<CSS
@@ -76,6 +78,7 @@ html, body {
 CSS;
         echo '</style>';
     }
+
     private bool $hasImport = false;
 
     public function footer(): void

@@ -4,6 +4,10 @@
  * @var array $msg
  * @var array $data
  */
+
+use app\Modules\tao\sdk\phaxui\HtmlAssets;
+
+HtmlAssets::initWithCdn();
 $redirectBack = $data['redirect'] ?? 'javascript:history.back();';
 $isLogin = \app\Modules\tao\Services\LoginUser::getInstance()->isLogin();
 $layui = \app\Modules\tao\sdk\phaxui\Layui\Layui::getInstance();

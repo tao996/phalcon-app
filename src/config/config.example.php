@@ -29,6 +29,7 @@ return [
         'error' => 'app\Http\Response',
         'cdn' => 'cn', // cn|ncn|(your cdn address), 本地开发时，可克隆 phalcon-admin-assets，然后将 app.cdn 设置为空
         'namespaces' => [], // name => path
+        'includes' => [], // 需要包含的文件
     ],
     // https://docs.phalcon.io/5.0/en/cache
     'cache' => [

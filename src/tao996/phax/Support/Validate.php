@@ -78,6 +78,9 @@ class Validate
             case 'cnphone':// 中国大陆手机号码
             case 'cnmobile':
                 return ['cnPhone', \Phax\Filter\Validation\MobileCnValidation::class];
+            case 'phone':
+            case 'mobile':
+                return ['phone', \Phax\Filter\Validation\PhoneValidation::class];
 
             case 'confirm': // 'repassword'=>'confirm:password' 等于指定的字段的值
             case '=':
@@ -265,7 +268,7 @@ class Validate
      * lenmin/strlenmin/min             字符串最小长度，示例 lenmin:0
      * unique/uniqueness                模型唯一，示例 unique:__CLASS__ 或者 unique:__CLASS__,attr
      * url                              URL 地址，默认为 url:query，可指定为 url:path
-     * mobile|phone                     中国大陆手机号
+     * cnmobile|cnphone                 中国大陆手机号
      * idcard|card                      中国大陆身份证号
      * zip                              中国大陆邮政编号
      * mac|macaddr                      MAC 地址

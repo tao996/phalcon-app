@@ -1,4 +1,5 @@
 <?php
+
 use app\Modules\tao\sdk\phaxui\Layui\Layui;
 
 /**
@@ -99,10 +100,9 @@ $taoHtml = \app\Modules\tao\Services\OauthService::getInstance();
     <?php include_once __DIR__ . '/auth.js' ?>
 </script>
 <script>
-    const token = '<?php echo viewData("row.token") ?>'
     // 提交事件
     form.on('submit(demo-login)', function (data) {
-        const postData = Object.assign({token}, data.field);
+        const postData = data.field;
         admin.ajax.post({
             url: '<?php echo url('tao/auth/index', true) ?>', data: postData,
         }, function () {

@@ -525,7 +525,7 @@ const admin = {
          * @param {string} layFilterName 添加在 form 上的 lay-filter
          * @param {Object} values 赋值
          */
-        valFilter: function (layFilterName, values) {
+        patch: function (layFilterName, values) {
             layui.form.val(layFilterName, values);
         }
     },

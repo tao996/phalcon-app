@@ -4,7 +4,7 @@
  * @var \Phalcon\Mvc\View\Engine\AbstractEngine $this
  */
 
-$captchaURL = url('tao/auth/captcha');
+$captchaURL = url('tao/captcha');
 \app\Modules\tao\sdk\phaxui\HtmlAssets::addHeaderFile(__DIR__ . '/auth.css');
 ?>
 
@@ -96,7 +96,6 @@ $captchaURL = url('tao/auth/captcha');
     <?php include_once __DIR__ . '/auth.js' ?>
 </script>
 <script>
-    const qToken = '<?php echo viewData("token") ?>';
     let seconds = 0; // 倒计时
     const verCodeBtn = $('#reg-get-vercode');
 
@@ -123,7 +122,6 @@ $captchaURL = url('tao/auth/captcha');
 
         const postData = {
             account: field.account, vercode: field.vercode, password: field.password,
-            token: qToken,
         }
         admin.ajax.post({
             url: '<?php echo url("tao/auth/signup", true) ?>',
@@ -174,7 +172,6 @@ $captchaURL = url('tao/auth/captcha');
 
                             const postData = Object.assign(data, {
                                 account: $('#reg-account').val(),
-                                token: qToken
                             });
 
                             admin.ajax.post({

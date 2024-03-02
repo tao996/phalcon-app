@@ -60,7 +60,6 @@
 <?php $layui->footer(); ?>
 <script>
     var verCodeBtn = $('#get-vercode');
-    var postToken = '<?php echo viewData('p.token') ?>';
     var phoneE = $('#phone')
     var seconds = 0;
     admin.util.layOn({
@@ -72,7 +71,7 @@
                 }
                 admin.ajax.postLimit({
                     url: '<?php echo url('tao/user.index/phone-code', true) ?>',
-                    data: {phone: phoneE.val(), token: postToken},
+                    data: {phone: phoneE.val()},
                 }, function (data) {
                     seconds = 60;
                     verCodeBtn.addClass('layui-btn-disabled')
@@ -94,8 +93,5 @@
 
     admin.form.submitFirst(function () {
         admin.page.closeCurrentOpen({refreshFrame: true})
-    }, function (data) {
-        data.token = postToken;
-        return data;
     })
 </script>

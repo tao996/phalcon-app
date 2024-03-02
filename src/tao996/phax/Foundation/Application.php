@@ -248,6 +248,10 @@ class Application
         } else if ('profiler' === $dbLogDriver) {
             Profiler::attach();
         }
+
+        foreach (\config('app.includes', []) as $f) {
+            include_once $f;
+        }
     }
 
     public static function addWebServices(FactoryDefault $di): void

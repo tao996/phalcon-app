@@ -4,6 +4,10 @@
  * @var string $msg 错误提示信息
  * @var string $url 点击 “确定” 按钮后跳转的网址
  */
+
+use app\Modules\tao\sdk\phaxui\HtmlAssets;
+
+HtmlAssets::initWithCdn();
 $layui = \app\Modules\tao\sdk\phaxui\Layui\Layui::getInstance();
 $title = $title ?? '错误';
 // 1 正确, 2 错误(X), 3 询问，4 锁定, 5 不开心, 6 开心(笑脸) 7 感叹号

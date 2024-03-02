@@ -3,6 +3,7 @@
 namespace app\Modules\tao\sdk\aliyun;
 
 use app\Modules\tao\sdk\EmailDriverInterface;
+use app\Modules\tao\sdk\SdkHelper;
 use Dm\Request\V20151123 as Dm;
 
 /**
@@ -36,7 +37,7 @@ class AliyumEmailDriver implements EmailDriverInterface
         } elseif (empty($this->config['fromAlias'])) {
             throw new \Exception('必须填写发信人昵称');
         }
-        include_once __DIR__ . '/aliyun-php-sdk-core.phar';
+        SdkHelper::aliyunCore();
 // 需要设置对应的region名称，如华东1（杭州）设为cn-hangzhou，新加坡Region设为ap-southeast-1，澳洲Region设为ap-southeast-2。
 // 参考文档：https://help.aliyun.com/document_detail/2361895.html
 // 新加坡或澳洲region需要设置服务器地址，华东1（杭州）不需要设置。

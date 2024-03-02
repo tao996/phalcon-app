@@ -2,8 +2,6 @@
 
 namespace app\Modules\tao\Controllers\user;
 
-
-use app\Modules\tao\Helper\PageRandToken;
 use app\Modules\tao\Models\SystemSmsCode;
 use app\Modules\tao\Models\SystemUser;
 use app\Modules\tao\Services\LoginUser;
@@ -52,10 +50,8 @@ class IndexTest extends TestCase
         LoginUser::getInstance()->loadUserInfo(1);
         /**
          * @var $cc IndexController
-         * @var $token PageRandToken
          */
         $cc = $mock->create(IndexController::class);
-        $token = $mock->getControllerProperty('token');
         /**
          * @var $loginUser LoginUser
          */
@@ -72,7 +68,6 @@ class IndexTest extends TestCase
 
         // 2.
         $loginUser->user()->phone_at = time(); // 最近修改
-        $postData['token'] = $token->create();
         $mock->setPostData($postData);
         $this->assertStringContainsString('每年只能',
             $mock->mustException('phoneCodeAction')
@@ -89,7 +84,6 @@ class IndexTest extends TestCase
 
         // 发送成功
         $postData['phone'] = '13412345678';
-        $postData['token'] = $token->create();
         $mock->setPostData($postData);
         $rst = $mock->getActionResponse($cc->phoneCodeAction());
         $this->assertStringContainsString('已发送', $rst['msg']);
@@ -103,7 +97,6 @@ class IndexTest extends TestCase
         $this->assertTrue($sms['id'] > 0);
 
         // 再次发送，不会重复发送
-        $postData['token'] = $token->create();
         $mock->setPostData($postData);
         $rst = $mock->getActionResponse($cc->phoneCodeAction());
         $this->assertStringContainsString('已发送', $rst['msg']);
@@ -123,10 +116,8 @@ class IndexTest extends TestCase
         LoginUser::getInstance()->loadUserInfo(1);
         /**
          * @var $cc IndexController
-         * @var $token PageRandToken
          */
         $cc = $mock->create(IndexController::class);
-        $token = $mock->getControllerProperty('token');
         /**
          * @var $loginUser LoginUser
          */
@@ -139,7 +130,6 @@ class IndexTest extends TestCase
         $loginUser->user()->phone_at = 0; // 避免被1年修改1次限制
         // 为手机成功
         $postData['phone'] = $newPhone;
-        $postData['token'] = $token->create();
 
         $mock->setPostData($postData);
         $rst = $mock->getActionResponse($cc->phoneCodeAction());
@@ -156,7 +146,6 @@ class IndexTest extends TestCase
         $postData = [
             'phone' => $newPhone,
             'vercode' => $sms['code'] . '1', // 错误的验证码
-            'token' => $token->create(),
         ];
         $mock->setPostData($postData);
 
@@ -172,7 +161,6 @@ class IndexTest extends TestCase
         $postData = [
             'phone' => $newPhone,
             'vercode' => $sms['code'],
-            'token' => $token->create(),
         ];
         $mock->setPostData($postData);
         $rst = $mock->getActionResponse($cc->changePhoneAction());

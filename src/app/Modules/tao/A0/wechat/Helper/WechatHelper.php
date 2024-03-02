@@ -3,6 +3,7 @@
 namespace app\Modules\tao\A0\wechat\Helper;
 
 use app\Modules\tao\A0\wechat\Services\WechatConfigService;
+use app\Modules\tao\sdk\SdkHelper;
 use Endroid\QrCode\Color\Color;
 use Endroid\QrCode\QrCode;
 use Endroid\QrCode\Writer\PngWriter;
@@ -50,7 +51,7 @@ class WechatHelper
      */
     public static function renderQrcode(string $data)
     {
-        require_once dirname(__DIR__) . '/sdk/qrcode.phar';
+        SdkHelper::qrcode();
 
         $qrCode = QrCode::create($data)
             ->setSize(300)->setMargin(10)
