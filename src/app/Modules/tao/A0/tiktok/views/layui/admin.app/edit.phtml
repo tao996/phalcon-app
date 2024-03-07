@@ -14,14 +14,14 @@ use app\Modules\tao\sdk\phaxui\Layui\Layui;
             <input type="text" name="title" class="layui-input"
                    placeholder="请输入应用名称"
                    lay-verify="required" lay-reqtext="请输入应用名称"
-                   value="<?php echo viewData('row.title') ?>">
+                   value="<?php echo viewData('api.title') ?>">
         </div>
-        <?php $kind = viewData('row.kind', 'mini') ?>
+        <?php $kind = viewData('api.kind', 'mini') ?>
         <label class="layui-form-label required">应用类型</label>
         <div class="layui-input-inline">
             <select class="layui-select" name="kind">
                 <?php foreach (\app\Modules\tao\A0\tiktok\Models\TiktokApp::MapKinds as $v => $t) { ?>
-                    <option value="<?php echo $v ?>" <?php echo viewDataCompare('row.kind', 'selected', $kind) ?>><?php echo $t ?></option>
+                    <option value="<?php echo $v ?>" <?php echo viewDataCompare('api.kind', 'selected', $kind) ?>><?php echo $t ?></option>
                 <?php } ?>
             </select>
         </div>
@@ -33,7 +33,7 @@ use app\Modules\tao\sdk\phaxui\Layui\Layui;
             <input type="text" name="appid" class="layui-input"
                    placeholder="请输入 AppID"
                    lay-verify="required"
-                   value="<?php echo viewData('row.appid') ?>">
+                   value="<?php echo viewData('api.appid') ?>">
         </div>
 
         <label class="layui-form-label required">Secret</label>
@@ -41,14 +41,14 @@ use app\Modules\tao\sdk\phaxui\Layui\Layui;
             <input type="text" name="secret" class="layui-input"
                    placeholder="请输入 Secret"
                    lay-verify="required"
-                   value="<?php echo viewData('row.secret') ?>">
+                   value="<?php echo viewData('api.secret') ?>">
         </div>
 
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label">沙盒</label>
         <div class="layui-input-inline">
-            <input type="checkbox" name="sandbox" title="是" <?php echo viewDataCompare('row.sandbox', 'checked') ?>>
+            <input type="checkbox" name="sandbox" title="是" <?php echo viewDataCompare('api.sandbox', 'checked') ?>>
         </div>
     </div>
 
@@ -57,7 +57,7 @@ use app\Modules\tao\sdk\phaxui\Layui\Layui;
         <label class="layui-form-label">备注</label>
         <div class="layui-input-block">
             <input type="text" name="remark" class="layui-input" placeholder=""
-                   value="<?php echo viewData('row.remark') ?>">
+                   value="<?php echo viewData('api.remark') ?>">
         </div>
     </div>
 

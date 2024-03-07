@@ -14,7 +14,7 @@
                    lay-verify="required"
                    lay-reqtext="请输入角色名称"
                    placeholder="请输入角色名称"
-                   value="<?php echo viewData('row.title') ?>">
+                   value="<?php echo viewData('api.title') ?>">
         </div>
         <div class="layui-form-mid layui-text-em">填写角色名称</div>
     </div>
@@ -23,7 +23,7 @@
         <div class="layui-input-inline">
             <input type="text" name="name" class="layui-input"
                    placeholder="请输入角色的英文名称"
-                   value="<?php echo viewData('row.name') ?>">
+                   value="<?php echo viewData('api.name') ?>">
 
         </div>
         <div class="layui-form-mid layui-text-em">填写角色英文名称，英文名称通常用于某个特殊模块的快速授权；<br>
@@ -35,7 +35,7 @@
         <label class="layui-form-label">备注信息</label>
         <div class="layui-input-block">
                 <textarea name="remark" class="layui-textarea"
-                          placeholder="请输入备注信息"><?php echo viewData('row.remark') ?></textarea>
+                          placeholder="请输入备注信息"><?php echo viewData('api.remark') ?></textarea>
         </div>
     </div>
 

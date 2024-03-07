@@ -9,7 +9,7 @@ use app\Modules\tao\sdk\phaxui\Layui\LayuiHtml;
  */
 
 $terms = \app\Modules\tao\A0\city\Services\CityTermService::options();
-$termId = viewData('row.term_id', 0);
+$termId = viewData('api.term_id', 0);
 ?>
 <form class="layui-form">
     <div class="layui-form-item">
@@ -26,13 +26,13 @@ $termId = viewData('row.term_id', 0);
 
 
     <?php LayuiHtml::upload('头像', 'avatar', [
-        'value' => viewData('row.avatar')]); ?>
+        'value' => viewData('api.avatar')]); ?>
 
     <div class="layui-form-item">
         <label class="layui-form-label required">名称</label>
         <div class="layui-input-inline">
             <input type="text" name="name" class="layui-input" placeholder="请输入球员名称"
-                   value="<?php echo viewData('row.name') ?>"
+                   value="<?php echo viewData('api.name') ?>"
                    lay-affix="clear"
                    lay-verify="required" lay-reqtext="输入球员名称"
             >
@@ -41,7 +41,7 @@ $termId = viewData('row.term_id', 0);
         <label class="layui-form-label">号码</label>
         <div class="layui-input-inline">
             <input type="text" name="code" class="layui-input"
-                   value="<?php echo viewData('row.code') ?>"
+                   value="<?php echo viewData('api.code') ?>"
                    lay-affix="clear"
             >
         </div>
@@ -51,7 +51,7 @@ $termId = viewData('row.term_id', 0);
         <label class="layui-form-label">性别</label>
         <div class="layui-input-block">
             <?php
-            $sex = viewData('row.sex', 1);
+            $sex = viewData('api.sex', 1);
             foreach ([1 => '男', 2 => '女'] as $v => $t) {
                 ?>
                 <input type="radio" name="sex" value="<?php echo $v ?>"

@@ -92,7 +92,7 @@ class LayuiData
     }
 
     /**
-     * 转为时间戳
+     * 將字符串日期转为时间戳
      * @param array $data
      * @param array $keys
      * @return void

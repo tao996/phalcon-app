@@ -20,11 +20,21 @@ class Controller extends \Phalcon\Mvc\Controller
      * @var array
      */
     protected array $viewData = [];
+
     /**
-     * 接口中返回的数据将会绑定到此 ['row'=>actionApiReturn]
+     * @var string 语言
+     */
+    protected string $language = 'en';
+    /**
+     * 接口中返回的数据将会绑定到此 ['api'=>actionApiReturn]
      * @var string
      */
-    protected string $actionResponseDataName = 'row';
+    protected string $actionResponseDataName = 'api';
+
+    public function initialize(): void
+    {
+        $this->language = Request::getBestLanguage();
+    }
 
     public function addViewData($name, $value): self
     {
@@ -75,6 +85,7 @@ class Controller extends \Phalcon\Mvc\Controller
             return \json($data);
         } else {
             $this->view->setVars($this->viewData, true);
+            $this->view->setVar('language', $this->language);
             if (is_scalar($data)) {
                 $this->view->setVar('message', $data);
             } else {

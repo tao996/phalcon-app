@@ -3,6 +3,7 @@
 namespace Phax\Mvc;
 
 use Phax\Foundation\Router;
+use Phax\I18n\Lang;
 use Phax\Support\Facades\Helper;
 use Phax\Support\Validate;
 use Phax\Utils\Data;
@@ -136,5 +137,10 @@ class Request
         $limit = request()->get('limit', 'int', 15);
         $b->pagination($page - 1, $limit);
         return $b;
+    }
+
+    public static function getBestLanguage(): string
+    {
+        return Lang::getBaseLanguage();
     }
 }

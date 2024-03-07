@@ -13,7 +13,7 @@ use app\Modules\tao\sdk\phaxui\Layui\Layui;
             <input type="text" name="app_id" class="layui-input" placeholder="公众号 ID"
                    lay-verify="required" lay-reqtext="请输入公众号"
                    lay-affix="clear"
-                   value="<?php echo viewData('row.app_id') ?>">
+                   value="<?php echo viewData('api.app_id') ?>">
         </div>
 
         <label class="layui-form-label required">mchid</label>
@@ -21,7 +21,7 @@ use app\Modules\tao\sdk\phaxui\Layui\Layui;
             <input type="text" name="mch_id" class="layui-input" placeholder="商户号 ID"
                    lay-verify="required" lay-reqtext="请输入商户号"
                    lay-affix="clear"
-                   value="<?php echo viewData('row.mch_id') ?>">
+                   value="<?php echo viewData('api.mch_id') ?>">
         </div>
     </div>
 
@@ -30,13 +30,13 @@ use app\Modules\tao\sdk\phaxui\Layui\Layui;
         <div class="layui-input-inline">
             <input type="text" name="secret_key" class="layui-input" placeholder="V3 api 秘钥"
                    lay-verify="required" lay-reqtext="请输入 V3 api 秘钥"
-                   value="<?php echo viewData('row.secret_key') ?>">
+                   value="<?php echo viewData('api.secret_key') ?>">
         </div>
 
         <label class="layui-form-label">V2 api 秘钥</label>
         <div class="layui-input-inline">
             <input type="text" name="v2_secret_key" class="layui-input" placeholder="V2 api 秘钥"
-                   value="<?php echo viewData('row.v2_secret_key') ?>">
+                   value="<?php echo viewData('api.v2_secret_key') ?>">
         </div>
         <div class="layui-form-mid layui-text-em">非必须</div>
     </div>
@@ -45,7 +45,7 @@ use app\Modules\tao\sdk\phaxui\Layui\Layui;
         <label class="layui-form-label">备注</label>
         <div class="layui-input-block">
             <input type="text" name="remark" class="layui-input" placeholder="备注信息"
-                   value="<?php echo viewData('row.remark') ?>">
+                   value="<?php echo viewData('api.remark') ?>">
         </div>
     </div>
 

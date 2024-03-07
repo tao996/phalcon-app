@@ -9,7 +9,7 @@ use app\Modules\tao\sdk\phaxui\Layui\LayuiHtml;
  * @var \Phalcon\Mvc\View\Engine\AbstractEngine $this
  */
 
-$platform = viewData('row.platform', 0);
+$platform = viewData('api.platform', 0);
 ?>
 <div class="text-danger" style="margin-bottom: 10px;">通常情况下是由客户端登录后，推送过来“我要直播”，此时会获取用户的 app user id 和 账号，而不需要手动添加</div>
 <form class="layui-form" lay-filter="row">
@@ -27,7 +27,7 @@ $platform = viewData('row.platform', 0);
         <label class="layui-form-label">账号</label>
         <div class="layui-input-inline">
             <input type="text" name="name" class="layui-input" placeholder="请输入平台账号或者姓名"
-                   value="<?php echo viewData('row.name') ?>"
+                   value="<?php echo viewData('api.name') ?>"
                    lay-affix="clear"
             >
         </div>
@@ -38,13 +38,13 @@ $platform = viewData('row.platform', 0);
         <div class="layui-input-block">
             <input type="text" name="share_code" class="layui-input"
                    placeholder="请输入直播间分享码"
-                   value="<?php echo viewData('row.share_code') ?>"
+                   value="<?php echo viewData('api.share_code') ?>"
                    lay-affix="clear"
             >
         </div>
     </div>
     <?php LayuiHtml::upload('直播间二维码', 'qc', [
-        'value' => viewData('row.qc'),
+        'value' => viewData('api.qc'),
     ]); ?>
 
 

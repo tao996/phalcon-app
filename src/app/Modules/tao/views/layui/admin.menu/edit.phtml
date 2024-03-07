@@ -8,10 +8,9 @@ use app\Modules\tao\sdk\phaxui\Layui\Layui;
  * @var \Phalcon\Mvc\View\Engine\AbstractEngine $this
 
  * @var int $id
- * @var array $row
  */
-$pid = viewData('row.pid', viewData('pid', 0));
-$menuList = viewData('row.menuList',[]);
+$pid = viewData('api.pid', viewData('pid', 0));
+$menuList = viewData('api.menuList',[]);
 //dd(viewData());
 ?>
 
@@ -33,7 +32,7 @@ $menuList = viewData('row.menuList',[]);
             <label class="layui-form-label">访问权限</label>
             <div class="layui-input-inline">
                 <input type="text" class="layui-input" id="inputTag" name="tag"
-                       value="<?php echo viewData('row.tag') ?>"
+                       value="<?php echo viewData('api.row.tag') ?>"
                        placeholder="不填则表示手动授权"
                 >
             </div>
@@ -58,12 +57,12 @@ $menuList = viewData('row.menuList',[]);
             <input type="text" name="title" class="layui-input"
                    lay-verify="required" lay-reqtext="请输入菜单名称"
                    lay-affix="clear"
-                   placeholder="请输入菜单名称" value="<?php echo viewData('row.title') ?>">
+                   placeholder="请输入菜单名称" value="<?php echo viewData('api.row.title') ?>">
         </div>
 
         <label class="layui-form-label">标识</label>
         <div class="layui-input-inline">
-            <input type="text" name="remark" class="layui-input" value="<?php echo viewData('row.remark') ?>">
+            <input type="text" name="remark" class="layui-input" value="<?php echo viewData('api.row.remark') ?>">
         </div>
 
     </div>
@@ -74,16 +73,16 @@ $menuList = viewData('row.menuList',[]);
             <input type="text" name="href" id="href" class="layui-input"
                    lay-affix="clear"
                    placeholder="请输入菜单链接"
-                   value="<?php echo viewData('row.href') ?>">
+                   value="<?php echo viewData('api.row.href') ?>">
         </div>
 
         <div class="layui-input-inline">
             <input type="checkbox" name="multi" value="1" title="多模块"
-                <?php echo viewDataCompare('row.multi', 'checked') ?>>
+                <?php echo viewDataCompare('api.row.multi', 'checked') ?>>
         </div>
     </div>
 
-    <?php \app\Modules\tao\sdk\phaxui\Layui\LayuiHtml::icon(['value' => viewData('row.icon')]); ?>
+    <?php \app\Modules\tao\sdk\phaxui\Layui\LayuiHtml::icon(['value' => viewData('api.row.icon')]); ?>
 
 
     <div class="layui-form-item">
@@ -93,7 +92,7 @@ $menuList = viewData('row.menuList',[]);
         <div class="layui-input-inline">
             <input type="number" name="sort"
                    lay-reqtext="菜单排序不能为空" placeholder="请输入菜单排序"
-                   value="<?php echo viewData('row.sort', 0) ?>" class="layui-input">
+                   value="<?php echo viewData('api.row.sort', 0) ?>" class="layui-input">
         </div>
     </div>
 

@@ -12,12 +12,12 @@ use app\Modules\tao\sdk\phaxui\Layui\Layui;
             <div class="layui-input-inline">
                 <input type="text" name="tag" class="layui-input" placeholder="所属组名/模块名称"
                        lay-verify="required" lay-reqtext="请输入组名/模块名称"
-                       value="<?php echo viewData('row.tag') ?>">
+                       value="<?php echo viewData('api.tag') ?>">
             </div>
 
             <label class="layui-form-label">排序</label>
             <div class="layui-input-inline">
-                <input type="number" name="sort" placeholder="请输入菜单排序" value="<?php echo viewData('row.sort',0) ?>"
+                <input type="number" name="sort" placeholder="请输入菜单排序" value="<?php echo viewData('api.sort',0) ?>"
                        class="layui-input">
             </div>
         </div>
@@ -27,14 +27,14 @@ use app\Modules\tao\sdk\phaxui\Layui\Layui;
             <div class="layui-input-inline">
                 <input type="text" name="title" class="layui-input" placeholder="请输入中文标题"
                        lay-verify="required" lay-reqtext="请输入中文标题"
-                       value="<?php echo viewData('row.title') ?>">
+                       value="<?php echo viewData('api.title') ?>">
             </div>
 
             <label class="layui-form-label required">英文名称</label>
             <div class="layui-input-inline">
                 <input type="text" name="name" class="layui-input" placeholder="请输入英文名称"
                        lay-verify="required" lay-reqtext="请输入英文名称"
-                       value="<?php echo viewData('row.name') ?>">
+                       value="<?php echo viewData('api.name') ?>">
             </div>
         </div>
 
@@ -42,7 +42,7 @@ use app\Modules\tao\sdk\phaxui\Layui\Layui;
         <div class="layui-form-item layui-form-text">
             <label class="layui-form-label">内容</label>
             <div class="layui-input-block">
-                <textarea name="content" class="layui-textarea" placeholder="请输入单页内容" id="content"><?php echo viewData('row.content') ?></textarea>
+                <textarea name="content" class="layui-textarea" placeholder="请输入单页内容" id="content"><?php echo viewData('api.content') ?></textarea>
             </div>
         </div>
 

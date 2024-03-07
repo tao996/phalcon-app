@@ -11,6 +11,7 @@ use Phax\Utils\Data;
 class OpenController extends BaseController
 {
     protected array|string $openActions = '*';
+    public bool $disableUpdateActions = true;
 
     /**
      * 单页信息显示
@@ -18,9 +19,12 @@ class OpenController extends BaseController
      */
     public function pageAction()
     {
+        $this->disabledMainLayout();
         $data = Request::getData();
         Data::mustHasSet($data, ['name']);
-        $page = CmsPage::findFirst(['name' => $data['name']])?->toArray();
+//        $tag = $data['tag'] ?? config('app.project');
+
+        $page = CmsPage::findFirst(['name' => $data['name'], 'status' => 1])?->toArray();
         if (empty($page)) {
             throw new \Exception('没有找到符合要求的页面');
         }

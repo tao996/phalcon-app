@@ -13,14 +13,14 @@ use app\Modules\tao\sdk\phaxui\Layui\LayuiHtml;
     <div class="flex-rows">
         <div style="width: 300px;">
             <?php LayuiHtml::upload('球队图标', 'avatar', [
-                'value' => viewData('row.avatar')]); ?>
+                'value' => viewData('api.avatar')]); ?>
         </div>
         <div class="flex-1">
             <div class="layui-form-item">
                 <label class="layui-form-label required">全称</label>
                 <div class="layui-input-inline">
                     <input type="text" name="name" class="layui-input" placeholder="请输入球队名称"
-                           value="<?php echo viewData('row.name') ?>"
+                           value="<?php echo viewData('api.name') ?>"
                            lay-affix="clear"
                            lay-verify="required" lay-reqtext="输入球队名称"
                     >
@@ -30,7 +30,7 @@ use app\Modules\tao\sdk\phaxui\Layui\LayuiHtml;
                 <label class="layui-form-label">简称</label>
                 <div class="layui-input-inline">
                     <input type="text" name="nickname" class="layui-input"
-                           value="<?php echo viewData('row.nickname') ?>"
+                           value="<?php echo viewData('api.nickname') ?>"
                            lay-affix="clear"
                     >
                 </div>
@@ -39,7 +39,7 @@ use app\Modules\tao\sdk\phaxui\Layui\LayuiHtml;
             <div class="layui-form-item">
                 <label class="layui-form-label required">地区</label>
                 <div class="layui-input-block">
-                    <input type="text" name="address" class="layui-input" value="<?php echo viewData('row.address') ?>">
+                    <input type="text" name="address" class="layui-input" value="<?php echo viewData('api.address') ?>">
                 </div>
             </div>
 
@@ -47,7 +47,7 @@ use app\Modules\tao\sdk\phaxui\Layui\LayuiHtml;
             <div class="layui-form-item">
                 <label class="layui-form-label">领队</label>
                 <div class="layui-input-inline">
-                    <input type="text" name="leader" class="layui-input" value="<?php echo viewData('row.leader') ?>">
+                    <input type="text" name="leader" class="layui-input" value="<?php echo viewData('api.leader') ?>">
                 </div>
             </div>
 

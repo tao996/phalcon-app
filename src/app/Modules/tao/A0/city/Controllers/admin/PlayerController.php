@@ -2,10 +2,11 @@
 
 namespace app\Modules\tao\A0\city\Controllers\admin;
 
-use app\Http\Projects\you\BaseSubTermController;
 use app\Modules\tao\A0\city\Models\CityPlayer;
+use app\Modules\tao\A0\city\Services\CityTermService;
+use app\Modules\tao\common\BaseProjectController;
 
-class PlayerController extends BaseSubTermController
+class PlayerController extends BaseProjectController
 {
     protected bool $console = true;
     protected array|string $superAdminActions = '*';
@@ -15,5 +16,12 @@ class PlayerController extends BaseSubTermController
     {
         $this->model = new CityPlayer();
         parent::initialize();
+    }
+
+    protected function indexActionGetResult(int $count, \Phax\Db\QueryBuilder $queryBuilder): array
+    {
+        $rows = parent::indexActionGetResult($count, $queryBuilder);
+        CityTermService::appendTerm($rows);
+        return $rows;
     }
 }

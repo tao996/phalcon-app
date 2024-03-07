@@ -14,7 +14,7 @@ use app\Modules\tao\sdk\phaxui\Layui\LayuiHtml;
     <div class="layui-form-item">
         <label class="layui-form-label"></label>
         <div class="layui-input-block">
-            <img src="<?php echo viewData('row.url') ?>" alt="图片地址" style="width: 150px;">
+            <img src="<?php echo viewData('api.url') ?>" alt="图片地址" style="width: 150px;">
         </div>
     </div>
 
@@ -22,7 +22,7 @@ use app\Modules\tao\sdk\phaxui\Layui\LayuiHtml;
         <label class="layui-form-label">描述</label>
         <div class="layui-input-block">
             <textarea name="summary" class="layui-textarea" placeholder="图片描述内容"
-                      maxlength="255"><?php echo viewData('row.summary') ?></textarea>
+                      maxlength="255"><?php echo viewData('api.summary') ?></textarea>
         </div>
     </div>
 

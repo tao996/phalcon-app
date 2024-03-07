@@ -59,7 +59,6 @@ class IndexTest extends TestCase
 
         $postData = [
             'phone' => 'abc',
-            'token' => '',
         ];
         $mock->setPostData($postData);
         $this->assertStringContainsString('不匹配',

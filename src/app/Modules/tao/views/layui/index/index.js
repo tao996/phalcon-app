@@ -265,10 +265,10 @@ onclick="tabs.close('${info.href}')"></i>
      * @return {number}
      */
     getCurrentMenuParentId: function (id) {
-        return parseInt(id.includes('-') ? id.split('-')[0] : id);
+        return parseInt((''+id).indexOf('-') > -1 ? id.split('-')[0] : id);
     },
     isSubMenuId: function (id) {
-        return id.includes('-');
+        return (''+id).includes('-');
     }
 };
 

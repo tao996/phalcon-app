@@ -4,7 +4,7 @@
         <input type="text" name="address" class="layui-input" placeholder="请输入地址"
                lay-affix="clear"
                lay-verify="required" lay-reqtext="必须填写地址"
-               value="<?php echo viewData('row.address') ?>"
+               value="<?php echo viewData('api.address') ?>"
         >
     </div>
 </div>
@@ -22,7 +22,7 @@
     <div class="layui-input-inline">
         <input type="number" name="lng" class="layui-input" placeholder=""
                lay-affix="clear"
-               value="<?php echo viewData('row.lng') ?>"
+               value="<?php echo viewData('api.lng') ?>"
         >
     </div>
     <div class="layui-form-mid layui-text-em">LNG -180~180 度</div>
@@ -30,7 +30,7 @@
     <div class="layui-input-inline">
         <input type="number" name="lat" class="layui-input" placeholder=""
                lay-affix="clear"
-               value="<?php echo viewData('row.lat') ?>"
+               value="<?php echo viewData('api.lat') ?>"
         >
     </div>
     <div class="layui-form-mid layui-text-em">LAT -90~90 度</div>

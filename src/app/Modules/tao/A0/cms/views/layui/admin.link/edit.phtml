@@ -11,12 +11,12 @@ use app\Modules\tao\sdk\phaxui\Layui\Layui;
     <div class="layui-form-item">
         <label class="layui-form-label required">TAG</label>
         <div class="layui-input-inline">
-            <input type="number" name="tag" class="layui-input" placeholder="分组 TAG" value="<?php echo viewData('row.tag',0) ?>">
+            <input type="number" name="tag" class="layui-input" placeholder="分组 TAG" value="<?php echo viewData('api.tag',0) ?>">
         </div>
 
         <label class="layui-form-label">排序</label>
         <div class="layui-input-inline">
-            <input type="number" name="sort" class="layui-input" placeholder="排序" value="<?php echo viewData('row.sort',0) ?>">
+            <input type="number" name="sort" class="layui-input" placeholder="排序" value="<?php echo viewData('api.sort',0) ?>">
         </div>
     </div>
 
@@ -25,14 +25,14 @@ use app\Modules\tao\sdk\phaxui\Layui\Layui;
         <div class="layui-input-inline">
             <input type="text" name="title" class="layui-input" placeholder="请输入链接标题"
                    lay-verify="required" lay-reqtext="请输入链接标题"
-                   value="<?php echo viewData('row.title') ?>">
+                   value="<?php echo viewData('api.title') ?>">
         </div>
 
         <label class="layui-form-label required">链接地址</label>
         <div class="layui-input-inline">
             <input type="text" name="href" class="layui-input" placeholder="请输入链接地址"
                    lay-verify="required" lay-reqtext="请输入链接地址"
-                   value="<?php echo viewData('row.href') ?>">
+                   value="<?php echo viewData('api.href') ?>">
         </div>
     </div>
 

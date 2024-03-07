@@ -10,7 +10,7 @@ use app\Modules\tao\sdk\phaxui\Layui\LayuiHtml;
  */
 
 \app\Modules\tao\A0\cms\Helper\CmsHtmlHelper::header();
-$kind = viewData('row.kind', 0);
+$kind = viewData('api.kind', 0);
 ?>
 
 <form class="layui-form" lay-filter="near">
@@ -28,13 +28,13 @@ $kind = viewData('row.kind', 0);
         <div style="width: 400px;">
             <div>
                 <?php LayuiHtml::upload('横幅图', 'banner', [
-                    'value' => viewData('row.banner'),
+                    'value' => viewData('api.banner'),
                     'tip' => '通常用于广告，建议尺寸比例 16:9'
                 ]); ?>
             </div>
             <div>
                 <?php LayuiHtml::upload('列表图', 'list', [
-                    'value' => viewData('row.list'),
+                    'value' => viewData('api.list'),
                     'tip' => '建议尺寸比例 1:1'
                 ]); ?>
             </div>
@@ -47,7 +47,7 @@ $kind = viewData('row.kind', 0);
                 <div class="layui-input-block">
                     <input type="text" name="title" class="layui-input" placeholder="请输入名称"
                            lay-affix="clear"
-                           value="<?php echo viewData('row.title') ?>"
+                           value="<?php echo viewData('api.title') ?>"
                            lay-verify="required" lay-reqtext="必须填写名称"
                     >
                 </div>
@@ -58,15 +58,15 @@ $kind = viewData('row.kind', 0);
                 <label class="layui-form-label"></label>
                 <div class="layui-input-inline">
                     <input type="checkbox" name="hot"
-                           title="热门" <?php echo viewDataCompare('row.hot', 'checked', 1) ?>>
+                           title="热门" <?php echo viewDataCompare('api.hot', 'checked', 1) ?>>
                     <input type="checkbox" name="top"
-                           title="置顶" <?php echo viewDataCompare('row.top', 'checked', 1) ?>>
+                           title="置顶" <?php echo viewDataCompare('api.top', 'checked', 1) ?>>
                 </div>
                 <label class="layui-form-label">排序</label>
                 <div class="layui-input-inline">
                     <input type="number" name="sort" class="layui-input" placeholder="排序号"
                            lay-affix="clear"
-                           value="<?php echo viewData('row.sort') ?>"
+                           value="<?php echo viewData('api.sort') ?>"
                     >
                 </div>
 
@@ -75,7 +75,7 @@ $kind = viewData('row.kind', 0);
                 <label class="layui-form-label">标签</label>
                 <div class="layui-input-block">
                     <input type="text" name="tag" class="layui-input" placeholder="多个标签使用空格分开"
-                           lay-affix="clear" value="<?php echo viewData('row.tag') ?>"
+                           lay-affix="clear" value="<?php echo viewData('api.tag') ?>"
                     >
                 </div>
             </div>
@@ -86,7 +86,7 @@ $kind = viewData('row.kind', 0);
         <label class="layui-form-label">简介</label>
         <div class="layui-input-block">
             <input type="text" name="summary" class="layui-input" placeholder="卖点等信息"
-                   lay-affix="clear" value="<?php echo viewData('row.summary') ?>"
+                   lay-affix="clear" value="<?php echo viewData('api.summary') ?>"
             >
         </div>
     </div>
@@ -108,9 +108,9 @@ $kind = viewData('row.kind', 0);
 $layui->addWindowConfig();
 $layui->footer();
 
-$images = viewData('row.images', []);
+$images = viewData('api.images', []);
 \app\Modules\tao\A0\cms\Helper\CmsHtmlHelper::ImageJs($images);
-$videos = viewData('row.videos', []);
+$videos = viewData('api.videos', []);
 \app\Modules\tao\A0\city\Helper\CityHtmlHelper::videoJs($videos);
 
 \app\Modules\tao\A0\city\Helper\CityHtmlHelper::addressJs();

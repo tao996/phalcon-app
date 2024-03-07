@@ -2,15 +2,17 @@
 
 namespace app\Modules\tao\A0\city\Controllers\admin;
 
-use app\Http\Projects\you\BaseSubTermController;
+
 use app\Modules\tao\A0\city\Models\CitySponsor;
+use app\Modules\tao\A0\city\Services\CityTermService;
+use app\Modules\tao\common\BaseProjectController;
 use Phax\Mvc\Request;
 use Phax\Utils\Data;
 
 /**
  * @property \app\Modules\tao\A0\city\Models\CitySponsor $model
  */
-class SponsorController extends BaseSubTermController
+class SponsorController extends BaseProjectController
 {
     protected bool $console = true;
     protected array|string $superAdminActions = '*';
@@ -32,6 +34,13 @@ class SponsorController extends BaseSubTermController
             $queryBuilder->opt('date', '>=', $year . '0101', \PDO::PARAM_INT)->opt('date', '<=', $year . '1231',
                 \PDO::PARAM_INT);
         }
+    }
+
+    protected function indexActionGetResult(int $count, \Phax\Db\QueryBuilder $queryBuilder): array
+    {
+        $rows = parent::indexActionGetResult($count, $queryBuilder);
+        CityTermService::appendTerm($rows);
+        return $rows;
     }
 
     public function addAction()

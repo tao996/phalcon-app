@@ -44,6 +44,7 @@ class BaseController extends BaseRbacController
      */
     public function initialize(): void
     {
+        parent::initialize();
         parent::rbacInitialize();
         $this->prepareInitialize();
     }

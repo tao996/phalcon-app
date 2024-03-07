@@ -18,7 +18,7 @@ use app\Modules\tao\A0\cms\Models\CmsCategory;
         <div class="layui-form-item" style="width: 300px;margin-right: 10px;">
 
             <?php \app\Modules\tao\sdk\phaxui\Layui\LayuiHtml::upload('封面', 'cover', [
-                'value' => viewData('row.cover'), 'tip' => '建议尺寸 620 * 300'
+                'value' => viewData('api.cover'), 'tip' => '建议尺寸 620 * 300'
             ]); ?>
         </div>
         <div style="flex: 1;">
@@ -26,7 +26,7 @@ use app\Modules\tao\A0\cms\Models\CmsCategory;
                 <label class="layui-form-label required">标题</label>
                 <div class="layui-input-inline">
                     <input type="text" class="layui-input" name="title"
-                           value="<?php echo viewData('row.title') ?>"
+                           value="<?php echo viewData('api.title') ?>"
                            lay-verify="required" lay-reqtext="请填写图集名称"
                            placeholder="请填写图集名称"
                     >
@@ -35,7 +35,7 @@ use app\Modules\tao\A0\cms\Models\CmsCategory;
                 <label class="layui-form-label">标签</label>
                 <div class="layui-input-inline">
                     <input type="text" class="layui-input" name="tag"
-                           value="<?php echo viewData('row.tag') ?>"
+                           value="<?php echo viewData('api.tag') ?>"
                            placeholder="通常用于分组使用"
                     >
                 </div>
@@ -46,7 +46,7 @@ use app\Modules\tao\A0\cms\Models\CmsCategory;
                 <label class="layui-form-label">简介</label>
                 <div class="layui-input-block">
                     <input type="text" name="summary" class="layui-input" placeholder="请填写简介"
-                           value="<?php echo viewData('row.summary') ?>">
+                           value="<?php echo viewData('api.summary') ?>">
                 </div>
             </div>
         </div>
@@ -66,7 +66,7 @@ use app\Modules\tao\A0\cms\Models\CmsCategory;
 $layui->addWindowConfig([]);
 $layui->footer();
 
-$items = viewData('row.albums');
+$items = viewData('api.albums');
 \app\Modules\tao\A0\cms\Helper\CmsHtmlHelper::ImageJs($items);
 ?>
 

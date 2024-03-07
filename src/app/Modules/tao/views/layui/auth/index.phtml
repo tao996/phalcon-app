@@ -74,10 +74,10 @@ $taoHtml = \app\Modules\tao\Services\OauthService::getInstance();
             </div>
         </div>
 
-        <?php echo \app\Modules\tao\sdk\phaxui\Layui\LayuiHtml::captcha() ?>
+        <?php // echo \app\Modules\tao\sdk\phaxui\Layui\LayuiHtml::captcha() ?>
 
         <div class="layui-form-item">
-            <button class="layui-btn layui-btn-fluid" lay-submit lay-filter="demo-login">登录</button>
+            <button class="layui-btn layui-btn-fluid" lay-submit lay-filter="submit-login">登录</button>
         </div>
 
         <div class="layui-row link">
@@ -101,20 +101,23 @@ $taoHtml = \app\Modules\tao\Services\OauthService::getInstance();
 </script>
 <script>
     // 提交事件
-    form.on('submit(demo-login)', function (data) {
-        const postData = data.field;
-        admin.ajax.post({
-            url: '<?php echo url('tao/auth/index', true) ?>', data: postData,
-        }, function () {
-            const search = layui.url().search;
-            if (!admin.util.isEmpty(search['redirect'])) {
-                setTimeout(function () {
-                    location.href = search.redirect;
-                }, 1500)
-            } else {
-                auth.afterLogin();
-            }
+    form.on('submit(submit-login)', function (data) {
+        admin.form.captcha(captcha => {
+            const postData = Object.assign(data.field, {captcha});
+            admin.ajax.post({
+                url: '<?php echo url('tao/auth/index', true) ?>', data: postData,
+            }, function () {
+                const search = layui.url().search;
+                if (!admin.util.isEmpty(search['redirect'])) {
+                    setTimeout(function () {
+                        location.href = search.redirect;
+                    }, 1500)
+                } else {
+                    auth.afterLogin();
+                }
+            })
         })
+
         return false; // 阻止默认 form 跳转
     });
 

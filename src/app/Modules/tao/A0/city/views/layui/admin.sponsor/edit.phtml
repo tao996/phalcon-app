@@ -8,7 +8,7 @@ use app\Modules\tao\sdk\phaxui\Layui\Layui;
  */
 
 $terms = \app\Modules\tao\A0\city\Services\CityTermService::options();
-$termId = viewData('row.term_id', 0);
+$termId = viewData('api.term_id', 0);
 ?>
 <form class="layui-form">
 
@@ -53,7 +53,7 @@ $termId = viewData('row.term_id', 0);
             <label class="layui-form-label">名称</label>
             <div class="layui-input-inline">
                 <input type="text" name="name" class="layui-input" placeholder="请输入赞助商名称"
-                       value="<?php echo viewData('row.name') ?>"
+                       value="<?php echo viewData('api.name') ?>"
                        lay-affix="clear"
                 >
             </div>
@@ -61,7 +61,7 @@ $termId = viewData('row.term_id', 0);
             <label class="layui-form-label">金额</label>
             <div class="layui-input-inline layui-input-group">
                 <input type="number" name="money" class="layui-input"
-                       value="<?php echo viewData('row.money') ?>"
+                       value="<?php echo viewData('api.money') ?>"
                        lay-affix="clear"
                 >
                 <div class="layui-input-split layui-input-suffix">元</div>
@@ -71,7 +71,7 @@ $termId = viewData('row.term_id', 0);
             <label class="layui-form-label">物品</label>
             <div class="layui-input-block">
                 <input type="text" name="other" class="layui-input" placeholder="其它赞助物品"
-                       value="<?php echo viewData('row.other') ?>"
+                       value="<?php echo viewData('api.other') ?>"
                        lay-affix="clear"
                 >
             </div>
@@ -89,7 +89,7 @@ $termId = viewData('row.term_id', 0);
 <?php
 $layui->addWindowConfig();
 $layui->footer();
-$date = viewData("row.date");
+$date = viewData("api.date");
 if ($date) {
     $date = date('Y-m-d', strtotime($date));
 }

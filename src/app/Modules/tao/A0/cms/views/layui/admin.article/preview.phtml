@@ -54,29 +54,29 @@ use app\Modules\tao\sdk\phaxui\Layui\Layui;
 
     </style>
     <div class="article">
-        <div class="article-title"><?php echo viewData('row.title') ?></div>
+        <div class="article-title"><?php echo viewData('api.title') ?></div>
         <div class="article-info">
             <div style="display: inline-block;margin-right: 10px;">
                 <span>发布时间:</span>
-                <span><?php echo date('Y-m-d', viewData('row.created_at')) ?></span>
+                <span><?php echo date('Y-m-d', viewData('api.created_at')) ?></span>
             </div>
             <div style="display: inline-block;">
-                <span>作者:</span><span><?php echo viewData('row.author', '匿名') ?></span>
+                <span>作者:</span><span><?php echo viewData('api.author', '匿名') ?></span>
             </div>
         </div>
-        <div class="article-summary">简介: <?php echo viewData('row.summary') ?></div>
+        <div class="article-summary">简介: <?php echo viewData('api.summary') ?></div>
 
         <div class="article-main">
             <div class="article-content">
-                <?php echo viewData('row.content') ?>
+                <?php echo viewData('api.content') ?>
             </div>
             <div class="article-albums">
-                <?php if ($cover = viewData('row.cover')) { ?>
+                <?php if ($cover = viewData('api.cover')) { ?>
                     <img src="<?php echo $cover ?>" alt="封面图片">
                 <?php } ?>
 
                 <h5 style="margin: 5px;text-align: center;">图集</h5>
-                <?php foreach (viewData('row.images', []) as $item) { ?>
+                <?php foreach (viewData('api.images', []) as $item) { ?>
                     <img src="<?php echo $item['url'] ?>" alt="">
                     <div class="article-albums-desc"><?php echo $item['summary'] ?></div>
                 <?php } ?>

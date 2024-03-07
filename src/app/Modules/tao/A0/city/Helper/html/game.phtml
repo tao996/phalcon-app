@@ -1,6 +1,6 @@
 <?php
-$isGameKind = viewData('row.kind', 0) == \app\Modules\tao\A0\city\Models\CityNews::KindGame;
-$metadata = viewData('row.metadata', []);
+$isGameKind = viewData('api.kind', 0) == \app\Modules\tao\A0\city\Models\CityNews::KindGame;
+$metadata = viewData('api.metadata', []);
 ?>
 <div class="layui-form-item">
     <input type="hidden" name="metadata[id1]" class="layui-input" lay-affix="clear"

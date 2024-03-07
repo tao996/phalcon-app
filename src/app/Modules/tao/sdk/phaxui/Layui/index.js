@@ -431,6 +431,28 @@ const admin = {
             })
         },
         /**
+         * lay-filter 事件 <pre>
+         *     单选框事件 form.on('radio(filter)', callback); // filter 为单选框元素对应的 lay-filter 属性值
+         *     form.on('select', function(data){console.log(data);});// 指向所有 select 组件的选择事件
+         *     form.on('select(test)', function(data){console.log(data);});// 指向元素为 `<select lay-filter="test"></select>` 的选择事件
+         * </pre>
+         * @link https://layui.dev/docs/2/form/#on
+         * @param {string} layFilterName lay-filter 对应的值
+         * @param {function} action 回调函数 data.elem.value 选中的值, data.elem.checked 是否选中, data.othis jQuery对象
+         * @param {string} eleKind 元素类型，支持 select,checkbox,switch 开关风格, radio,submit；如果为空，则是全部元素
+         */
+        on: function (layFilterName, action, eleKind = '') {
+            const name = admin.util.isEmpty(eleKind) ? layFilterName : `${eleKind}(${layFilterName})`
+            layui.form.on(name, function (data) {
+                try {
+                    action(data);
+                } catch (e) {
+                    console.error(e);
+                }
+                return false;
+            });
+        },
+        /**
          * 绑定第一个 lay-submit 按钮，以提交第一个表单
          * @param {function|string} ok
          * @param {function} [postDataCallback]
@@ -453,7 +475,7 @@ const admin = {
                     filter = 'save_form_1';
                     f.attr('lay-filter', filter);
                 }
-                form.on('submit(' + filter + ')', function (data) {
+                layui.form.on('submit(' + filter + ')', function (data) {
                     let postData = data.field;
                     if (typeof postDataCallback == "function") {
                         try {
@@ -483,43 +505,13 @@ const admin = {
                 ok(data)
             }, no, complete, ex)
         },
-        /**
-         * lay-filter 事件 <pre>
-         *     单选框事件 form.on('radio(filter)', callback); // filter 为单选框元素对应的 lay-filter 属性值
-         *     form.on('select', function(data){console.log(data);});// 指向所有 select 组件的选择事件
-         *     form.on('select(test)', function(data){console.log(data);});// 指向元素为 `<select lay-filter="test"></select>` 的选择事件
-         * </pre>
-         * @link https://layui.dev/docs/2/form/#on
-         * @param {string} layFilterName lay-filter 对应的值
-         * @param {function} action 回调函数 data.elem.value 选中的值, data.elem.checked 是否选中, data.othis jQuery对象
-         * @param {string} eleKind 元素类型，支持 select,checkbox,switch 开关风格, radio,submit；如果为空，则是全部元素
-         */
-        on: function (layFilterName, action, eleKind = '') {
-            const name = admin.util.isEmpty(eleKind) ? layFilterName : `${eleKind}(${layFilterName})`
-            layui.form.on(name, function (data) {
-                try {
-                    action(data);
-                } catch (e) {
-                    console.error(e);
-                }
-                return false;
-            });
-        },
+
         updateValueByName: function (kvs) {
             for (const name in kvs) {
                 document.getElementsByName(name)[0].value = kvs[name];
             }
         },
-        /**
-         * 自定义的提交按钮  lay-submit lay-filter="demo1"
-         * @param {string} layFilterName
-         * @param {function} action 接收 form 全部字段参数
-         */
-        submitFilter: function (layFilterName, action) {
-            return this.on(layFilterName, function (data) {
-                action(data.field);
-            }, 'submit');
-        },
+
         /**
          * 表单赋值
          * @param {string} layFilterName 添加在 form 上的 lay-filter
@@ -527,6 +519,44 @@ const admin = {
          */
         patch: function (layFilterName, values) {
             layui.form.val(layFilterName, values);
+        },
+        /**
+         * 点击按钮时弹出验证码窗口
+         * @param success {Function} 接收一个验证码参数
+         */
+        captcha: function (success) {
+            layer.open({
+                type: 1, area: '250px', resize: false, shadeClose: true,
+                title: '验证码', content: `<div class="layui-form" lay-filter="form-captcha" style="margin: 16px;">
+<div>
+<img src="/m/tao/captcha" onclick="this.src='/m/tao/captcha?t='+ new Date().getTime();" id="formCaptcha">
+<div style="font-size: 0.9em;font-weight: bold" lay-on="refreshCaptcha">点击图片刷新验证码</div>
+</div>
+<div style="margin: 10px 0;">
+ <input type="text" name="captcha" value="" lay-verify="required" 
+ placeholder="验证码(不区分大小写)" lay-reqtext="请填写验证码" maxlength="4"
+ autocomplete="off" class="layui-input" lay-affix="clear">
+</div>
+<div class="layui-form-item">
+    <button class="layui-btn layui-btn-fluid" lay-submit lay-filter="submit-captcha">确定</button>
+</div>
+</div>
+`, success: function (layero, index) {
+                    layui.form.render();
+                    layui.form.on('submit(submit-captcha)', function (data) {
+                        const captcha = data.field.captcha;
+                        layer.close(index)
+                        success(captcha)
+                        return false;
+                    });
+
+                    layui.util.on({
+                        refreshCaptcha: function () {
+                            document.getElementById('formCaptcha').src = '/m/tao/captcha?t=' + new Date().getTime();
+                        }
+                    })
+                }
+            })
         }
     },
     /**

@@ -5,11 +5,11 @@ use app\Modules\tao\sdk\phaxui\Layui\Layui;
 /**
  * @var Layui $layui
  * @var \Phalcon\Mvc\View\Engine\AbstractEngine $this
- * @var array $options
  */
 
 \app\Modules\tao\A0\cms\Helper\CmsHtmlHelper::header();
-$cateId = viewData('row.cate_id', 0);
+$cateId = viewData('api.row.cate_id', 0);
+//dd($cateId,viewData());
 ?>
     <form class="layui-form">
         <div class="layui-form-item">
@@ -18,7 +18,7 @@ $cateId = viewData('row.cate_id', 0);
                 <select name="cate_id" lay-filter="category"
                         lay-verify="required" lay-reqtext="请选择栏目">
                     <option value="">请选择</option>
-                    <?php foreach ($options as $item) { ?>
+                    <?php foreach (viewData('api.options') as $item) { ?>
                         <option value="<?php echo $item['id'] ?>" <?php echo $cateId == $item['id'] ? 'selected' : '' ?>><?php echo $item['title'] ?></option>
                     <?php } ?>
                 </select>
@@ -30,7 +30,7 @@ $cateId = viewData('row.cate_id', 0);
             <div class="layui-form-item" style="width: 300px;margin-right: 10px;">
 
                 <?php \app\Modules\tao\sdk\phaxui\Layui\LayuiHtml::upload('封面', 'cover',[
-                    'value'=>viewData('row.cover')
+                    'value'=>viewData('api.row.cover')
                 ]); ?>
 
             </div>
@@ -41,7 +41,7 @@ $cateId = viewData('row.cate_id', 0);
                     <div class="layui-input-block">
                         <input type="text" name="title" class="layui-input" placeholder="请输入文章标题"
                                lay-verify="required" lay-reqtext="请输入文章标题" maxlength="255"
-                               value="<?php echo viewData('row.title') ?>">
+                               value="<?php echo viewData('api.row.title') ?>">
                     </div>
                 </div>
 
@@ -51,7 +51,7 @@ $cateId = viewData('row.cate_id', 0);
                         <input type="text" name="keywords" class="layui-input"
                                placeholder="请输入文章关键词，使用空格分割多个关键词"
                                lay-affix="clear" maxlength="60"
-                               value="<?php echo viewData('row.keywords') ?>">
+                               value="<?php echo viewData('api.row.keywords') ?>">
                     </div>
                 </div>
 
@@ -60,7 +60,7 @@ $cateId = viewData('row.cate_id', 0);
                     <div class="layui-input-block">
                         <input type="text" name="summary" class="layui-input" placeholder="请输入文章简介"
                                lay-affix="clear" maxlength="255"
-                               value="<?php echo viewData('row.summary') ?>">
+                               value="<?php echo viewData('api.row.summary') ?>">
                     </div>
                 </div>
             </div>
@@ -70,12 +70,12 @@ $cateId = viewData('row.cate_id', 0);
             <label class="layui-form-label">作者</label>
             <div class="layui-input-inline">
                 <input name="author" placeholder="请输入作者名称" class="layui-input"
-                       value="<?php echo viewData('row.author') ?>">
+                       value="<?php echo viewData('api.row.author') ?>">
             </div>
             <label class="layui-form-label">点击次数</label>
             <div class="layui-input-inline">
                 <input name="hits" type="number" placeholder="请输入点击次数" class="layui-input"
-                       value="<?php echo viewData('row.hits') ?>">
+                       value="<?php echo viewData('api.row.hits') ?>">
             </div>
         </div>
         <?php \app\Modules\tao\A0\cms\Helper\CmsHtmlHelper::ImageHtml(); ?>
@@ -83,7 +83,7 @@ $cateId = viewData('row.cate_id', 0);
             <label class="layui-form-label">内容</label>
             <div class="layui-input-block">
                 <textarea name="content" class="layui-textarea" placeholder="请输入单页内容"
-                          id="content"><?php echo viewData('row.content') ?></textarea>
+                          id="content"><?php echo viewData('api.row.content') ?></textarea>
             </div>
         </div>
 
@@ -98,7 +98,7 @@ $cateId = viewData('row.cate_id', 0);
 $layui->addWindowConfig();
 $layui->footer();
 
-$items = viewData('row.images');
+$items = viewData('api.row.images');
 \app\Modules\tao\A0\cms\Helper\CmsHtmlHelper::ImageJs($items);
 ?>
     <script>

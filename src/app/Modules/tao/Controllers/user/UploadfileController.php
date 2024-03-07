@@ -12,7 +12,7 @@ use Phax\Db\QueryBuilder;
 class UploadfileController extends BaseController
 {
     protected array $allowModifyFields = ['summary'];
-    public array $enableActions = ['index', 'modify'];
+    public array $enableActions = ['index', 'modify', 'add'];
     public bool $disableUpdateActions = true;
 
     public function initialize(): void

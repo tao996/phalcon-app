@@ -55,7 +55,7 @@ $indexWelcome = url(\app\Modules\tao\Config\Config::IndexWelcome);
                     </a>
                 </li>
                 <?php
-                $menuTree = viewData('row.menuTree');
+                $menuTree = viewData('api.menuTree');
                 foreach ($menuTree as $index => $menu) { ?>
                     <li class="switchSidebar layui-nav-item layui-hide-xs <?php echo $index == 0 ? 'layui-this' : '' ?>"
                         lay-on="switchSidebar" data-id="<?php echo $menu['id'] ?>"

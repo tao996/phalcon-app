@@ -12,7 +12,7 @@ use app\Modules\tao\sdk\phaxui\Layui\Layui;
         <label class="layui-form-label">代理域名</label>
         <div class="layui-input-block">
             <input type="text" name="proxy_origin" class="layui-input" placeholder=""
-                   value="<?php echo viewData('row.proxy_origin', '') ?>">
+                   value="<?php echo viewData('api.proxy_origin', '') ?>">
             <div class="hint">默认为当前站点域名，通常用在测试环境中</div>
         </div>
     </div>
@@ -21,14 +21,14 @@ use app\Modules\tao\sdk\phaxui\Layui\Layui;
         <label class="layui-form-label">公众号 appid</label>
         <div class="layui-input-inline">
             <input type="text" name="gzh_appid" class="layui-input" placeholder=""
-                   value="<?php echo viewData('row.gzh_appid', '') ?>">
+                   value="<?php echo viewData('api.gzh_appid', '') ?>">
             <div class="hint">默认公众号授权 appid</div>
         </div>
 
         <label class="layui-form-label">网页应用 appid</label>
         <div class="layui-input-inline">
             <input type="text" name="web_appid" class="layui-input" placeholder=""
-                   value="<?php echo viewData('row.web_appid', '') ?>">
+                   value="<?php echo viewData('api.web_appid', '') ?>">
             <div class="hint">默认网页授权 appid</div>
         </div>
     </div>
@@ -36,7 +36,7 @@ use app\Modules\tao\sdk\phaxui\Layui\Layui;
         <label class="layui-form-label">支付应用 appid</label>
         <div class="layui-input-inline">
             <input type="text" name="pay_appid" class="layui-input" placeholder=""
-                   value="<?php echo viewData('row.pay_appid', '') ?>">
+                   value="<?php echo viewData('api.pay_appid', '') ?>">
             <div class="hint">默认网页授权 appid</div>
         </div>
     </div>

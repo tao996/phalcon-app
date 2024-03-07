@@ -9,7 +9,7 @@ use app\Modules\tao\sdk\phaxui\Layui\LayuiHtml;
  */
 
 \app\Modules\tao\A0\cms\Helper\CmsHtmlHelper::header();
-$kind = viewData('row.kind', 0);
+$kind = viewData('api.kind', 0);
 //dd(viewData());
 ?>
 <form class="layui-form" lay-filter="row">
@@ -18,13 +18,13 @@ $kind = viewData('row.kind', 0);
         <div style="width: 400px;">
             <div>
                 <?php LayuiHtml::upload('横幅图', 'banner', [
-                    'value' => viewData('row.banner'),
+                    'value' => viewData('api.banner'),
                     'tip' => '通常用于广告，建议尺寸比例 16:9'
                 ]); ?>
             </div>
             <div>
                 <?php LayuiHtml::upload('列表图', 'list', [
-                    'value' => viewData('row.list'),
+                    'value' => viewData('api.list'),
                     'tip' => '建议尺寸比例 1:1'
                 ]); ?>
             </div>
@@ -55,7 +55,7 @@ $kind = viewData('row.kind', 0);
                 <div class="layui-input-block">
                     <input type="text" name="title" class="layui-input"
                            placeholder="请输入活动/景点/比赛标题（最多填写 100 个汉字）"
-                           value="<?php echo viewData('row.title') ?>"
+                           value="<?php echo viewData('api.title') ?>"
                            lay-affix="clear"
                            lay-verify="required" maxlength="100"
                     >
@@ -67,7 +67,7 @@ $kind = viewData('row.kind', 0);
                 <div class="layui-input-block">
                     <input type="text" name="summary" class="layui-input"
                            placeholder="请输入活动/景点/比赛简介（最多填写 255 个汉字）"
-                           value="<?php echo viewData('row.summary') ?>"
+                           value="<?php echo viewData('api.summary') ?>"
                            lay-affix="clear" maxlength="255"
                     >
                 </div>
@@ -78,7 +78,7 @@ $kind = viewData('row.kind', 0);
                 <div class="layui-input-block">
                     <input type="text" name="tag" class="layui-input"
                            placeholder="显示的标签"
-                           value="<?php echo viewData('row.tag') ?>"
+                           value="<?php echo viewData('api.tag') ?>"
                            lay-affix="clear"
                            maxlength="255"
                     >
@@ -91,7 +91,7 @@ $kind = viewData('row.kind', 0);
     <div class="layui-form-item">
         <label class="layui-form-label">类型</label>
         <div class="layui-input-block">
-            <?php $kind = viewData('row.kind', 0); ?>
+            <?php $kind = viewData('api.kind', 0); ?>
 
             <input lay-filter="kind" <?php echo $kind == 0 ? 'checked' : '' ?> value="0" type="radio" name="kind"
                    title="无" lay-skin="tag">
@@ -112,7 +112,7 @@ $kind = viewData('row.kind', 0);
         <label class="layui-form-label">提示</label>
         <div class="layui-input-block">
                     <textarea name="warning" class="layui-textarea"
-                              placeholder="出行提示或其它警告信息（水/洗手间）（最多填写 1000 个汉字）"><?php echo viewData('row.warning') ?></textarea>
+                              placeholder="出行提示或其它警告信息（水/洗手间）（最多填写 1000 个汉字）"><?php echo viewData('api.warning') ?></textarea>
         </div>
     </div>
 
@@ -124,7 +124,7 @@ $kind = viewData('row.kind', 0);
     <h3 class="my-2">内容</h3>
     <div>
             <textarea name="content" class="layui-textarea" placeholder="请输入内容"
-                      id="content"><?php echo viewData('row.content') ?></textarea>
+                      id="content"><?php echo viewData('api.content') ?></textarea>
     </div>
 
     <div class="hr-line"></div>
@@ -138,16 +138,16 @@ $kind = viewData('row.kind', 0);
 $layui->addWindowConfig();
 $layui->footer();
 
-$images = viewData('row.images');
+$images = viewData('api.images');
 \app\Modules\tao\A0\cms\Helper\CmsHtmlHelper::ImageJs($images);
 
-$lives = viewData('row.lives');
+$lives = viewData('api.lives');
 \app\Modules\tao\A0\city\Helper\CityHtmlHelper::liveJs($lives);
 
-$videos = viewData('row.videos');
+$videos = viewData('api.videos');
 \app\Modules\tao\A0\city\Helper\CityHtmlHelper::videoJs($videos);
 
-$nears = viewData('row.nears');
+$nears = viewData('api.nears');
 \app\Modules\tao\A0\city\Helper\CityHtmlHelper::nearJs($nears);
 
 \app\Modules\tao\A0\city\Helper\CityHtmlHelper::addressJs();
@@ -188,13 +188,13 @@ $nears = viewData('row.nears');
     laydate.render({
         elem: '#dt1',
         type: 'datetime',
-        value: '<?php echo date("Y-m-d H:i:s", viewData("row.dt1")) ?>',
+        value: '<?php echo date("Y-m-d H:i:s", viewData("api.dt1")) ?>',
         fullPanel: true // 2.8+
     });
     laydate.render({
         elem: '#dt2',
         type: 'datetime',
-        value: '<?php echo date("Y-m-d H:i:s", viewData("row.dt2")) ?>',
+        value: '<?php echo date("Y-m-d H:i:s", viewData("api.dt2")) ?>',
         fullPanel: true // 2.8+
     });
 

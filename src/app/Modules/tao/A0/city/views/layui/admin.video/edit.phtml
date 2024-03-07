@@ -9,7 +9,7 @@ use app\Modules\tao\sdk\phaxui\Layui\LayuiHtml;
  * @var \Phalcon\Mvc\View\Engine\AbstractEngine $this
  */
 
-$platformId = viewData('row.platform', 0);
+$platformId = viewData('api.platform', 0);
 $storage = \Phax\Utils\Data::get($_GET, 'storage');
 ?>
 <form class="layui-form" lay-filter="row">
@@ -21,7 +21,7 @@ $storage = \Phax\Utils\Data::get($_GET, 'storage');
                           placeholder="通常是在 APP 中复制得到，包含了播放地址和基本的视频信息"
                           lay-affix="clear"
                           lay-verify="required" lay-reqtext="必须填写分享码"
-                ><?php echo viewData('row.share_code') ?></textarea>
+                ><?php echo viewData('api.share_code') ?></textarea>
             </div>
             <div class="layui-form-mid" style="padding: 0!important;">
                 <button type="button" class="layui-btn layui-btn-primary" lay-on="doShareCode">分析分享码</button>
@@ -55,7 +55,7 @@ $storage = \Phax\Utils\Data::get($_GET, 'storage');
             <input type="text" name="title" class="layui-input" placeholder="请填写标题标题"
                    lay-affix="clear"
                    lay-verify="required" lay-reqtext="标题不能为空"
-                   value="<?php echo viewData('row.title') ?>"
+                   value="<?php echo viewData('api.title') ?>"
             >
         </div>
     </div>
@@ -66,13 +66,13 @@ $storage = \Phax\Utils\Data::get($_GET, 'storage');
             <input type="text" name="link" class="layui-input" placeholder="实际的网页播放地址 https://..."
                    lay-affix="clear"
                    lay-verify="required" lay-reqtext="链接不能为空"
-                   value="<?php echo viewData('row.link') ?>"
+                   value="<?php echo viewData('api.link') ?>"
             >
         </div>
     </div>
 
     <?php LayuiHtml::upload('封面', 'cover', [
-        'value' => viewData('row.cover')
+        'value' => viewData('api.cover')
     ]); ?>
 
     <div class="hr-line"></div>
@@ -105,7 +105,7 @@ $layui->footer();
         if (vs) {
             admin.form.patch('row', vs)
         }
-        admin.form.submitFilter('demo1', data => {
+        admin.form.onSubmit('demo1', data => {
             admin.ajax.post({data}, function () {
                 saveData(data)
             })
@@ -155,6 +155,6 @@ $layui->footer();
 
     layui.laydate.render({
         elem: '#date',
-        value: '<?php echo date("Y-m-d", viewData("row.date"))?>'
+        value: '<?php echo date("Y-m-d", viewData("api.date"))?>'
     });
 </script>

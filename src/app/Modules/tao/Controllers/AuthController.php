@@ -38,7 +38,7 @@ class AuthController extends BaseController
             $data = Request::getData();
 
             // session = session 或者 jwt
-            Request::mustHasSet($data, ['account', 'password', 'captcha', 'token']);
+            Request::mustHasSet($data, ['account', 'password', 'captcha']);
             CaptchaService::getInstance()->compare($data['captcha']);
 
             /**
@@ -81,7 +81,7 @@ class AuthController extends BaseController
     {
         if ($this->request->isPost()) {
             $data = Request::getData();
-            Data::mustHasSet($data, ['account', 'vercode', 'token']);
+            Data::mustHasSet($data, ['account', 'vercode']);
             $isEmail = SmsCodeService::mustReceiver($data['account']);
             SmsCodeService::checkLoginCode($data['account'], $data['vercode']);
 
@@ -110,7 +110,7 @@ class AuthController extends BaseController
     {
         Request::mustPost();
         $data = Request::getData();
-        Data::mustHasSet($data, ['captcha', 'account', 'token']);
+        Data::mustHasSet($data, ['captcha', 'account']);
 
         SmsCodeService::mustReceiver($data['account']);
         CaptchaService::getInstance()->compare($data['captcha']);
@@ -140,7 +140,7 @@ class AuthController extends BaseController
     {
         if ($this->request->isPost()) {
             $data = Request::getData();
-            Data::mustHasSet($data, ['account', 'vercode', 'password', 'token']);
+            Data::mustHasSet($data, ['account', 'vercode', 'password']);
 
             UserService::mustAccountString($data['account']);
             UserService::mustCanRegister($data['account']);
@@ -171,7 +171,7 @@ class AuthController extends BaseController
     {
         Request::mustPost();
         $data = Request::getData();
-        Data::mustHasSet($data, ['captcha', 'account', 'token']);
+        Data::mustHasSet($data, ['captcha', 'account']);
 
         UserService::mustAccountString($data['account']);
         CaptchaService::getInstance()->compare($data['captcha']);
@@ -202,7 +202,7 @@ class AuthController extends BaseController
     {
         if ($this->request->isPost()) {
             $data = Request::getData();
-            Data::mustHasSet($data, ['account', 'captcha', 'token']);
+            Data::mustHasSet($data, ['account', 'captcha']);
 
             CaptchaService::getInstance()->compare($data['captcha']);
             SmsCodeService::sendForgotPasswordEmail($data['account']);
@@ -228,7 +228,7 @@ class AuthController extends BaseController
 
         if ($this->request->isPost()) {
             $d2 = $this->request->getPost();
-            Data::mustHasSet($d2, ['password', 'token']);
+            Data::mustHasSet($d2, ['password']);
             UserService::mustPassword($d2['password']);
             $user = UserService::mustGetUser(['id' => $code->user_id]);
             $user->newPassword($d2['password']);

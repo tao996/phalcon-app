@@ -7,14 +7,14 @@
 ?>
 <form class="layui-form">
 
-    <?php \app\Modules\tao\sdk\phaxui\Layui\LayuiHtml::upload('用户头像', 'head_img', ['value' => viewData('row.head_img')]) ?>
+    <?php \app\Modules\tao\sdk\phaxui\Layui\LayuiHtml::upload('用户头像', 'head_img', ['value' => viewData('api.head_img')]) ?>
 
 
     <div class="layui-form-item">
         <label class="layui-form-label">用户昵称</label>
         <div class="layui-input-inline">
             <input type="text" name="nickname" class="layui-input"
-                   value="<?php echo viewData('row.nickname') ?>">
+                   value="<?php echo viewData('api.nickname') ?>">
         </div>
     </div>
 
@@ -22,7 +22,7 @@
         <label class="layui-form-label">个性签名</label>
         <div class="layui-input-block">
             <input type="text" name="signature" class="layui-input"
-                   placeholder="请输入个性签名" value="<?php echo viewData('row.signature') ?>">
+                   placeholder="请输入个性签名" value="<?php echo viewData('api.signature') ?>">
         </div>
     </div>
 
@@ -34,7 +34,7 @@
                        lay-reqtext="请输入用户手机"
                        lay-affix="clear"
                        placeholder="请输入用户手机"
-                       value="<?php echo viewData('row.phone') ?>"
+                       value="<?php echo viewData('api.phone') ?>"
                 >
             </div>
         </div>
@@ -43,7 +43,7 @@
             <div class="layui-input-inline">
                 <input type="checkbox" name="phone_valid" lay-skin="switch" lay-filter="switchTest"
                        title="是|否"
-                    <?php echo viewDataCompare('row.phone_valid', 'checked') ?>
+                    <?php echo viewDataCompare('api.phone_valid', 'checked') ?>
                 >
             </div>
 
@@ -57,14 +57,14 @@
                 <input type="email" name="email" class="layui-input"
                        lay-reqtext="请输入用户邮箱" lay-affix="clear"
                        placeholder="请输入用户邮箱"
-                       value="<?php echo viewData('row.email') ?>">
+                       value="<?php echo viewData('api.email') ?>">
             </div>
         </div>
         <div class="layui-inline">
             <label class="layui-form-label">是否验证</label>
             <div class="layui-input-inline">
                 <input type="checkbox" name="email_valid" lay-skin="switch" lay-filter="switchTest"
-                       title="是|否" <?php echo viewDataCompare('row.email_valid', 'checked') ?>>
+                       title="是|否" <?php echo viewDataCompare('api.email_valid', 'checked') ?>>
             </div>
 
         </div>
@@ -75,9 +75,9 @@
         <label class="layui-form-label">角色权限</label>
         <div class="layui-input-block">
             <?php
-            $roleIds = viewData('row.role_ids',[]);
+            $roleIds = viewData('api.role_ids',[]);
 
-            foreach (viewData('row.auth_list', []) as $id => $item) { ?>
+            foreach (viewData('api.auth_list', []) as $id => $item) { ?>
                 <input type="checkbox" name="role_ids[<?php echo $id ?>]"
                        lay-skin="primary" title="<?php echo $item['title'] ?>"
                     <?php echo in_array($id, $roleIds) ? 'checked' : '' ?>

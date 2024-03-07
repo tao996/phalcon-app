@@ -3,6 +3,7 @@
 namespace app\Modules\tao\A0\city\Services;
 
 use app\Modules\tao\A0\city\Models\CityTerm;
+use Phax\Utils\Data;
 
 class CityTermService
 {
@@ -39,5 +40,30 @@ class CityTermService
         return $rows
             ? array_column($rows, 'name', 'id')
             : [];
+    }
+
+    /**
+     * 追加球隊信息
+     * @param array $rows
+     * @param string $name
+     * @return void
+     * @throws \Exception
+     */
+    public static function appendTerm(array &$rows, string $name = 'term_id'): void
+    {
+        if (!empty($rows)) {
+            $termIds = array_column($rows, $name);
+            if ($terms = CityTerm::queryBuilder()->inInt('id', $termIds)
+                ->findColumn(['id', 'avatar', 'name', 'nickname', 'address', 'leader'])) {
+                foreach ($rows as $index => $row) {
+                    foreach ($terms as $term) {
+                        if ($term['id'] == $row[$name]) {
+                            $rows[$index]['term'] = $term;
+                            break;
+                        }
+                    }
+                }
+            }
+        }
     }
 }
