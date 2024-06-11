@@ -1,0 +1,62 @@
+<style type="text/css">
+    form {
+        border-left: 1px solid grey;
+        padding: 10px 0;
+
+    }
+
+    .form-controller {
+        margin-bottom: 15px;
+    }
+
+    .form-controller label {
+        width: 150px;
+        padding-right: 10px;
+        text-align: right;
+        display: inline-block;
+    }
+
+    .form-controller input[type=text] {
+        width: 400px;
+    }
+
+    .d-inline {
+        display: inline-block;
+    }
+
+    .d-hint {
+        font-size: small;
+        color: grey;
+    }
+</style>
+
+<div>错误信息:</div>
+<div style="color: orangered;">
+    <?php echo flash()->output(); ?>
+</div>
+<div>------------------</div>
+<div>SESSION:</div>
+<?php
+session_start();
+var_dump($_SESSION);
+?>
+<div>------------------</div>
+<h5>表单验证</h5>
+<form method="post">
+
+    <input type="hidden" name="<?php echo security()->getTokenKey() ?>" value="<?php echo security()->getToken() ?>">
+    <div class="form-controller">
+        <label>accepted</label>
+        <input type="checkbox" name="accept" value="true" <?php echo formData('accept', true) ? 'checked' : '' ?>>
+        同意【服务条款】
+    </div>
+    <div class="form-controller">
+        <label>email</label>
+        <input type="email" name="email" value="<?php echo formData('email') ?>" placeholder="请填写电子邮箱">
+        *
+    </div>
+    <div class="form-controller">
+        <label></label>
+        <input type="submit" value="提交">
+    </div>
+</form>

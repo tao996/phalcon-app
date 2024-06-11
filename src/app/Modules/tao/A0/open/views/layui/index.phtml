@@ -1,0 +1,54 @@
+<?php
+
+use App\Modules\tao\BaseResponseController;
+use App\Modules\tao\sdk\phaxui\HtmlAssets;
+
+/**
+ * @var \Phalcon\Mvc\View\Engine\AbstractEngine $this
+ */
+$layui = App\Modules\tao\sdk\phaxui\Layui\Layui::getInstance();
+$js = request()->getQuery('js', 'string'); // tt / wx
+?>
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="utf-8">
+    <title><?php echo $title ?? '' ?></title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!--[if lt IE 9]>
+    <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+    <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <?php if ($js == 'tt') { ?>
+        <script src="https://lf3-cdn-tos.bytegoofy.com/obj/goofy/developer/jssdk/jssdk-1.2.1.js"></script>
+    <?php } elseif ($js == 'wx') { ?>
+        <script src="http://res2.wx.qq.com/open/js/jweixin-1.6.0.js"></script>
+    <?php } ?>
+    <?php
+    $layui->header();
+    HtmlAssets::outputHeaders();
+
+    $layui->footer();
+    \App\Modules\tao\sdk\phaxui\HtmlAssets::outputFooters();
+    ?>
+    <style>
+        .tao-container {
+            padding: 10px;
+            margin: 5px;
+            background: white;
+        }
+    </style>
+</head>
+<body>
+<div class="tao-container">
+    <?php echo $this->view->getContent(); ?>
+</div>
+</body>
+
+<?php
+\App\Modules\tao\sdk\phaxui\HtmlAssets::appendTemplateJs(BaseResponseController::$theme);
+?>
+
+</html>

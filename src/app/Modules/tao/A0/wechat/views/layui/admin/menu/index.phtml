@@ -1,0 +1,69 @@
+<?php
+use App\Modules\tao\sdk\phaxui\Layui\Layui;
+
+/**
+ * @var Layui $layui
+ * @var \Phalcon\Mvc\View\Engine\AbstractEngine $this
+ */
+?>
+
+<fieldset class="table-search-fieldset layui-hide" id="table-search">
+    <legend>条件搜索</legend>
+    <div class="layui-form-item layui-inline" >
+        <a class="layui-btn layui-btn-normal"
+           lay-submit>搜索</a>
+        <button type="reset" class="layui-btn layui-btn-primary">
+            重置
+        </button>
+    </div>
+</fieldset>
+
+<script type="text/html" id="toolbar">
+    <div class="layui-table-tool-temp">
+        <button class="layui-btn layui-btn-sm" lay-on="refresh">
+            <i class="fa fa-refresh"></i>
+        </button>
+    </div>
+</script>
+<script type="text/html" id="row-action">
+    <div class="layui-btn-container">
+        <a class="layui-btn layui-btn-xs" lay-event="menu">菜单设置</a>
+    </div>
+</script>
+
+<table id="table" class="layui-hide"></table>
+
+<?php $layui->footer(); ?>
+<?php $layui->addWindowConfig([]); ?>
+<script>
+    const prefix = '<?php echo url("tao.wechat/admin.menu") ?>';
+    const kind = <?php echo json_encode(\App\Modules\tao\A0\open\Data\Config::MapKinds)?>;
+    admin.table.with({url: prefix, key: 'appid'})
+        .render({
+            toolbar: '#toolbar',
+            cols: [[
+                {
+                    field: 'kind', title: '类型', width: 150, templet: function (d) {
+                        return kind[d.kind];
+                    }
+                },
+                {field: 'sync', title: '启用同步', width: 120, templet: admin.table.switch},
+                {field: 'sync_at', title: '最近同步', width: 120, templet: admin.table.humanTime},
+                {field: 'appid', title: 'AppId', width: 200},
+                {field: 'title', title: '名称', width: 200},
+                {
+                    title: '操作', toolbar: '#row-action',
+                }
+            ]],
+        })
+        .addPostSwitch(['sync'])
+        .addLayOnActions()
+        .addLayEventActions({
+            events: function (obj) {
+                admin.iframe.open(prefix + '/edit?appid=' + obj.data.appid, {
+                    title: '公众号菜单设置',
+                })
+            }
+        });
+
+</script>

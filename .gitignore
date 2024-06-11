@@ -1,0 +1,10 @@
+.idea
+.vscode
+DirectoryV3.xml
+
+.env
+docker-compose.yaml
+nginx/sites/default.conf
+nginx/host.conf
+php/php.ini
+php/supervisord.conf

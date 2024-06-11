@@ -1,0 +1,94 @@
+<?php
+/**
+ * @var \App\Modules\tao\sdk\phaxui\Layui\Layui $layui
+ * @var \Phalcon\Mvc\View\Engine\AbstractEngine $this
+ */
+$captchaURL = url('tao/captcha');
+\App\Modules\tao\sdk\phaxui\HtmlAssets::addHeaderFile(__DIR__ . '/auth.css');
+?>
+
+<form class="layui-form">
+    <div class="auth-container">
+        <h2>重置密码</h2>
+        <div class="layui-form-item">
+            <div class="layui-input-wrap">
+                <div class="layui-input-prefix">
+                    <i class="layui-icon layui-icon-email"></i>
+                </div>
+                <input type="text" name="account" value=""
+                       lay-verify="required" lay-reqtext="请填写电子邮箱"
+                       placeholder="电子邮箱地址"
+                       autocomplete="off"
+                       lay-affix="clear"
+                       class="layui-input" id="pwd-account">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-row">
+                <div class="layui-col-xs7">
+                    <div class="layui-input-wrap">
+                        <div class="layui-input-prefix">
+                            <i class="layui-icon layui-icon-vercode"></i>
+                        </div>
+                        <input type="text" name="captcha" value="" lay-verify="required"
+                               placeholder="验证码"
+                               lay-reqtext="请填写验证码" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-col-xs5">
+                    <div style="margin-left: 10px;">
+                        <img style="width: 100%;" title="点击刷新验证码图片"
+                             src="<?php echo $captchaURL ?>"
+                             onclick="this.src='<?php echo $captchaURL ?>?t='+ new Date().getTime();">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <button class="layui-btn layui-btn-fluid"
+                    id="submit"
+                    lay-submit lay-filter="demo-password">重置密码
+            </button>
+        </div>
+        <div class="link">
+            <span style="margin-right: 10px;">已有账号？</span>
+            <a href="javascript:;" lay-on="index">前往登录</a>
+            <a style="margin-left: 15px;" href="javascript:;" lay-on="forgot">忘记密码</a>
+        </div>
+        <div style="margin-top: 10px;" class="link">
+            <span style="margin-right: 10px;">没有账号？</span>
+            <a href="javascript:;" lay-on="signup">前往注册</a>
+        </div>
+        <?php include_once __DIR__ . '/quickLogin.phtml' ?>
+    </div>
+</form>
+
+<?php $layui->footer(); ?>
+<script>
+    <?php include_once __DIR__ . '/auth.js' ?>
+</script>
+<script>
+    // 提交事件
+    form.on('submit(demo-password)', function (data) {
+        const field = data.field; // 获取表单字段值
+
+        const postData = {
+            account: field.account, captcha: field.captcha,
+        }
+
+        admin.ajax.post({
+            url: '<?php echo url('tao/auth/forgot', true) ?>',
+            data: postData,
+        }, function () {
+            $('#submit').addClass('layui-btn-disabled');
+        })
+
+        return false;
+    });
+
+    auth.bindButtons({
+        prefix: "<?php echo url('/tao/auth/') ?>"
+    });
+
+</script>

@@ -1,0 +1,69 @@
+<?php
+use App\Modules\tao\sdk\phaxui\Layui\Layui;
+
+/**
+ * @var Layui $layui
+ * @var \Phalcon\Mvc\View\Engine\AbstractEngine $this
+ */
+?>
+<form class="layui-form" method="post" enctype="multipart/form-data">
+    <div class="layui-form-item">
+        <label class="layui-form-label required">appid</label>
+        <div class="layui-input-inline">
+            <input type="text" name="appid" class="layui-input" placeholder="公众号 ID"
+                   lay-verify="required" lay-reqtext="请输入公众号"
+                   lay-affix="clear"
+                   value="<?php echo viewData('api.appid') ?>">
+        </div>
+
+        <label class="layui-form-label required">mchid</label>
+        <div class="layui-input-inline">
+            <input type="text" name="mchid" class="layui-input" placeholder="商户号 ID"
+                   lay-verify="required" lay-reqtext="请输入商户号"
+                   lay-affix="clear"
+                   value="<?php echo viewData('api.mchid') ?>">
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label required">v3 api 秘钥</label>
+        <div class="layui-input-inline">
+            <input type="text" name="secret_key" class="layui-input" placeholder="V3 api 秘钥"
+                   lay-verify="required" lay-reqtext="请输入 V3 api 秘钥"
+                   value="<?php echo viewData('api.secret_key') ?>">
+        </div>
+
+        <label class="layui-form-label">V2 api 秘钥</label>
+        <div class="layui-input-inline">
+            <input type="text" name="v2_secret_key" class="layui-input" placeholder="V2 api 秘钥"
+                   value="<?php echo viewData('api.v2_secret_key') ?>">
+        </div>
+        <div class="layui-form-mid layui-text-em">非必须</div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">备注</label>
+        <div class="layui-input-block">
+            <input type="text" name="remark" class="layui-input" placeholder="备注信息"
+                   value="<?php echo viewData('api.remark') ?>">
+        </div>
+    </div>
+
+
+    <div class="hr-line"></div>
+    <div class="layui-form-item text-center">
+        <button type="submit" class="layui-btn layui-btn-normal layui-btn-sm" lay-submit>确认</button>
+        <button type="reset" class="layui-btn layui-btn-primary layui-btn-sm">重置</button>
+    </div>
+
+</form>
+<?php $layui->addWindowConfig(); ?>
+<?php $layui->footer(); ?>
+
+<script>
+    admin.form.submitFirst(() => {
+        admin.iframe.closeFromParent(true);
+    }, function (data) {
+        return Object.assign(data, {})
+    })
+</script>

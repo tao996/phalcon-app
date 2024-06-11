@@ -1,0 +1,101 @@
+<?php
+
+use App\Modules\tao\sdk\phaxui\Layui\Layui;
+
+/**
+ * @var Layui $layui
+ * @var \Phalcon\Mvc\View\Engine\AbstractEngine $this
+ */
+$title = '账号登录';
+$js = request()->getQuery('js', 'string'); // tt / wx
+?>
+<style>
+    .demo-login-container {
+        width: 320px;
+        margin: 21px auto 0;
+    }
+
+    .demo-login-other .layui-icon {
+        position: relative;
+        display: inline-block;
+        margin: 0 2px;
+        top: 2px;
+        font-size: 26px;
+    }
+</style>
+<form class="layui-form">
+    <div class="demo-login-container">
+        <div class="layui-form-item">
+            <div class="layui-input-wrap">
+                <div class="layui-input-prefix">
+                    <i class="layui-icon layui-icon-username"></i>
+                </div>
+                <input type="text" name="account" value="" lay-verify="required" placeholder="手机号或电子邮箱"
+                       lay-reqtext="请填写账号" autocomplete="off" class="layui-input" lay-affix="clear">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-input-wrap">
+                <div class="layui-input-prefix">
+                    <i class="layui-icon layui-icon-password"></i>
+                </div>
+                <input type="password" name="password" value="" lay-verify="required" placeholder="密   码"
+                       lay-reqtext="请填写密码" autocomplete="off" class="layui-input" lay-affix="eye">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-row">
+                <div class="layui-col-xs6">
+                    <div class="layui-input-wrap">
+                        <div class="layui-input-prefix">
+                            <i class="layui-icon layui-icon-vercode"></i>
+                        </div>
+                        <input type="text" name="captcha" value="" lay-verify="required" placeholder="验证码"
+                               lay-reqtext="请填写验证码" autocomplete="off" class="layui-input" lay-affix="clear">
+                    </div>
+                </div>
+                <div class="layui-col-xs6">
+                    <div style="padding-left: 10px;">
+                        <img src="/m/tao/captcha"
+                             onclick="this.src='/m/tao/captcha?t='+ new Date().getTime();">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <?php \App\Modules\tao\sdk\phaxui\Layui\LayuiHtml::csrfToken(); ?>
+        <div class="layui-form-item">
+            <button class="layui-btn layui-btn-fluid" lay-submit lay-filter="login">登录</button>
+        </div>
+    </div>
+</form>
+<?php
+$layui->addWindowConfig();
+$layui->footer();
+?>
+<script>
+    layui.form.on('submit(login)', function (data) {
+        const field = data.field; // 获取表单字段值
+        console.log('field', field)
+        /*
+                tt.miniProgram.postMessage({
+                    data: {
+                        // 加载(token 存放在 redis.key 中，secret 作为加密密钥）
+                        auth: {
+                            token: 'hereIsTheToken', secret: 'abc'
+                        }
+                    },
+                    success(res) {
+                        layer.msg('登录成功', {
+                            icon: 1, time: 1500,
+                        }, function () {
+                            // todo 根据 appid 类型判断
+                            tt.miniProgram.navigateBack({
+                                delta: 1,
+                            })
+                        })
+                    }
+                })
+         */
+        return false;
+    });
+</script>

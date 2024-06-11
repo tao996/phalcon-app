@@ -1,0 +1,16 @@
+<?php
+
+use App\Modules\tao\sdk\phaxui\Layui\Layui;
+
+/**
+ * @var Layui $layui
+ * @var \Phalcon\Mvc\View\Engine\AbstractEngine $this
+ * @var array $page
+ */
+$page = viewData('api');
+$title = $page['title'];
+
+//dd(viewData());
+?>
+
+<div style="margin: 10px;"><?php echo $page['content'] ?></div>

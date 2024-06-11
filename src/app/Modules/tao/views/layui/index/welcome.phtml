@@ -1,0 +1,16 @@
+<?php
+/**
+ * @var \App\Modules\tao\sdk\phaxui\Layui\Layui $layui
+ * @var \Phalcon\Mvc\View\Engine\AbstractEngine $this
+ * @var bool $demo
+ */
+
+?>
+<h5>欢迎界面</h5>
+<?php if ($demo) { ?>
+    <div class="text-danger" style="margin-top: 15px;">当前为演示系统，数据不定期清空，请不要填写重要数据</div>
+<?php } ?>
+<?php $layui->footer(); ?>
+<?php $layui->addWindowConfig([]); ?>
+<script>
+</script>

@@ -1,0 +1,3 @@
+# 线上配置，在 docker-compose.yaml 中重新映射
+*
+!.gitignore

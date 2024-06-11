@@ -1,0 +1,23 @@
+#!/usr/bin/env php
+<?php
+/*
+ * 默认格式
+ * php artisan controller[/action [param1 param2...]]
+ * 其中 action 默认为 index, 参数可选
+ * 示例，src/tao996/phalcon/phax/src/phax/Foundation/RouterTest.php testCliRoute
+ * php artisan main =》 src/app/Console/MainTask.indexAction
+ * php artisan main/main =》 src/app/Console/MainTask.mainAction
+ * 多模块示例（通常用于初始化模块数据库）
+ * php artisan m/tao/main/index
+ * php artisan m/tao.wechat/main/index
+ *
+ * 自定义命令 src/routes/cli.php
+ */
+
+define('PATH_ROOT', __DIR__.'/');
+require PATH_ROOT . 'tao996/index.php';
+/**
+ * @var $app \Phax\Foundation\Application
+ */
+$app = require PATH_ROOT . 'bootstrap/app.php';
+$app->runCLI();

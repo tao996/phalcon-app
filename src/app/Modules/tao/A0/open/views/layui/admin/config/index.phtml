@@ -1,0 +1,59 @@
+<?php
+/**
+ * @var \Phalcon\Mvc\View\Engine\AbstractEngine $this
+ * @var \App\Modules\tao\sdk\phaxui\Layui\Layui $layui
+ */
+
+?>
+<form class="layui-form" style="margin: 15px;">
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">代理域名</label>
+        <div class="layui-input-block">
+            <input type="text" name="proxy_origin" class="layui-input" placeholder=""
+                   value="<?php echo viewData('api.proxy_origin', '') ?>">
+            <div class="hint">默认为当前站点域名，通常用在测试环境中</div>
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">公众号 appid</label>
+        <div class="layui-input-inline">
+            <input type="text" name="gzh_appid" class="layui-input" placeholder=""
+                   value="<?php echo viewData('api.gzh_appid', '') ?>">
+            <div class="hint">默认微信公众号授权应用 appid</div>
+        </div>
+
+        <label class="layui-form-label">网页应用 appid</label>
+        <div class="layui-input-inline">
+            <input type="text" name="web_appid" class="layui-input" placeholder=""
+                   value="<?php echo viewData('api.web_appid', '') ?>">
+            <div class="hint">默认微信网页授权应用 appid</div>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">支付应用 appid</label>
+        <div class="layui-input-inline">
+            <input type="text" name="pay_appid" class="layui-input" placeholder=""
+                   value="<?php echo viewData('api.pay_appid', '') ?>">
+            <div class="hint">默认微信支付应用 appid</div>
+        </div>
+    </div>
+
+    <div class="hr-line"></div>
+    <div class="layui-form-item text-center">
+        <button type="submit" class="layui-btn layui-btn-normal layui-btn-sm" lay-submit>确认</button>
+        <button type="reset" class="layui-btn layui-btn-primary layui-btn-sm">重置</button>
+    </div>
+
+</form>
+<?php $layui->addWindowConfig(); ?>
+<?php $layui->footer(); ?>
+
+<script>
+    admin.form.submitFirst(() => {
+        admin.iframe.closeFromParent(true);
+    }, function (data) {
+        return Object.assign(data, {})
+    })
+</script>

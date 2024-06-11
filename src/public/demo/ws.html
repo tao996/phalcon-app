@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="zh-cn">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <title>WebSocket</title>
+</head>
+<body>
+<ul id="content">
+
+</ul>
+</body>
+<script>
+    function connect() {
+        // 与服务端建立WebSocket连接
+        //(为了方便测试这里ip使用的是127.0.0.1，正式环境请使用外网ip)
+        ws = new WebSocket('ws://127.0.0.1:8282');
+        // 连接建立后发送daping，表明自己是电脑浏览器
+        ws.onopen = function() {
+            ws.send('daping');
+        };
+        //  收到服务端推送的数据后，将数据显示在浏览器里(心跳数据pong除外)
+        ws.onmessage = function (e) {
+            if (e.data !== 'pong') {
+                $($('#content')).append('<li>'+e.data+'</li>');
+            }
+        };
+        // 没隔50秒发送一个心跳数据 ping 给服务器，保持连接
+        ws.timer = setInterval(function () {
+            ws.send('ping');
+        }, 50000);
+        //  当连接关闭时清除定时器，并设置1秒后重连
+        ws.onclose = function () {
+            clearTimeout(ws.timer);
+            setTimeout(connect, 1000);
+        };
+    }
+    // 执行连接
+    connect();
+</script>
+</html>

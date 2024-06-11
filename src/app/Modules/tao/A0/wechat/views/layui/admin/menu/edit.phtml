@@ -1,0 +1,49 @@
+<?php
+
+use App\Modules\tao\sdk\phaxui\Layui\Layui;
+
+/**
+ * @var Layui $layui
+ * @var \Phalcon\Mvc\View\Engine\AbstractEngine $this
+ */
+\App\Modules\tao\sdk\phaxui\Vue::js();
+?>
+<style>
+    ol li {
+        list-style: auto;
+        line-height: 1.5em;
+    }
+</style>
+<h1>此功能未完成~~~</h1>
+<ol class="">
+    <li><a class="link"
+           href="https://developers.weixin.qq.com/doc/offiaccount/Custom_Menus/Creating_Custom-Defined_Menu.html"
+           target="_blank">微信自定义菜单文档地址</a>：最多包含3个一级菜单（最多4个汉字），每个一级菜单最多包含5个二级菜单（最多8个汉字）
+    </li>
+    <li>链接菜单参数
+        <p>
+            如果不需要后台处理，则可添加查询参数 skip=1
+        </p>
+        <p>
+            如果需要识别用户身份，则可添加参数 user=1
+        </p>
+    </li>
+
+</ol>
+<div id="tao-app">
+    <ul class="">
+        <li>
+            <a @click="openMsg">test</a>
+        </li>
+    </ul>
+    <form class="layui-form">
+        <div class="hr-line"></div>
+        <div class="layui-form-item text-center">
+            <a href="javascript:;" lay-on="getCurrent"
+               class="layui-btn layui-btn-normal layui-disabled layui-btn-sm">查询菜单设置</a>
+        </div>
+
+    </form>
+</div>
+
+

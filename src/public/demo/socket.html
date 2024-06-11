@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>SocketIO Client</title>
+</head>
+<body>
+<h3>SocketIO Test</h3>
+</body>
+<script src='https://cdn.bootcss.com/socket.io/2.0.3/socket.io.js'></script>
+<script>
+    // 如果服务端不在本机，请把127.0.0.1改成服务端ip
+    const socket = io('http://localhost:8282');
+    // 当连接服务端成功时触发connect默认事件
+    socket.on('connect', function () {
+        console.log('connect success');
+    });
+</script>
+</html>

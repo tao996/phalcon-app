@@ -1,0 +1,44 @@
+<?php
+
+use App\Modules\tao\sdk\phaxui\Layui\Layui;
+
+/**
+ * @var Layui $layui
+ * @var \Phalcon\Mvc\View\Engine\AbstractEngine $this
+ */
+
+?>
+    <style>
+    </style>
+    <table class="layui-table">
+        <tr>
+            <td width="90">发布时间</td>
+            <td><?php echo date('Y-m-d', viewData('api.created_at')) ?></td>
+        </tr>
+        <tr>
+            <td>标题</td>
+            <td><?php echo viewData('api.title') ?></td>
+        </tr>
+        <tr>
+            <td>封面</td>
+            <td><?php if ($cover = viewData('api.cover')) { ?>
+                    <img src="<?php echo $cover ?>" alt="封面图片">
+                <?php } ?></td>
+        </tr>
+        <tr>
+            <td>图集</td>
+            <td>
+                <?php foreach (viewData('api.images', []) as $item) { ?>
+                    <div style="margin: 0 10px 10px 0;">
+                        <img style="width: 150px;" src="<?php echo $item['url'] ?>" alt="">
+                        <div class="article-albums-desc"><?php echo $item['summary'] ?></div>
+                    </div>
+                <?php } ?>
+            </td>
+        </tr>
+    </table>
+<?php
+$layui->addWindowConfig();
+$layui->footer();
+
+?>

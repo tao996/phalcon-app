@@ -1,0 +1,87 @@
+<?php
+/**
+ * @var \Phalcon\Mvc\View\Engine\AbstractEngine $this
+ * @var array $msg
+ * @var array $data
+ */
+
+use App\Modules\tao\sdk\phaxui\HtmlAssets;
+
+HtmlAssets::initWithCdn();
+$redirectBack = $data['redirect'] ?? 'javascript:history.back();';
+$isLogin = \App\Modules\tao\Services\LoginUser::getInstance()->isLogin();
+$layui = \App\Modules\tao\sdk\phaxui\Layui\Layui::getInstance();
+?>
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title><?php echo $pageTitle ?? 'Phax Admin' ?></title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <!--[if lt IE 9]>
+    <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+    <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <?php $layui->header(); ?>
+    <?php
+    echo '<style>';
+    include_once __DIR__ . '/tao.css';
+    echo '</style>';
+    ?>
+    <style>
+        .container {
+            width: 320px;
+            margin: 0 auto;
+        }
+    </style>
+</head>
+<body>
+
+<div class="tao-container">
+    <div class="container">
+        <i class="layui-icon layui-icon-face-surprised" style="font-size: 300px;
+    color: #393d49;"></i>
+        <h2>出错啦</h2>
+        <?php foreach ($msg as $item) { ?>
+            <div class="text-danger" style="margin: 5px 0;"><?php echo $item ?></div>
+        <?php } ?>
+
+        <div style="margin-top: 20px;" class="link">
+
+            <div class="mb10" id="console">
+                <a href="<?php echo $redirectBack ?>" class="mr10">返回上一页</a>
+                <a href="/" class="mr10">前往首页</a>
+            </div>
+
+            <?php if (!$isLogin) { ?>
+                <div class="mb10">
+                    <span class="mr10">已有账号？</span>
+                    <a href="javascript:;" lay-on="index" class="mr10">前往登录</a>
+                    <a href="javascript:;" lay-on="forgot">忘记密码</a>
+                </div>
+                <div class="mb10">
+                    <span class="mr10">没有账号？</span>
+                    <a href="javascript:;" lay-on="signup">前往注册</a>
+                </div>
+            <?php } ?>
+        </div>
+    </div>
+<?php if (IS_DEBUG) {
+    \Phax\Helper\Debug::info();
+} ?>
+</div>
+
+</body>
+<?php $layui->footer(); ?>
+<?php \App\Modules\tao\sdk\phaxui\HtmlAssets::includeAssetsFile(__DIR__ . '/auth/auth.js','js') ?>
+<script>
+    auth.bindButtons({prefix: '<?php echo url('tao/auth/') ?>'});
+    if (admin.page.inIframe()) {
+        $('#console').hide();
+    }
+</script>
+</html>
+
+
