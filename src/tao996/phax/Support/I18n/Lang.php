@@ -2,6 +2,7 @@
 
 namespace Phax\Support\I18n;
 
+use Phax\Foundation\Application;
 use Phax\Foundation\Router;
 use Phax\Utils\MyHelper;
 
@@ -10,6 +11,10 @@ use Phax\Utils\MyHelper;
  */
 class Lang
 {
+    /**
+     * 浏览器语言
+     * @return false|string
+     */
     public static function locale()
     {
         return \Locale::acceptFromHttp($_SERVER['HTTP_ACCEPT_LANGUAGE']);
@@ -31,8 +36,12 @@ class Lang
      * @param string $rightToken
      * @return string '2020-09-09 (YYYY-MM-DD)'
      */
-    public static function interpolate(string $message, array $placeholders = [], string $leftToken = ":", string $rightToken = ""): string
-    {
+    public static function interpolate(
+        string $message,
+        array $placeholders = [],
+        string $leftToken = ":",
+        string $rightToken = ""
+    ): string {
         return MyHelper::interpolate($message, $placeholders, $leftToken, $rightToken);
     }
 
@@ -42,12 +51,21 @@ class Lang
      */
     public static function getBaseLanguage(): string
     {
+        // 请求参数
         if ($language = request()->getQuery('language')) {
             return $language;
         }
+        // 路由
         if ($language = Router::getMatchLanguage()) { // 网址中设置的语言
             return $language;
         }
+        // cookie
+        if (Application::di()->has('cookie')) {
+            if ($language = cookies()->get('language')->getValue('string')) {
+                return $language;
+            }
+        }
+        // 请求参数，配置设置
         return dispatcher()->getParam('language') ?: config('app.locale', 'en');
     }
 

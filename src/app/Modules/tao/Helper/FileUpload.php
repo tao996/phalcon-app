@@ -127,7 +127,8 @@ class FileUpload
                 'upload_type' => $this->getUploadType(), // 文件类型
                 'summary' => $this->_file->getName(), // 原始文件名
                 'url' => '/' . $subDir . $saveName, // 本地访问链接地址(添加 config('app.url') . 可能会导致移除数据库时无法访问）
-                'width' => $width, 'height' => $height, // 尺寸
+                'width' => $width,
+                'height' => $height, // 尺寸
                 'mime_type' => $this->_file->getType(), // mime 类型
                 'file_size' => $this->_file->getSize(), // 文件大小
                 'file_ext' => $this->_file->getExtension(), // 文件扩展名
@@ -167,7 +168,6 @@ class FileUpload
 
     private function getOssDriver(string $driver, array $config): OssDriverInterface
     {
-
         switch ($driver) {
             case 'alioss':
                 return new AliyunDriver([
@@ -215,7 +215,9 @@ class FileUpload
                     $oss = $this->getOssDriver($uploadcc['driver'], $uploadcc[$uploadcc['driver']]);
                     return $this->ossUpload($oss, Config::currentProject('phax'));
                 } else {
-                    throw new \Exception('系统未配置默认上传方式');
+                    // 退回到本地上传
+                    $this->_config['upload_type'] = 'local';
+                    return $this->moveToLocal();
                 }
             case 'local':
                 return $this->moveToLocal();
@@ -230,7 +232,6 @@ class FileUpload
      */
     public function serverToken()
     {
-
     }
 
 }

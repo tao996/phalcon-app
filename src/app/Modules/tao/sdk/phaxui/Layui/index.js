@@ -534,7 +534,7 @@ const admin = {
                 offset: Math.max(((window.innerHeight - 400) / 2), 100) + 'px',
                 title: '验证码', content: `<div class="layui-form" lay-filter="form-captcha" style="margin: 16px;">
 <div>
-<img src="/m/tao/captcha" onclick="this.src='/m/tao/captcha?t='+ new Date().getTime();" id="formCaptcha">
+<img style="width: 218px;height: 50px;" src="/m/tao/captcha" onclick="this.src='/m/tao/captcha?t='+ new Date().getTime();" id="formCaptcha">
 <div style="font-size: 0.9em;font-weight: bold" lay-on="refreshCaptcha">点击图片刷新验证码（不区分大小写）</div>
 </div>
 <div style="margin: 10px 0;">

@@ -17,8 +17,16 @@ class ImageCaptcha
      */
     protected string $characters = '2346789abcdefghjkmnpqrstuvwxyABCDEFGHJKLMNPQRSTUVWXYZ';
     protected int $charactersLen = 53; // characters 的长度
-    protected array $fonts = ['actionj', 'ApothecaryFont', 'BigBlocko', 'Bitsumishi', 'D3Parallelism',
-        'DeborahFancyDress', 'Flim-Flam', 'Pointy'];
+    protected array $fonts = [
+        'actionj',
+        'ApothecaryFont',
+        'BigBlocko',
+        'Bitsumishi',
+        'D3Parallelism',
+        'DeborahFancyDress',
+        'Flim-Flam',
+        'Pointy'
+    ];
 
     private array $options = [
         'width' => 150,
@@ -64,21 +72,30 @@ class ImageCaptcha
         $this->options['drawCurve'] && $this->drawSineLine();
 
         $codeNx = 0; // 验证码第N个字符的左边距
-        $code = [];
+        $code = []; // 保存验证码
 
         for ($i = 0; $i < $this->options['length']; $i++) {
             $code[$i] = $this->characters[mt_rand(0, $this->charactersLen - 1)];
-            $codeNx += mt_rand($this->options['fontSize'] * 1 - 20 , intval($this->options['fontSize'] * 1.3));
+            $codeNx += mt_rand(
+                $this->options['fontSize'] * 1 - mt_rand(0,15),
+                intval($this->options['fontSize'] * 1.1)
+            );
 
             list($red, $green, $blue) = $this->getDeepColor();
             $color = imagecolorallocate($this->image, $red, $green, $blue);
             if ($color === false) {
                 $color = mt_rand(50, 200);
             }
-            imagettftext($this->image,
-                $this->options['fontSize'], mt_rand(-40, 40),
-                $codeNx, intval($this->options['fontSize'] * 1.2), $color,
-                $this->options['font'], $code[$i]);
+            imagettftext(
+                $this->image,
+                $this->options['fontSize'],
+                mt_rand(-40, 40),
+                $codeNx,
+                intval($this->options['fontSize'] * 1.2),
+                $color,
+                $this->options['font'],
+                $code[$i]
+            );
         }
 
         $this->options['text'] = strtolower(implode('', $code));
@@ -209,7 +226,9 @@ class ImageCaptcha
             $noiseColor = imagecolorallocate($this->image, $red, $green, $blue);
             for ($j = 0; $j < 5; $j++) {
                 // 绘杂点
-                imagestring($this->image, 5,
+                imagestring(
+                    $this->image,
+                    5,
                     mt_rand(-10, $this->options['width']),
                     mt_rand(-10, $this->options['height']),
                     $codeSet[mt_rand(0, 29)],
@@ -258,9 +277,9 @@ class ImageCaptcha
         list($red, $green, $blue) = $this->getRandColor();
         $increase = 30 + mt_rand(1, 254);
 
-        $red = abs(min(255, $red - $increase));
-        $green = abs(min(255, $green - $increase));
-        $blue = abs(min(255, $blue - $increase));
+        $red = min(abs(min(255, $red - $increase)),255);
+        $green = min(abs(min(255, $green - $increase)),255);
+        $blue = min(abs(min(255, $blue - $increase)),255);
 
         return [$red, $green, $blue];
     }

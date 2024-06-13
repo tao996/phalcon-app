@@ -57,7 +57,7 @@ class Application
 
         // 加载语言
         Transaction::getInstance()
-            ->addDictionary(PATH_PHAX . 'languages/:lang.php')
+            ->addDictionary(PATH_PHAX . 'messages/:lang.php')
             ->setLanguage($config->path('app.locale', 'cn'))
             ->loadLast();
 

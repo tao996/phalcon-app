@@ -1,4 +1,7 @@
 <?php
+
+use App\Modules\tao\Services\ConfigService;
+
 /**
  * 与模板数据比较
  * @param string $path 路径 或者 值
@@ -35,12 +38,12 @@ function viewDataBool2String(bool $condition): string
  */
 function systemConfig(string $path, mixed $default = ''): mixed
 {
-    return \App\Modules\tao\Services\ConfigService::getWith($path, $default);
+    return ConfigService::getWith($path, $default);
 }
 
 function systemConfigCompare(string $path, string $output, $cmpValue = "1"): void
 {
-    echo \App\Modules\tao\Services\ConfigService::getWith($path, "") == $cmpValue ? $output : '';
+    echo ConfigService::getWith($path) == $cmpValue ? $output : '';
 }
 
 /**

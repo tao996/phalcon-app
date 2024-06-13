@@ -11,6 +11,7 @@ class CaptchaController extends BaseController
 
     /**
      * 生成一个验证码
+     * http://localhost:8071/m/tao/captcha
      */
     public function indexAction()
     {

@@ -27,9 +27,9 @@ class Transaction
     {
     }
 
-
     /**
-     * @param string $path 词典格式，如 /app/:lang/some.php
+     * 指定语言所在目录
+     * @param string $path 示例 messages/:lang.php，其中 :lang 会被替换成真正的语言
      * @return self
      */
     public function addDictionary(string $path): self

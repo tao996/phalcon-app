@@ -2,6 +2,8 @@
 
 namespace Phax\Mvc;
 
+use Exception;
+use Phax\Db\QueryBuilder;
 use Phax\Foundation\Router;
 use Phax\Support\I18n\Lang;
 use Phax\Support\Validate;
@@ -23,15 +25,19 @@ class Request
         return str_contains($_SERVER['HTTP_HOST'], 'localhost');
     }
 
-    public static function mustPost()
+    /**
+     * @throws Exception
+     */
+    public static function mustPost(): void
     {
         if (!request()->isPost()) {
-            throw new \Exception('only support POST method', 200);
+            throw new Exception('only support POST method', 200);
         }
     }
 
     /**
      * 如果有 $name 值，则优先从 getQuery 中获取值
+     * @param string|null $name
      * @return mixed
      */
     public static function getData(string $name = null): mixed
@@ -51,7 +57,7 @@ class Request
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     public static function mustHasSet(array $data, array|string $keys): void
     {
@@ -62,12 +68,12 @@ class Request
      * 支持 name|名称 的格式
      * @param string $key
      * @return string[] [参数名,意义]
-     * @throws \Exception
+     * @throws Exception
      */
     protected static function nameLang(string $key): array
     {
         if (empty($key)) {
-            throw new \Exception('name is empty for Request::Get', 200);
+            throw new Exception('name is empty for Request::Get', 200);
         }
         $cc = explode('|', $key);
         return count($cc) == 1 ? [$key, $key] : $cc;
@@ -80,12 +86,12 @@ class Request
      * @param $v mixed 待检查的值
      * @param $title string 标题
      * @return void
-     * @throws \Exception
+     * @throws Exception
      */
     protected static function checkEmptyResult(bool $mustNotEmpty, mixed $v, string $title): void
     {
         if ($mustNotEmpty && empty($v)) {
-            throw new \Exception(__('require', ['field' => $title]), 200);
+            throw new Exception(__('require', ['field' => $title]), 200);
         }
     }
 
@@ -94,7 +100,7 @@ class Request
      * @param string $name 示例 name 或者 name|用户名
      * @param bool $notEmpty 是否允许为空
      * @return int
-     * @throws \Exception
+     * @throws Exception
      */
     public static function getInt(string $name, bool $notEmpty = true): int
     {
@@ -104,7 +110,10 @@ class Request
         return $v;
     }
 
-    public static function getQueryInt(string $name, bool $notEmpty = true)
+    /**
+     * @throws Exception
+     */
+    public static function getQueryInt(string $name, bool $notEmpty = true): int
     {
         $cc = self::nameLang($name);
         $v = request()->getQuery($cc[0], 'int', 0);
@@ -112,6 +121,9 @@ class Request
         return intval($v);
     }
 
+    /**
+     * @throws Exception
+     */
     public static function getQueryString(string $name, bool $notEmpty = true)
     {
         $cc = self::nameLang($name);
@@ -120,6 +132,9 @@ class Request
         return $v;
     }
 
+    /**
+     * @throws Exception
+     */
     public static function getString(string $name, bool $notEmpty = true): string
     {
         $cc = self::nameLang($name);
@@ -133,7 +148,7 @@ class Request
      * @param string $name
      * @param bool $notEmpty
      * @return array
-     * @throws \Exception
+     * @throws Exception
      */
     public static function tryGetInts(string $name, bool $notEmpty = true): array
     {
@@ -145,10 +160,10 @@ class Request
 
     /**
      * 追加分页
-     * @param \Phax\Db\QueryBuilder $b
-     * @return \Phax\Db\QueryBuilder
+     * @param QueryBuilder $b
+     * @return QueryBuilder
      */
-    public static function pagination(\Phax\Db\QueryBuilder $b): \Phax\Db\QueryBuilder
+    public static function pagination(QueryBuilder $b): QueryBuilder
     {
         $page = request()->get('page', 'int', 0);
         $limit = request()->get('limit', 'int', 15);
