@@ -1184,13 +1184,19 @@ const admin = {
             return `<input type="checkbox" name="${option.field}" value="${data[key]}"
 lay-skin="switch" lay-text="${option.tips}" lay-filter="${option.filter}" ${checked}>`;
         },
-        humanTime: function (data, useV = false) {
-            const v = useV === true ? data : data[this.field];
+        /**
+         * 時間格式化
+         * @param {string|number} data 對象或者是值
+         * @return {string}
+         */
+        humanTime: function (data) {
+            const datat = typeof data;
+            const v = datat === 'string' || datat === 'number' ? data : data[this.field];
             if (admin.util.isEmpty(v)) {
                 return '';
             }
             const date = new Date(v * 1000);  // 参数需要毫秒数，所以这里将秒数乘于 1000
-            return [
+            return ([
                 date.getFullYear(),
                 ('' + (date.getMonth() + 1)).padStart(2, '0'),
                 ('' + date.getDate()).padStart(2, '0')
@@ -1198,7 +1204,7 @@ lay-skin="switch" lay-text="${option.tips}" lay-filter="${option.filter}" ${chec
                 ('' + date.getHours()).padStart(2, '0'),
                 ('' + date.getMinutes()).padStart(2, '0'),
                 ('' + date.getSeconds()).padStart(2, '0')
-            ].join(':')
+            ].join(':')).replace(' 00:00:00', '')
         },
         humanDate: function (data, useV = false) {
             const v = useV === true ? data : data[this.field];

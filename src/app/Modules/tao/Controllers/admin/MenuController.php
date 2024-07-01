@@ -50,23 +50,6 @@ class MenuController extends BaseController
     }
 
     /**
-     * @return array|\int[][]|\string[][]
-     * @throws \Exception
-     */
-    private function options()
-    {
-        $list = SystemMenu::queryBuilder()
-            ->int('status', 1)
-            ->notEqual('pid', Data::HOME_PID)
-            ->columns('id,pid,title')
-            ->find();
-        $optionList = LayuiData::selectOptions(0, $list);
-        return array_merge([[
-            'id' => 0, 'pid' => 0, 'title' => '顶级菜单'
-        ]], $optionList);
-    }
-
-    /**
      * @rbac ({title:'添加菜单'})
      * @throws \Exception
      */
@@ -82,10 +65,7 @@ class MenuController extends BaseController
             $data['id'] = 0;
             return $this->saveData($this->model, $data);
         }
-        return [
-            'pid' => $pid,
-            'menuList' => $this->options(),
-        ];
+        return [];
     }
 
     private function saveData(SystemMenu $model, array $data)
@@ -134,11 +114,7 @@ class MenuController extends BaseController
             return $this->saveData($row, $data);
         }
 
-        return [
-            'id' => $id,
-            'menuList' => $this->options(),
-            'row' => $row->toArray(),
-        ];
+        return $row->toArray();
     }
 
     public function userAction($userId)

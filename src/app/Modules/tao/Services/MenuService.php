@@ -16,12 +16,12 @@ class MenuService
                 if (str_starts_with($href, '/' . Router::ModulePrefix . '/')) {
                     return $href;
                 }
-                return url($href, false, true, $params);
+                return url($href, false, true);
             } elseif (SystemNode::KIND_PROJECT == $type) {
                 if (str_starts_with($href, '/' . Router::ProjectPrefix . '/')) {
                     return $href;
                 }
-                return projectURL($href, false, $params);
+                return url($href, false, false);
             }
         }
         return $href;

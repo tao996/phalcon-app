@@ -52,9 +52,13 @@ class BaseResponseController extends Controller
     }
 
     /**
-     * 当前默认主题
+     * 当前默认主题，如果设置，则使用 views/$theme 下的模板
      */
     public static string $theme = 'layui';
+    /**
+     * @var bool 是否需要在模板中注入 layui，如果没有使用 layui，则不需要
+     */
+    protected static bool $enableLayui = true;
     /**
      * 目录，通常用于查询视图模板
      * @var string
@@ -70,15 +74,14 @@ class BaseResponseController extends Controller
     public static function getBaseViewDir(string $tpl): string
     {
         if (static::$theme) {
-            return self::$baseDIR . '/views/' . static::$theme . '/' . $tpl;
+            return static::$baseDIR . '/views/' . static::$theme . '/' . $tpl;
         } else {
-            return self::$baseDIR . '/views/' . $tpl;
+            return static::$baseDIR . '/views/' . $tpl;
         }
     }
 
     protected function beforeJsonResponse(mixed &$data): void
     {
-
         if (!isset($data['code']) && !isset($data['msg']) && !isset($data['data'])) {
             $this->success('', $data);
             throw new BlankException();
@@ -89,11 +92,14 @@ class BaseResponseController extends Controller
     protected function beforeViewResponse(mixed &$data): void
     {
         HtmlAssets::initWithCdn();
-        $this->view->setVar('layui', Layui::getInstance());
+        if (static::$enableLayui) {
+            $this->view->setVar('layui', Layui::getInstance());
+        }
         require_once __DIR__ . '/Common/function.php';
         require_once PATH_TAO . 'views/function.php';
 
-        $viewDir = $this->view->getViewsDir() . self::$theme; // 主题
+        $viewDir = $this->view->getViewsDir() . static::$theme; // 主题
+//        dd($viewDir,false); ddRouterMatch(); // 如果视图没有显示，取消注释检查
         $this->view->setViewsDir($viewDir);
         parent::beforeViewResponse($data);
     }
@@ -129,7 +135,9 @@ class BaseResponseController extends Controller
     public static function success(string $msg, mixed $data = '')
     {
         $result = [
-            'code' => 0, 'msg' => $msg, 'data' => $data,
+            'code' => 0,
+            'msg' => $msg,
+            'data' => $data,
         ];
         if (Request::isApiRequest()) {
             return \json($result);
@@ -148,7 +156,10 @@ class BaseResponseController extends Controller
     public function successPagination(int $count, array $rows): \Phalcon\Http\Response
     {
         return \json([
-            'code' => 0, 'msg' => '', 'count' => $count, 'data' => $rows
+            'code' => 0,
+            'msg' => '',
+            'count' => $count,
+            'data' => $rows
         ]);
     }
 

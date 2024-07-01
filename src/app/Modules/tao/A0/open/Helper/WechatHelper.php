@@ -7,8 +7,10 @@ use App\Modules\tao\sdk\SdkHelper;
 use Endroid\QrCode\Color\Color;
 use Endroid\QrCode\QrCode;
 use Endroid\QrCode\Writer\PngWriter;
+use Phax\Foundation\Router;
 use Phax\Mvc\Response;
 use Phax\Support\Exception\BlankException;
+use Phax\Utils\MyUrl;
 
 class WechatHelper
 {
@@ -40,7 +42,7 @@ class WechatHelper
      */
     public static function url(string $mca, array $query = [], bool $multi = true): string
     {
-        $url = url($mca, false, $multi, $query);
+        $url = MyUrl::createPagePath($mca, $query, false, Router::ModulePrefix);
         $origin = OpenConfigService::getWith('proxy_origin', config('app.url'));
         return rtrim($origin, '/') . $url;
     }

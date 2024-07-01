@@ -16,7 +16,7 @@ class BaseProjectController extends \App\Modules\tao\BaseController
      */
     protected bool $console = false;
     /**
-     * @var string 默认前端 Layout 模板（包含了导航/页头/页脚）
+     * @var string 默认前端 Layout 模板（通常包含了导航/页头/页脚）
      */
     protected string $layoutView = 'base';
 

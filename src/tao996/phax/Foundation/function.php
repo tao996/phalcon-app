@@ -1,5 +1,9 @@
 <?php
 
+use Phax\Foundation\Application;
+use Phax\Foundation\Router;
+use Phax\Utils\MyUrl;
+
 define('IS_CLI', php_sapi_name() === 'cli');
 define('IS_WEB', isset($_SERVER['HTTP_HOST']));
 
@@ -39,7 +43,7 @@ if (!function_exists('pr')) {
 if (!function_exists('di')) {
     function di(): \Phalcon\Di\FactoryDefault
     {
-        return \Phax\Foundation\Application::di();
+        return Application::di();
     }
 }
 
@@ -69,46 +73,46 @@ if (!function_exists('config')) {
 if (!function_exists('annotations')) {
     function annotations(): Phalcon\Annotations\Adapter\Memory
     {
-        return \Phax\Foundation\Application::di()->getShared('annotations');
+        return Application::di()->getShared('annotations');
     }
 }
 if (!function_exists('assets')) {
     function assets(): Phalcon\Assets\Manager
     {
-        return \Phax\Foundation\Application::di()->getShared('assets');
+        return Application::di()->getShared('assets');
     }
 }
 
 if (!function_exists('crypt')) {
     function crypt(): \Phalcon\Encryption\Crypt
     {
-        return \Phax\Foundation\Application::di()->getShared('crypt');
+        return Application::di()->getShared('crypt');
     }
 }
 if (!function_exists('cookies')) {
     function cookies(): \Phalcon\Http\Response\Cookies
     {
-        return \Phax\Foundation\Application::di()->getShared('cookies');
+        return Application::di()->getShared('cookies');
     }
 }
 if (!function_exists('dispatcher')) {
     function dispatcher(): \Phalcon\Dispatcher\AbstractDispatcher
     {
-        return \Phax\Foundation\Application::di()->getShared('dispatcher');
+        return Application::di()->getShared('dispatcher');
     }
 }
 
 if (!function_exists('escaper')) {
     function escaper(): Phalcon\Html\Escaper
     {
-        return \Phax\Foundation\Application::di()->getShared('escaper');
+        return Application::di()->getShared('escaper');
     }
 }
 
 if (!function_exists('eventsManager')) {
     function eventsManager(): \Phalcon\Events\Manager
     {
-        return \Phax\Foundation\Application::di()->getShared('eventsManager');
+        return Application::di()->getShared('eventsManager');
     }
 }
 
@@ -120,55 +124,55 @@ if (!function_exists('flash')) {
      */
     function flash(): \Phalcon\Flash\AbstractFlash
     {
-        return \Phax\Foundation\Application::di()->getShared('flash');
+        return Application::di()->getShared('flash');
     }
 }
 
 if (!function_exists('filter')) {
     function filter(): Phalcon\Filter\Filter
     {
-        return \Phax\Foundation\Application::di()->getShared('filter');
+        return Application::di()->getShared('filter');
     }
 }
 
 if (!function_exists('helper')) {
     function helper(): Phalcon\Support\HelperFactory
     {
-        return \Phax\Foundation\Application::di()->getShared('helper');
+        return Application::di()->getShared('helper');
     }
 }
 
 if (!function_exists('modelsManager')) {
     function modelsManager(): Phalcon\Mvc\Model\Manager
     {
-        return \Phax\Foundation\Application::di()->getShared('modelsManager');
+        return Application::di()->getShared('modelsManager');
     }
 }
 
 if (!function_exists('modelsMetadata')) {
     function modelsMetadata(): Phalcon\Mvc\Model\MetaData\Memory
     {
-        return \Phax\Foundation\Application::di()->getShared('modelsMetadata');
+        return Application::di()->getShared('modelsMetadata');
     }
 }
 
 if (!function_exists('request')) {
     function request(): \Phalcon\Http\RequestInterface
     {
-        return \Phax\Foundation\Application::di()->getShared('request');
+        return Application::di()->getShared('request');
     }
 }
 if (!function_exists('response')) {
     function response(): Phalcon\Http\Response
     {
-        return \Phax\Foundation\Application::di()->getShared('response');
+        return Application::di()->getShared('response');
     }
 }
 
 if (!function_exists('router')) {
     function router(): \Phalcon\Cli\Router|\Phalcon\Mvc\Router
     {
-        return \Phax\Foundation\Application::di()->getShared('router');
+        return Application::di()->getShared('router');
     }
 }
 
@@ -182,7 +186,7 @@ if (!function_exists('security')) {
      */
     function security(): Phalcon\Encryption\Security
     {
-        return \Phax\Foundation\Application::di()->getShared('security');
+        return Application::di()->getShared('security');
     }
 }
 
@@ -194,14 +198,14 @@ if (!function_exists('tag')) {
      */
     function tag(): Phalcon\Html\TagFactory
     {
-        return \Phax\Foundation\Application::di()->getShared('tag');
+        return Application::di()->getShared('tag');
     }
 }
 
 if (!function_exists('transactionManager')) {
     function transactionManager(): Phalcon\Mvc\Model\Transaction\Manager
     {
-        return \Phax\Foundation\Application::di()->getShared('transactionManager');
+        return Application::di()->getShared('transactionManager');
     }
 }
 
@@ -209,25 +213,14 @@ if (!function_exists('url')) {
     /**
      * 通常用来拼接以便生成模块 URLs 地址; 更多功能请使用 \Phax\Utils\MyUrl
      * @param string $path 路径：模块/控制器/操作 或者 /控制器/操作
-     * @param bool $api 是否为 api 地址，默认为 false
-     * @param bool $multi 是否为多模块，默认为 true
-     * @param array|string $query 请求参数
+     * @param bool $api 是否为 api 地址; 如果是，则添加前辍 api
+     * @param bool $mModule 是否为多模块; 如果是则添加前辍 m，否则添加 p；注意：需要自己添加模块/项目名称
      * @return string
      */
-    function url(string $path, bool $api = false, bool $multi = true, array|string $query = [], bool $baseUri = false): string
+    function url(string $path, bool $api = false, bool $mModule = true): string
     {
-        return \Phax\Utils\MyUrl::createPagePath($path, $query, $api,
-            $multi ? \Phax\Foundation\Router::ModulePrefix : '',
-            $baseUri);
-    }
-
-    /**
-     * 生成 Project 链接地址
-     * @return string
-     */
-    function projectURL(string $path, bool $api = false, array|string $query = [], bool $baseUri = false): string
-    {
-        return \Phax\Utils\MyUrl::createPagePath($path, $query, $api, \Phax\Foundation\Router::ProjectPrefix, $baseUri);
+        return MyUrl::createPagePath($path, '', $api,
+            $mModule ? Router::ModulePrefix : Router::ProjectPrefix);
     }
 }
 
@@ -235,26 +228,26 @@ if (!function_exists('url')) {
 if (!function_exists('application')) {
     function application(): \Phalcon\Mvc\Application|\Phalcon\Cli\Console
     {
-        return \Phax\Foundation\Application::di()->getShared('application');
+        return Application::di()->getShared('application');
     }
 }
 
 if (!function_exists('db')) {
     function db(): Phalcon\Db\Adapter\Pdo\AbstractPdo
     {
-        return \Phax\Foundation\Application::di()->get('db');
+        return Application::di()->get('db');
     }
 }
 if (!function_exists('pdo')) {
     function pdo(): \PDO
     {
-        return \Phax\Foundation\Application::di()->get('pdo');
+        return Application::di()->get('pdo');
     }
 }
 if (!function_exists('redis')) {
     function redis(): \Redis
     {
-        return \Phax\Foundation\Application::di()->get('redis');
+        return Application::di()->get('redis');
     }
 }
 
@@ -262,7 +255,7 @@ if (!function_exists('logger')) {
     // 应用程序日志
     function logger(): \Phalcon\Logger\Logger
     {
-        return \Phax\Foundation\Application::di()->get('logger');
+        return Application::di()->get('logger');
     }
 }
 
@@ -274,7 +267,7 @@ if (!function_exists('session')) {
      */
     function session(): \Phalcon\Session\Manager
     {
-        return \Phax\Foundation\Application::di()->get('session');
+        return Application::di()->get('session');
     }
 
     function sessionWith($path, $default = null)
@@ -282,7 +275,7 @@ if (!function_exists('session')) {
         /**
          * @var $session \Phalcon\Session\Manager
          */
-        $session = \Phax\Foundation\Application::di()->get('session');
+        $session = Application::di()->get('session');
         $keys = explode('.', $path);
         $current = $session->get(array_shift($keys));
         while ($key = array_shift($keys)) {
@@ -299,7 +292,7 @@ if (!function_exists('session')) {
 if (!function_exists('cache')) {
     function cache(): \Phalcon\Cache\Cache
     {
-        return \Phax\Foundation\Application::di()->get('cache');
+        return Application::di()->get('cache');
     }
 }
 if (!function_exists('view')) {
@@ -309,7 +302,7 @@ if (!function_exists('view')) {
         /**
          * @var \Phalcon\Mvc\View $view
          */
-        $view = \Phax\Foundation\Application::di()->get('view');
+        $view = Application::di()->get('view');
         if (empty($data)) {
             return $view;
         }
@@ -320,7 +313,7 @@ if (!function_exists('view')) {
 if (!function_exists('metadata')) {
     function metadata(): \Phalcon\Mvc\Model\MetaData
     {
-        return \Phax\Foundation\Application::di()->get('modelsMetadata');
+        return Application::di()->get('modelsMetadata');
     }
 }
 
@@ -342,7 +335,7 @@ if (!function_exists('profiler')) {
     // 分析 SQL 性能
     function profiler(): \Phalcon\Db\Profiler
     {
-        return \Phax\Foundation\Application::di()->getShared('profiler');
+        return Application::di()->getShared('profiler');
     }
 }
 if (!function_exists('formData')) {
@@ -394,7 +387,7 @@ if (!function_exists('ddRouterMatch')) {
      */
     function ddRouterMatch(): void
     {
-        dd('RouterInfo', \Phax\Foundation\Router::matchOptions());
+        dd('RouterInfo', Router::matchOptions());
     }
 }
 /**

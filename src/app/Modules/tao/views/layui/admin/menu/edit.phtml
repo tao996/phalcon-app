@@ -1,16 +1,34 @@
 <?php
 
+use App\Modules\tao\Config\Data;
+use App\Modules\tao\Models\SystemMenu;
 use App\Modules\tao\sdk\phaxui\Layui\Layui;
 use App\Modules\tao\Models\SystemNode;
+use App\Modules\tao\sdk\phaxui\Layui\LayuiData;
+use App\Modules\tao\sdk\phaxui\Layui\LayuiHtml;
 
 /**
  * @var Layui $layui
  * @var \Phalcon\Mvc\View\Engine\AbstractEngine $this
  * @var int $id
  */
-$pid = viewData('api.row.pid', 0);
-$menuList = viewData('api.menuList', []);
 //dd(viewData());
+$list = SystemMenu::queryBuilder()
+    ->int('status', 1)
+    ->notEqual('pid', Data::HOME_PID)
+    ->columns('id,pid,title')
+    ->find();
+$optionList = LayuiData::selectOptions(0, $list);
+$menuList = array_merge([
+    [
+        'id' => 0,
+        'pid' => 0,
+        'title' => '顶级菜单'
+    ]
+], $optionList);
+$pid = viewData('api.pid', $_GET['pid'] ?? 0);
+
+
 ?>
 
 <form class="layui-form">
@@ -19,11 +37,16 @@ $menuList = viewData('api.menuList', []);
         <label class="layui-form-label required">上级菜单</label>
         <div class="layui-input-inline">
             <select name="pid">
-                <?php foreach ($menuList as $vo) { ?>
-                    <option value="<?php echo $vo['id'] ?>"
-                        <?php echo $pid == $vo['id'] ? 'selected' : '' ?>
-                    ><?php echo $vo['title'] ?></option>
-                <?php } ?>
+                <?php
+                foreach ($menuList as $vo) { ?>
+                    <option value="<?php
+                    echo $vo['id'] ?>"
+                        <?php
+                        echo $pid == $vo['id'] ? 'selected' : '' ?>
+                    ><?php
+                        echo $vo['title'] ?></option>
+                    <?php
+                } ?>
             </select>
         </div>
 
@@ -32,7 +55,8 @@ $menuList = viewData('api.menuList', []);
             <input type="text" name="title" class="layui-input"
                    lay-verify="required" lay-reqtext="请输入菜单名称"
                    lay-affix="clear"
-                   placeholder="请输入菜单名称" value="<?php echo viewData('api.row.title') ?>">
+                   placeholder="请输入菜单名称" value="<?php
+            echo viewData('api.title') ?>">
         </div>
 
     </div>
@@ -41,17 +65,22 @@ $menuList = viewData('api.menuList', []);
         <label class="layui-form-label">访问角色</label>
         <div class="layui-input-inline">
             <input type="text" class="layui-input" id="inputRoles" name="roles"
-                   value="<?php echo viewData('api.row.roles') ?>"
+                   value="<?php
+                   echo viewData('api.roles') ?>"
                    placeholder="不填则表示手动授权"
             >
         </div>
 
         <div class="layui-input-inline" style="width: 300px;padding-top: 4px;">
             <a class="layui-btn layui-btn-sm layui-btn-warm" onclick="inputRoles('')">清空</a>
-            <?php foreach (array_keys(\App\Modules\tao\Config\Data::MapAccess) as $role) { ?>
+            <?php
+            foreach (array_keys(Data::MapAccess) as $role) { ?>
                 <a class="layui-btn layui-btn-sm"
-                   onclick="inputRoles('<?php echo $role ?>')"><?php echo $role ?></a>
-            <?php } ?>
+                   onclick="inputRoles('<?php
+                   echo $role ?>')"><?php
+                    echo $role ?></a>
+                <?php
+            } ?>
         </div>
     </div>
 
@@ -61,28 +90,36 @@ $menuList = viewData('api.menuList', []);
             <input type="text" name="href" id="href" class="layui-input"
                    lay-affix="clear"
                    placeholder="请输入菜单链接"
-                   value="<?php echo viewData('api.row.href') ?>">
+                   value="<?php
+                   echo viewData('api.href') ?>">
         </div>
 
         <label class="layui-form-label">地址前缀</label>
         <div class="layui-input-inline" style="width: 300px;">
             <?php
-            $type = viewData('api.row.type', 0);
-            foreach ([
-                         0 => '无',
-                         SystemNode::KIND_MODULE => 'Module',
-                         SystemNode::KIND_PROJECT => 'Project'
-                     ] as $v => $t) { ?>
-                <input type="radio" name="type" value="<?php echo $v ?>"
-                       title="<?php echo $t ?>" <?php echo viewDataCompare($type, 'checked', $v, true) ?>>
-            <?php } ?>
+            $type = viewData('api.type', 0);
+            foreach (
+                [
+                    0 => '无',
+                    SystemNode::KIND_MODULE => 'Module',
+                    SystemNode::KIND_PROJECT => 'Project'
+                ] as $v => $t
+            ) { ?>
+                <input type="radio" name="type" value="<?php
+                echo $v ?>"
+                       title="<?php
+                       echo $t ?>" <?php
+                echo viewDataCompare($type, 'checked', $v, true) ?>>
+                <?php
+            } ?>
 
             <div class="layui-form-mid layui-text-em">选择 Module 自动为链接补充前缀 /m/，选择 Project 则补充前缀 /p/
             </div>
         </div>
     </div>
 
-    <?php \App\Modules\tao\sdk\phaxui\Layui\LayuiHtml::icon(['value' => viewData('api.row.icon')]); ?>
+    <?php
+    LayuiHtml::icon(['value' => viewData('api.icon')]); ?>
 
 
     <div class="layui-form-item">
@@ -90,7 +127,8 @@ $menuList = viewData('api.menuList', []);
         <div class="layui-input-inline">
             <input type="number" name="sort"
                    lay-reqtext="菜单排序不能为空" placeholder="请输入菜单排序"
-                   value="<?php echo viewData('api.row.sort', 0) ?>" class="layui-input">
+                   value="<?php
+                   echo viewData('api.sort', 0) ?>" class="layui-input">
         </div>
     </div>
 
@@ -101,9 +139,12 @@ $menuList = viewData('api.menuList', []);
     </div>
 
 </form>
-<?php $layui->addWindowConfig([]); ?>
-<?php $layui->footer(); ?>
-<?php \App\Modules\tao\sdk\phaxui\Layui\LayuiHtml::iconJs(); ?>
+<?php
+$layui->addWindowConfig([]); ?>
+<?php
+$layui->footer(); ?>
+<?php
+LayuiHtml::iconJs(); ?>
 <script>
     admin.form.submitFirst(() => {
         admin.iframe.closeFromParent(true);
