@@ -13,7 +13,7 @@ services:
     working_dir: /var/www
     volumes:
       - ./src:/var/www:delegated
-      - ./src/storage/logs:/var/log/php/:rw
+      - ./log/php:/var/log/php/:rw
       - ./php/php.ini:/usr/local/etc/php/php.ini
     networks:
       - backend
@@ -29,7 +29,7 @@ services:
 #    image: authus/phalcon:5.7.0-cli
 #    volumes:
 #      - ./src:/var/www:delegated
-#      - ./src/storage/logs:/var/log/php/:rw
+#      - ./log/php:/var/log/php/:rw
 #      - ./php/php.ini:/usr/local/etc/php/php.ini
 #      - ./php/supervisord.conf:/etc/supervisor/conf.d/supervisord.conf
 #    networks:
@@ -176,7 +176,8 @@ services:
     # - ./src/app/Http/Projects/city/assets:/var/www/public/project/city
     volumes:
       - ./src:/var/www
-      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
+      - ./nginx/location.conf:/etc/nginx/location.conf
+      - ./nginx/sites:/etc/nginx/conf.d
       - ./log/nginx:/var/log/nginx/:rw
     networks:
       - backend

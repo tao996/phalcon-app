@@ -3,7 +3,6 @@
 /**
  * https://github.com/phalcon/cphalcon/issues/16244
  * 线上时，可以直接移除没用的配置信息
- * 以下配置中，使用多个 ## 来表示重要需要修改（通常是密钥）
  */
 
 return [
@@ -14,11 +13,9 @@ return [
         'logo' => env('APP_LOGO', '/assets/logo.png'), // 30*30
         'timezone' => env('TZ', 'UTC'),
         'locale' => 'cn', // 默认的语言（总是2位）[a-z]{2}
-        // #######
         'jwt' => [
             'hmac' => 'sha256',
-            // #######
-            'secret' => env('APP_JWT_SECRET', 'phalcon'),
+            'secret' => env('APP_JWT_SECRET', 'phalcon'), // 必须修改
             'expire' => intval(env('APP_JWT_SECRET', 3600 * 48)),
         ],
         // 异常和错误处理的类
@@ -29,7 +26,7 @@ return [
         'project' => [
             'sites' => [], // '项目'=>'域名' 如 'city' => ['phax.test']
             'default' => '', // 默认的项目
-            'prefix' => false // 是否以项目名称作为配置文件前辍，默认为 config.php
+            'config_prefix' => false // 是否以项目名称作为配置文件前辍，默认为 config.php; 如果为 true，则加载 项目名.config.php
         ],
         /**
          * 超级管理员用户 ID 列表，不受权限控制；

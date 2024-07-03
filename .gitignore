@@ -4,7 +4,8 @@ DirectoryV3.xml
 
 .env
 docker-compose.yaml
-nginx/sites/default.conf
 nginx/host.conf
+nginx/location.conf
+nginx/sites/default.conf
 php/php.ini
 php/supervisord.conf
