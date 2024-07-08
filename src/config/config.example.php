@@ -20,7 +20,8 @@ return [
         ],
         // 异常和错误处理的类
         'error' => 'App\Http\Response',
-        'cdn' => 'cn', // cn|ncn|(your cdn address), 本地开发时，可克隆 phalcon-admin-assets，然后将 app.cdn 设置为空
+        // cn|ncn|(your cdn domain); 本地开发时，可不填，则从 src/public/assets 中读取
+        'cdn' => 'cn',
         'namespaces' => [], // name => path
         'includes' => [], // 需要包含的文件
         'project' => [
@@ -121,7 +122,7 @@ return [
         // 是否记录 SQL 语句
         'log' => [
             'driver' => env('SQL_LOG', ''), // file|profile，如果为空则表示不开启
-            'path' => PATH_STORAGE . (IS_DEBUG ? 'logs/sql-{Ym}.log' : 'logs/sql-{Ymd}.log')
+            'path' => PATH_STORAGE . (IS_DEBUG ? 'logs/sql_{Ym}.log' : 'logs/sql_{Ymd}.log')
         ],
     ],
     'redis' => [
@@ -143,7 +144,7 @@ return [
         'driver' => env('LOGGER_DRIVER', 'stream'), // stream, syslog, noop
         'stores' => [
             'stream' => [
-                'path' => PATH_STORAGE . (IS_DEBUG ? 'logs/app-{Ym}.log' : 'logs/app-{Ymd}.log'),
+                'path' => PATH_STORAGE . (IS_DEBUG ? 'logs/app_{Ym}.log' : 'logs/app_{Ymd}.log'),
                 'name' => env('LOG_NAME', 'main'),
                 'level' => 'message',
             ],

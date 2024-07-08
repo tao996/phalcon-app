@@ -9,7 +9,7 @@ services:
   php:
     container_name: php
     image: authus/phalcon:5.7.0
-    #image: registry.cn-shenzhen.aliyuncs.com/authus/phalcon:5.5.0
+    #image: registry.cn-shenzhen.aliyuncs.com/authus/phalcon:5.7.0
     working_dir: /var/www
     volumes:
       - ./src:/var/www:delegated
@@ -27,6 +27,7 @@ services:
 #  phpCli:
 #    container_name: phpCli
 #    image: authus/phalcon:5.7.0-cli
+#    image: registry.cn-shenzhen.aliyuncs.com/authus/phalcon:5.7.0-cli
 #    volumes:
 #      - ./src:/var/www:delegated
 #      - ./log/php:/var/log/php/:rw
